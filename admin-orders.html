@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders - TrueCycle Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --admin-primary: #006778;
+            --admin-bg: #f0f2f5;
+            --admin-sidebar: #1e293b;
+            --eco-green: #2ecc71;
+        }
+
+        body {
+            background-color: var(--admin-bg);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Sidebar (Same as Pricing for consistency) */
+        .sidebar {
+            width: 260px;
+            background: var(--admin-sidebar);
+            color: #fff;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center; gap: 10px;
+            color: var(--eco-green);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-link { text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; color: #94a3b8; font-weight: 500; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.1); color: #fff; }
+        .nav-link.active { background: var(--admin-primary); }
+
+        .main-content { flex-grow: 1; padding: 40px; }
+        .admin-box { background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+
+        .admin-table { width: 100%; border-collapse: collapse; }
+        .admin-table th { text-align: left; padding: 12px; font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; border-bottom: 1px solid #f1f5f9; }
+        .admin-table td { padding: 15px 12px; font-size: 0.9rem; border-bottom: 1px solid #f1f5f9; }
+
+        .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .status-delivered { background: #dcfce7; color: #15803d; }
+        .status-processing { background: #fff7ed; color: #9a3412; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-logo">
+            <i class="fas fa-recycle"></i> TrueCycle
+        </a>
+        <div class="nav-menu">
+            <a href="admin-dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="admin-products.html" class="nav-link"><i class="fas fa-box"></i> Products</a>
+            <a href="admin-edit-product.html?mode=add" class="nav-link"><i class="fas fa-plus-circle"></i> Add Product</a>
+            <a href="admin-orders.html" class="nav-link active"><i class="fas fa-shopping-cart"></i> Orders</a>
+            <a href="admin-settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #1e293b; margin:0 0 30px;">Order Management</h1>
+        <div class="admin-box">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Total Amount</th>
+                        <th>Payment Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rendered dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="admin-auth.js"></script>
+  <script src="productService.js"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          renderOrders();
+      });
+
+      async function renderOrders() {
+          const tbody = document.querySelector('.admin-table tbody');
+          let orders = [];
+
+          if (typeof tcCloud !== 'undefined' && tcCloud) {
+              try {
+                  const { data, error } = await tcCloud.from('orders').select('*').order('created_at', { ascending: false });
+                  if (data) {
+                      orders = data.map(o => ({
+                          id: o.id.toString().substring(0, 8).toUpperCase(),
+                          date: new Date(o.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+                          name: o.customer_name || (o.address ? o.address.name : 'Guest User'),
+                          amount: '₹' + o.total_amount.toLocaleString('en-IN'),
+                          status: o.status,
+                          paymentMethod: o.payment_method
+                      }));
+                  }
+              } catch (e) { console.error("Cloud orders fetch failed:", e); }
+          }
+
+          // Fallback to local if empty
+          if (orders.length === 0) {
+              const local = JSON.parse(localStorage.getItem('truecycle_orders')) || [];
+              orders = local.map(o => ({
+                  id: o.id, date: o.date, name: o.address ? o.address.name : 'Guest', 
+                  amount: o.amount, status: o.status, paymentMethod: o.paymentMethod || 'COD'
+              }));
+          }
+          
+          if (orders.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px;">No orders found yet.</td></tr>';
+              return;
+          }
+
+          tbody.innerHTML = orders.map(order => `
+              <tr>
+                  <td style="font-weight:700;">#${order.id}</td>
+                  <td>${order.date}</td>
+                  <td>${order.name}</td>
+                  <td style="font-weight:700;">${order.amount}</td>
+                  <td>
+                      <i class="fas ${order.paymentMethod === 'COD' ? 'fa-clock' : 'fa-check-circle'}" 
+                         style="color:${order.paymentMethod === 'COD' ? '#eab308' : '#2ecc71'};"></i> 
+                      ${order.paymentMethod === 'COD' ? 'Pending' : 'Paid'}
+                  </td>
+                  <td>
+                      <span class="status-pill ${order.status === 'Delivered' ? 'status-delivered' : 'status-processing'}">
+                          ${order.status}
+                      </span>
+                  </td>
+              </tr>
+          `).join('');
+      }
+  </script>
+</body>
+</html>
+

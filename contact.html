@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us – TrueCycle</title>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="ads.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <img src="logo.png" alt="TrueCycle Logo" style="height: 48px;">
+        </a>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="about.html">About</a>
+          <a href="contact.html" class="active">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header style="background: #f8fafc; padding: 60px 0; text-align: center; border-bottom: 1px solid #e2e8f0;">
+    <div class="container">
+      <h1 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #1e293b;">Get in Touch</h1>
+      <p style="color: #64748b;">Have questions about a device or an order? We’re here to help.</p>
+    </div>
+  </header>
+
+  <main style="padding: 80px 0;">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px;">
+        <!-- Contact Form -->
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;">
+          <h2 style="font-size: 1.5rem; color: #1e293b; margin-bottom: 30px;">Send us a Message</h2>
+          <form id="contactForm" onsubmit="event.preventDefault(); alert('Message sent!');">
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #64748b; margin-bottom: 10px;">Full Name</label>
+              <input type="text" placeholder="Your Name" style="width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='var(--primary)'">
+            </div>
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #64748b; margin-bottom: 10px;">Email Address</label>
+              <input type="email" placeholder="Your Email" style="width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='var(--primary)'">
+            </div>
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #64748b; margin-bottom: 10px;">Message</label>
+              <textarea placeholder="How can we help?" style="width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; outline: none; transition: 0.2s; height: 120px;" onfocus="this.style.borderColor='var(--primary)'"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Send Message</button>
+          </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div>
+          <h2 style="font-size: 1.5rem; color: #1e293b; margin-bottom: 30px;">Information</h2>
+          <div style="display: grid; gap: 30px;">
+            <div style="display: flex; gap: 20px; align-items: center;">
+              <div style="width: 50px; height: 50px; background: #e0f2fe; color: #0369a1; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Email</h4>
+                <p style="font-size: 1rem; color: #1e293b; font-weight: 800;">sm1807489@gmail.com</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; align-items: center;">
+              <div style="width: 50px; height: 50px; background: #dcfce7; color: #15803d; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Phone</h4>
+                <p style="font-size: 1rem; color: #1e293b; font-weight: 800;">+91 98765 43210</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; align-items: center;">
+              <div style="width: 50px; height: 50px; background: #fef3c7; color: #92400e; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Opening Hours</h4>
+                <p style="font-size: 1rem; color: #1e293b; font-weight: 800;">Mon - Sat, 10AM - 7PM</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 50px; padding: 40px; background: #1e293b; color: white; border-radius: 20px; text-align: center;">
+            <p style="font-size: 1.25rem; font-family: 'Playfair Display', serif; margin-bottom: 20px;">Support is our priority.</p>
+            <p style="opacity: 0.7; font-size: 0.9rem;">We aim to respond to all inquiries within 2 hours during business hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container" style="text-align: center; padding: 40px 0;">
+      <p style="color: #64748b;">© 2026 TrueCycle. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

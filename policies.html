@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Center - TrueCycle</title>
+    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .policy-page { padding: 120px 0 60px; background: white; }
+        .policy-nav { background: #f8fafc; padding: 20px; border-radius: 12px; position: sticky; top: 120px; }
+        .policy-nav a { display: block; padding: 10px; color: #64748b; font-weight: 600; text-decoration: none; transition: 0.2s; border-radius: 6px; }
+        .policy-nav a:hover, .policy-nav a.active { background: var(--primary); color: white; }
+        .policy-content { padding-left: 40px; }
+        .policy-section { margin-bottom: 60px; scroll-margin-top: 130px; }
+        .policy-section h2 { font-size: 2rem; margin-bottom: 20px; color: #1e293b; border-bottom: 3px solid var(--primary); display: inline-block; }
+        .policy-section p { margin-bottom: 15px; color: #475569; line-height: 1.8; }
+        .policy-section ul { list-style: disc; margin-left: 20px; color: #475569; margin-bottom: 15px; }
+        .policy-section li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="navbar-main" style="border-bottom: 1px solid #eee;">
+             <div class="container">
+                <a href="index.html" class="logo">
+                  <img src="logo.png" alt="TrueCycle Logo" style="height: 48px; width: auto; object-fit: contain;">
+                </a>
+                <div class="nav-links">
+                  <a href="index.html">Home</a>
+                  <a href="products.html">Products</a>
+                  <a href="about.html">About</a>
+                  <a href="contact.html">Contact</a>
+                </div>
+             </div>
+        </div>
+    </nav>
+
+    <main class="policy-page">
+        <div class="container" style="display: grid; grid-template-columns: 280px 1fr; gap: 40px;">
+            <aside>
+                <div class="policy-nav">
+                    <a href="#shipping" class="active">Shipping Policy</a>
+                    <a href="#returns">Return Policy</a>
+                    <a href="#warranty">Warranty Info</a>
+                    <a href="#condition">Condition Guide</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#tracking">Track Order</a>
+                    <a href="#faq">FAQs</a>
+                </div>
+            </aside>
+
+            <article class="policy-content">
+                <section class="policy-section" id="shipping">
+                    <h2>Shipping Policy</h2>
+                    <p>We provide free nationwide shipping on all refurbished electronics. Every product is safely packed using our <strong>TC-Safe Box</strong> to ensure no damage during transit.</p>
+                    <ul>
+                        <li><strong>Standard Shipping:</strong> 3-5 business days for Metro cities.</li>
+                        <li><strong>Outer Regions:</strong> 5-7 business days.</li>
+                        <li><strong>Express Shipping:</strong> Next-day delivery available in Delhi-NCR.</li>
+                    </ul>
+                    <p>Once your order is shipped, you will receive a WhatsApp and Email notification with the tracking link.</p>
+                </section>
+
+                <section class="policy-section" id="returns">
+                    <h2>Return Policy</h2>
+                    <p>At TrueCycle, we believe in 100% customer satisfaction. If you are not happy with your device, we offer a <strong>7-Day No-Questions-Asked Return Policy.</strong></p>
+                    <ul>
+                        <li>Device must be returned in the same condition as received.</li>
+                        <li>Original invoice and all accessories must be included.</li>
+                        <li>Pick-up will be arranged by TrueCycle free of charge.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section" id="warranty">
+                    <h2>Warranty Info</h2>
+                    <p>Every certified refurbished device comes with a <strong>12-Month TrueCycle Secure Warranty</strong> covering manufacturing defects and hardware failures.</p>
+                    <p><strong>What is covered?</strong></p>
+                    <ul>
+                        <li>Display failure (not including cracks).</li>
+                        <li>Motherboard issues.</li>
+                        <li>Network/Signal problems.</li>
+                        <li>Speakers and Microphone malfunctions.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section" id="tracking">
+                    <h2>Track Order</h2>
+                    <p>Status: <strong>Order Tracking System is currently in Prototype mode.</strong></p>
+                    <p>To track your order, please enter your Order ID (starts with #TC-) below:</p>
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <input type="text" placeholder="Enter Order ID" style="padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; flex: 1;">
+                        <button class="btn btn-primary" onclick="alert('Searching for order... Contacting TrueCycle Logistics!')">Track Now</button>
+                    </div>
+                <section class="policy-section" id="privacy">
+                    <h2>Privacy Policy</h2>
+                    <p>Your privacy is our priority. TrueCycle is committed to protecting the personal information you share with us during your shopping journey.</p>
+                    <p><strong>What we collect:</strong></p>
+                    <ul>
+                        <li>Contact details for order delivery and updates.</li>
+                        <li>Device diagnostic data if you use our "Sell Your Tech" portal.</li>
+                        <li>Payment information (processed securely through encrypted gateways).</li>
+                    </ul>
+                    <p>We never share your personal data with third-party marketers. Your information is only used to provide you with the best refurbished technology experience.</p>
+                </section>
+                <section class="policy-section" id="condition">
+                    <h2>Condition Guide</h2>
+                    <p>To help you choose the best value, we use a standardized grading system for all our devices:</p>
+                    <ul>
+                        <li><strong>Pristine (Like New):</strong> These devices look brand new with zero visible scratches or dents. Battery health is guaranteed to be 95%+.</li>
+                        <li><strong>Good (Certified):</strong> Minor, hairline scratches that are only visible under direct light. No structural damage or cracks. Battery health is at least 85%.</li>
+                        <li><strong>Fair (Eco-Friendly):</strong> Noticeable signs of wear, such as shallow scratches on the frame or back. Perfectly functional and offers the best price-to-performance ratio.</li>
+                    </ul>
+                </section>
+
+                <section class="policy-section" id="faq">
+                    <h2>Frequently Asked Questions</h2>
+                    <p><strong>Is buying refurbished safe?</strong><br>Yes! Every device at TrueCycle goes through a 72-point automated diagnostic test and is cleaned and sanitized before shipping.</p>
+                    <p><strong>How do I claim my warranty?</strong><br>Simply email us with your Order ID or call our helpline. We provide free pick-up and repair/replacement for all warranty claims.</p>
+                    <p><strong>Can I see real photos of the device?</strong><br>Our "Good" and "Fair" listings often include 360-degree photos of the actual device being sold so you know exactly what to expect.</p>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+          <div class="footer-bottom">
+            <span>© 2026 TrueCycle. All rights reserved.</span>
+          </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple scroll spy logic
+        window.onscroll = () => {
+            const sections = document.querySelectorAll('.policy-section');
+            const navLinks = document.querySelectorAll('.policy-nav a');
+            
+            sections.forEach(sec => {
+                const top = window.scrollY;
+                const offset = sec.offsetTop - 150;
+                const height = sec.offsetHeight;
+                const id = sec.getAttribute('id');
+
+                if (top >= offset && top < offset + height) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        document.querySelector('.policy-nav a[href*=' + id + ']').classList.add('active');
+                    });
+                }
+            });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Summary - TrueCycle</title>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { background: #f1f3f6; font-family: 'Inter', sans-serif; color: #333; }
+    .checkout-header { background: white; padding: 12px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+    .checkout-header .container { display: flex; align-items: center; gap: 20px; }
+    .back-btn { font-size: 1.2rem; color: #555; cursor: pointer; border:none; background:none; }
+    .header-title { font-size: 1.15rem; font-weight: 600; }
+
+    /* Stepper */
+    .stepper { background: white; padding: 16px 0; border-bottom: 1px solid #ddd; margin-bottom: 8px; }
+    .steps-container { display: flex; justify-content: space-around; max-width: 600px; margin: 0 auto; position: relative; }
+    .step { display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 1; }
+    .step-icon { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid #ccc; background: white; display: flex; align-items:center; justify-content:center; font-size: 0.75rem; color: #888; font-weight: 700; transition: all 0.3s; }
+    .step.active .step-icon { background: #006778; border-color: #006778; color: white; }
+    .step.completed .step-icon { background: #006778; border-color: #006778; color: white; }
+    .step-label { font-size: 0.75rem; color: #888; font-weight: 500; }
+    .step.active .step-label { color: #333; font-weight: 600; }
+    .connector { position: absolute; top: 12px; left: 16.6%; right: 16.6%; height: 1.5px; background: #ddd; z-index: 0; }
+    .connector-progress { position: absolute; top: 0; left: 0; height: 100%; background: #006778; width: 0%; transition: width 0.3s; }
+
+    /* Cards */
+    .checkout-card { background: white; margin-bottom: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .card-header { padding: 16px; display: flex; justify-content: space-between; align-items: flex-start; }
+    .card-title { font-size: 0.95rem; font-weight: 600; text-transform: uppercase; color: #666; letter-spacing: 0.5px; }
+    .card-content { padding: 0 16px 16px; }
+
+    /* Address Section */
+    .deliver-to { font-weight: 600; font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+    .addr-tag { background: #eee; color: #888; font-size: 0.65rem; padding: 2px 6px; border-radius: 2px; text-transform: uppercase; }
+    .addr-text { font-size: 0.9rem; line-height: 1.6; color: #444; margin-bottom: 12px; }
+    .addr-phone { font-size: 0.95rem; font-weight: 500; }
+
+    /* Item Summary */
+    .item-row { display: flex; gap: 16px; padding: 16px; border-top: 1px solid #f0f0f0; }
+    .item-image { width: 80px; height: 100px; object-fit: contain; flex-shrink: 0; }
+    .item-details h3 { font-size: 1rem; font-weight: 500; margin-bottom: 6px; line-height: 1.4; color: #212121; }
+    .item-spec { font-size: 0.82rem; color: #878787; margin-bottom: 8px; }
+    .item-price { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .curr-price { font-size: 1.2rem; font-weight: 700; color: #212121; }
+    .old-price { font-size: 0.9rem; color: #878787; text-decoration: line-through; }
+    .discount { color: #388e3c; font-size: 0.85rem; font-weight: 600; }
+
+    /* Bottom Bar */
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.08); z-index: 1000; }
+    .total-info .label { font-size: 0.75rem; color: #878787; text-decoration: line-through; }
+    .total-info .price { font-size: 1.2rem; font-weight: 700; color: #212121; }
+    .btn-continue { background: #006778; color: white; border: none; padding: 12px 36px; border-radius: 4px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background 0.2s; min-width: 160px; }
+    .btn-continue:hover { background: #005a68; }
+
+    /* Hidden Sections */
+    .checkout-section { display: none; }
+    .checkout-section.active { display: block; }
+
+    /* Address Selection List */
+    .address-card { border: 1.5px solid #eee; border-radius: 8px; padding: 16px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s; }
+    .address-card.selected { border-color: #006778; background: #F0F9FA; }
+    .address-card .name { font-weight: 600; margin-bottom: 6px; }
+
+    .btn-add-address { background: white; color: #006778; border: 1.5px dashed #006778; padding: 16px; width: 100%; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="checkout-header">
+    <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 16px;">
+      <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+      <h1 class="header-title" id="checkoutPageTitle">Address</h1>
+    </div>
+  </header>
+
+  <!-- Stepper -->
+  <div class="stepper">
+    <div class="steps-container">
+      <div class="connector"><div class="connector-progress" id="stepProgress"></div></div>
+      <div class="step active" id="step1">
+        <div class="step-icon">1</div>
+        <span class="step-label">Address</span>
+      </div>
+      <div class="step" id="step2">
+        <div class="step-icon">2</div>
+        <span class="step-label">Order Summary</span>
+      </div>
+      <div class="step" id="step3">
+        <div class="step-icon">3</div>
+        <span class="step-label">Payment</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="container" style="max-width: 800px; margin: 0 auto; padding: 0 16px 100px;">
+    
+    <!-- STEP 1: Address Selection -->
+    <div id="sectionAddress" class="checkout-section active">
+        <div class="checkout-card">
+            <div class="card-header"><span class="card-title">Select Delivery Address</span></div>
+            <div class="card-content" id="addressListContainer">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+        <button class="btn-add-address" onclick="toggleAddressForm()">
+            <i class="fas fa-plus"></i> Add New Address
+        </button>
+    </div>
+
+    <!-- STEP 2: Order Summary -->
+    <div id="sectionSummary" class="checkout-section">
+        <div class="checkout-card">
+            <div class="card-header">
+                <div>
+                   <span class="card-title" style="display:block; margin-bottom:12px;">Deliver to:</span>
+                   <div id="summaryAddressText"></div>
+                </div>
+                <button class="btn btn-outline btn-xs" onclick="changeStep(1)" style="color:#006778; border-color:#006778;">Change</button>
+            </div>
+        </div>
+
+        <div class="checkout-card">
+            <div class="card-content" id="summaryItemsContainer" style="padding:0;">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Action Bar -->
+  <div class="bottom-bar">
+    <div class="total-info">
+      <div class="label" id="summaryOldPrice"></div>
+      <div class="price" id="summaryFinalPrice"></div>
+    </div>
+    <button class="btn-continue" onclick="handleContinue()">Continue</button>
+  </div>
+
+  <!-- Address Form Modal (Minimal) -->
+  <div id="addressModal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2000; justify-content:center; align-items:center;">
+    <div style="background:white; padding:24px; border-radius:12px; width:90%; max-width:400px; transform: scale(0.9); animation: modalIn 0.3s forwards;">
+        <h3 style="margin-bottom:20px;">New Delivery Address</h3>
+        <form id="addressForm" onsubmit="saveNewAddress(event)">
+            <input type="text" name="name" placeholder="Full Name (Required)" required style="width:100%; padding:12px; margin-bottom:12px; border:1.5px solid #ddd; border-radius:6px;">
+            <input type="number" name="phone" placeholder="10-digit Phone Number" required style="width:100%; padding:12px; margin-bottom:12px; border:1.5px solid #ddd; border-radius:6px;">
+            <input type="text" name="area" placeholder="Locality / Area" required style="width:100%; padding:12px; margin-bottom:12px; border:1.5px solid #ddd; border-radius:6px;">
+            <input type="text" name="city" placeholder="City" required style="width:100%; padding:12px; margin-bottom:12px; border:1.5px solid #ddd; border-radius:6px;">
+            <input type="text" name="state" placeholder="State" required style="width:100%; padding:12px; margin-bottom:12px; border:1.5px solid #ddd; border-radius:6px;">
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button type="button" class="btn btn-ghost" onclick="toggleAddressForm()" style="flex:1">Cancel</button>
+                <button type="submit" class="btn btn-primary" style="flex:1">Save Address</button>
+            </div>
+        </form>
+    </div>
+  </div>
+
+  <script src="wishlistService.js?v=2"></script>
+  <script src="addressService.js?v=2"></script>
+  <script src="script.js?v=2"></script>
+  <script>
+    let currentStep = 1;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderAddresses();
+        renderSummary();
+    });
+
+    function goBack() {
+        if (currentStep > 1) {
+            changeStep(currentStep - 1);
+        } else {
+            window.location.href = 'cart.html';
+        }
+    }
+
+    function renderAddresses() {
+        const container = document.getElementById('addressListContainer');
+        const addresses = addressService.getAddresses();
+        const selectedId = addressService.getSelectedAddress()?.id;
+        
+        if (addresses.length === 0) {
+            container.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">No addresses saved yet.</p>';
+            return;
+        }
+
+        container.innerHTML = addresses.map(addr => `
+            <div class="address-card ${addr.id === selectedId ? 'selected' : ''}" onclick="selectAddress('${addr.id}')">
+                <div class="name">${addr.name} <span class="addr-tag">Home</span></div>
+                <div class="addr-text">${addr.area}, ${addr.city}, ${addr.state}</div>
+                <div class="addr-phone">${addr.phone}</div>
+            </div>
+        `).join('');
+    }
+
+    function selectAddress(id) {
+        addressService.setSelectedAddress(id);
+        renderAddresses();
+        renderSummary();
+    }
+
+    function toggleAddressForm() {
+        const modal = document.getElementById('addressModal');
+        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function saveNewAddress(e) {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const addr = {
+            name: fd.get('name'),
+            phone: fd.get('phone'),
+            area: fd.get('area'),
+            city: fd.get('city'),
+            state: fd.get('state')
+        };
+        const saved = addressService.saveAddress(addr);
+        addressService.setSelectedAddress(saved.id);
+        toggleAddressForm();
+        renderAddresses();
+        renderSummary();
+    }
+
+    function renderSummary() {
+        const addr = addressService.getSelectedAddress();
+        const textContainer = document.getElementById('summaryAddressText');
+        if (addr) {
+            textContainer.innerHTML = `
+                <div class="deliver-to">
+                    ${addr.name} <span class="addr-tag">HOME</span>
+                </div>
+                <div class="addr-text" style="margin-bottom:0">${addr.area}, ${addr.city}, ${addr.state} - 110001 <br> ${addr.phone}</div>
+            `;
+        } else {
+            textContainer.innerHTML = '<p style="color:red">Please select an address first</p>';
+        }
+
+        // Render Items
+        const items = Cart.items;
+        const container = document.getElementById('summaryItemsContainer');
+        container.innerHTML = items.map(item => `
+            <div class="item-row">
+                <img src="${item.img}" class="item-image">
+                <div class="item-details">
+                    <h3>${item.name}</h3>
+                    <div class="item-spec">${item.spec || 'Certified Refurbished'}</div>
+                    <div class="item-price">
+                        <span class="curr-price">₹${item.price.toLocaleString('en-IN')}</span>
+                        <span class="old-price">₹${(item.price + 5000).toLocaleString('en-IN')}</span>
+                        <span class="discount">Save ₹5,000</span>
+                    </div>
+                    <div style="font-size:0.85rem; color:#212121; margin-top:12px;">Delivery by Mar 30, Mon</div>
+                </div>
+            </div>
+        `).join('');
+
+        // Bottom Bar
+        const total = items.reduce((sum, item) => sum + (item.price * (item.qty || 1)), 0);
+        document.getElementById('summaryFinalPrice').textContent = `₹${total.toLocaleString('en-IN')}`;
+    }
+
+    function changeStep(n) {
+        currentStep = n;
+        document.querySelectorAll('.checkout-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active', 'completed'));
+        
+        const continueBtn = document.querySelector('.btn-continue');
+
+        if (n === 1) {
+            document.getElementById('sectionAddress').classList.add('active');
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('stepProgress').style.width = '0%';
+            document.getElementById('checkoutPageTitle').textContent = 'Address';
+            continueBtn.textContent = 'Continue';
+        } else if (n === 2) {
+            document.getElementById('sectionSummary').classList.add('active');
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('active');
+            document.getElementById('stepProgress').style.width = '50%';
+            document.getElementById('checkoutPageTitle').textContent = 'Order Summary';
+            continueBtn.textContent = 'Proceed to Payment';
+        } else if (n === 3) {
+            // Mark summary as completed too
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('step3').classList.add('active');
+            document.getElementById('stepProgress').style.width = '100%';
+            triggerMockPayment();
+        }
+    }
+
+    function handleContinue() {
+        if (currentStep === 1) {
+            if (!addressService.getSelectedAddress()) {
+                showToast('Please add/select an address', 'info');
+                return;
+            }
+            changeStep(2);
+        } else if (currentStep === 2) {
+            changeStep(3);
+        } else if (currentStep === 3) {
+            triggerMockPayment();
+        }
+    }
+  </script>
+</body>
+</html>

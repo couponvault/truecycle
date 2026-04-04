@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TrueCycle</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="admin-auth.js"></script>
+    <script src="productService.js"></script>
+    <style>
+        :root {
+            --admin-primary: #006778;
+            --admin-bg: #f0f2f5;
+            --admin-sidebar: #1e293b;
+            --eco-green: #2ecc71;
+        }
+
+        body {
+            background-color: var(--admin-bg);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Sidebar (Same as Pricing for consistency) */
+        .sidebar {
+            width: 260px;
+            background: var(--admin-sidebar);
+            color: #fff;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--eco-green);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .nav-link.active {
+            background: var(--admin-primary);
+        }
+
+        /* Dashboard specific */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            background: #f0fdf4;
+            color: var(--eco-green);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .stat-info h3 { margin: 0; font-size: 1.75rem; font-weight: 800; color: #1e293b; }
+        .stat-info span { font-size: 0.85rem; color: #64748b; font-weight: 600; }
+
+        .chart-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .admin-box {
+            background: #fff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .box-header h2 { font-size: 1.1rem; font-weight: 700; margin: 0; color: #1e293b; }
+
+        /* Mock Table */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .admin-table td {
+            padding: 15px 12px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-delivered { background: #dcfce7; color: #15803d; }
+        .status-pending { background: #fef9c3; color: #a16207; }
+
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-logo">
+            <i class="fas fa-recycle"></i> TrueCycle
+        </a>
+        <div class="nav-menu">
+            <a href="admin-dashboard.html" class="nav-link active"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="admin-products.html" class="nav-link"><i class="fas fa-box"></i> Products</a>
+            <a href="admin-edit-product.html?mode=add" class="nav-link"><i class="fas fa-plus-circle"></i> Add Product</a>
+            <a href="admin-orders.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Orders</a>
+            <a href="admin-settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div style="margin-bottom: 35px;">
+            <h1 style="font-size: 1.8rem; font-weight: 800; color: #1e293b; margin:0;">Platform Overview</h1>
+            <p style="color: #64748b; margin-top:5px;">Check how your refurbished tech business is performing today.</p>
+        </div>
+
+        <div class="overview-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                <div class="stat-info">
+                    <span>Total Revenue</span>
+                    <h3 id="revenueVal">₹0</h3>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:#eff6ff; color:#3b82f6;"><i class="fas fa-shopping-cart"></i></div>
+                <div class="stat-info">
+                    <span>Total Orders</span>
+                    <h3 id="orderVal">0</h3>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:#fefce8; color:#eab308;"><i class="fas fa-box"></i></div>
+                <div class="stat-info">
+                    <span>Total Products</span>
+                    <h3 id="inventoryVal">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-section">
+            <div class="admin-box">
+                <div class="box-header">
+                    <h2>Recent Sales</h2>
+                    <a href="admin-orders.html" style="font-size: 0.8rem; font-weight: 700; color: var(--admin-primary); text-decoration:none;">View All</a>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentSalesBody">
+                        <!-- Dynamic -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-box">
+                <div class="box-header">
+                    <h2>Stock Status</h2>
+                </div>
+                <div id="categoryStock" style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Dynamic Categories -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="admin-auth.js"></script>
+    <script src="productService.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!productService.isLoaded) {
+                await productService.init();
+            }
+            updateDashboard();
+        });
+
+        async function updateDashboard() {
+            const products = productService.getProducts();
+            let orders = [];
+
+            // 1. Fetch real orders from Cloud
+            if (typeof tcCloud !== 'undefined' && tcCloud) {
+                const { data, error } = await tcCloud.from('orders').select('*').order('created_at', { ascending: false });
+                if (!error && data) orders = data;
+            } else {
+                orders = JSON.parse(localStorage.getItem('truecycle_orders') || '[]');
+            }
+
+            // 2. Calculate Stats
+            let totalRevenue = 0;
+            orders.forEach(order => {
+                // Ensure amount is handled as string or number
+                let amtStr = String(order.amount).replace(/[^0-9.]/g, '');
+                totalRevenue += parseFloat(amtStr) || 0;
+            });
+
+            // Update UI Stats
+            const revEl = document.getElementById('revenueVal');
+            const ordEl = document.getElementById('orderVal');
+            const invEl = document.getElementById('inventoryVal');
+
+            if (revEl) revEl.textContent = '₹' + (totalRevenue > 100000 ? (totalRevenue/100000).toFixed(1) + ' Lakh' : totalRevenue.toLocaleString('en-IN'));
+            if (ordEl) ordEl.textContent = orders.length;
+            if (invEl) invEl.textContent = products.length;
+
+            // 3. Stock Status by Category
+            const catStockEl = document.getElementById('categoryStock');
+            if (catStockEl) {
+                const cats = {};
+                products.forEach(p => {
+                    cats[p.category] = (cats[p.category] || 0) + 1;
+                });
+                catStockEl.innerHTML = Object.entries(cats).map(([cat, count]) => `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.9rem; font-weight:600; text-transform:capitalize;">${cat}</span>
+                        <span style="font-size:0.8rem; background:#f1f5f9; padding:2px 8px; border-radius:4px;">${count} items</span>
+                    </div>
+                `).join('');
+            }
+
+            // 4. Recent Sales Table
+            const recentSalesBody = document.getElementById('recentSalesBody');
+            const recentOrders = orders.slice(0, 5);
+            
+            if (recentSalesBody) {
+                if (recentOrders.length === 0) {
+                    recentSalesBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No recent sales.</td></tr>';
+                } else {
+                    recentSalesBody.innerHTML = recentOrders.map(order => `
+                        <tr>
+                            <td>#${order.id.toString().substring(0,6)}</td>
+                            <td>${order.customer_name || 'Guest'}</td>
+                            <td>${order.product_info || 'Device'}</td>
+                            <td style="font-weight:700;">₹${parseFloat(String(order.amount).replace(/[^0-9.]/g, '')).toLocaleString('en-IN')}</td>
+                            <td><span class="status-pill status-pending">Pending</span></td>
+                        </tr>
+                    `).join('');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

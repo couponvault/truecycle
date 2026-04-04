@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TrueCycle - Buy certified refurbished mobile phones, laptops, and electronics at unbeatable prices. Quality guaranteed, 12-month warranty, save up to 60% on premium smartphones.">
+  <meta name="keywords" content="refurbished phones, second hand mobiles, buy used iphone, cheap laptops, refurbished electronics India, TrueCycle, used smartphones, buy old phones online, refurbished apple, refurbished samsung, second hand laptop">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="TrueCycle – Certified Refurbished Phones & Electronics">
+  <meta property="og:description" content="Save up to 60% on premium smartphones and laptops, fully tested with a 12-month warranty.">
+  <meta property="og:type" content="website">
+  <title>TrueCycle – Certified Refurbished Phones & Electronics</title>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="ads.js"></script>
+  <script src="productService.js"></script>
+</head>
+<body>
+  <!-- Top Bar -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-top">
+      <div class="container">
+        <span>📞 +91 98765 43210 &nbsp;|&nbsp; 📧 sm1807489@gmail.com</span>
+        <div>
+          <a href="admin-orders.html">Track Order</a> &nbsp;|&nbsp;
+          <a href="about.html">About Us</a> &nbsp;|&nbsp;
+          <a href="contact.html">Help</a>
+        </div>
+      </div>
+    </div>
+    <div class="navbar-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <img src="logo.png" alt="TrueCycle Logo" style="height: 48px; width: auto; display: block; object-fit: contain;">
+        </a>
+        <div class="nav-search">
+          <input id="navSearchInput" type="text" placeholder="Search for phones, brands, laptops..." onkeydown="if(event.key==='Enter'){doSearch(this.value)}">
+          <i class="fas fa-search"></i>
+          <button class="search-btn" onclick="doSearch(document.getElementById('navSearchInput').value)"><i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div class="nav-links" id="navLinks">
+          <a href="index.html" class="active">Home</a>
+          <a href="products.html">Products</a>
+          <a href="products.html?cat=phones">Phones</a>
+          <a href="#" onclick="openSmartlink(event)" style="color: #76C043; font-weight: 800;">Deals</a>
+          <a href="compare.html">Compare</a>
+        </div>
+        <div class="nav-actions">
+          <a href="wishlist.html" class="action-btn" title="Wishlist">
+            <i class="far fa-heart"></i>
+            <span class="cart-count" id="wishlistCount" style="display:none;">0</span>
+          </a>
+          <a href="cart.html" class="action-btn" title="Cart">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="cart-count" id="cartCount">3</span>
+          </a>
+          <button class="action-btn" title="Account" onclick="toggleProfileModal()"><i class="far fa-user"></i></button>
+        </div>
+        <div class="mobile-toggle" id="mobileToggle" onclick="toggleNav()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Native Ad Slot -->
+  <div id="native-ad-slot" class="container" style="margin: 20px auto;"></div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <span class="hero-badge">Certified Pre-owned</span>
+        <h1>TrueCycle — Smart Tech That Makes Sense.</h1>
+        <p class="hero-description">We take used devices, fix them properly, test them thoroughly, and price them so you don’t have to overthink it.</p>
+        <p class="hero-slogan">Give tech another run.</p>
+        
+        <div class="hero-btns">
+          <a href="products.html" class="btn btn-primary btn-lg">Browse Devices</a>
+          <a href="about.html" class="btn btn-outline btn-lg">How It Works</a>
+        </div>
+        
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="number">50,000+</span>
+            <span class="label">Devices rehomed</span>
+          </div>
+          <div class="hero-stat">
+            <span class="number">4.8★</span>
+            <span class="label">Rated by real customers</span>
+          </div>
+          <div class="hero-stat">
+            <span class="number">12-Month</span>
+            <span class="label">Warranty included</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-phone-container">
+          <div class="hero-phone">
+            <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=600&h=800&fit=crop" alt="Premium refurbished smartphone">
+          </div>
+          <div class="hero-float-card card-1">
+            <div class="float-card-label">Condition</div>
+            <div class="float-card-value"><span class="icon">✓</span> Like New Condition</div>
+          </div>
+          <div class="hero-float-card card-2">
+            <div class="float-card-label">Actual Value</div>
+            <div class="float-card-value" style="color: var(--success);">You Save ₹18,000</div>
+          </div>
+          <div class="hero-float-card card-3">
+            <div class="float-card-label">Peace of Mind</div>
+            <div class="float-card-value">🛡️ 12-Month Warranty</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Bar -->
+  <section class="trust-bar">
+    <div class="container">
+      <div class="trust-item">
+        <div class="trust-icon">🔒</div>
+        <div class="trust-text">
+          <strong>Secure Checkout</strong>
+          <span>100% secure payment</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🔄</div>
+        <div class="trust-text">
+          <strong>7-Day Returns</strong>
+          <span>No questions asked</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🛡️</div>
+        <div class="trust-text">
+          <strong>Warranty Included</strong>
+          <span>6-12 months coverage</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🚚</div>
+        <div class="trust-text">
+          <strong>Free Shipping</strong>
+          <span>On orders over ₹999</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Condition Guide Section -->
+  <section class="condition-guide-home" style="background: #f8fafc; padding: 100px 0;">
+    <div class="container">
+      <div class="section-header" style="text-align: center; margin-bottom: 60px;">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #1e293b;">Our Quality Standards</h2>
+        <p style="color: #64748b; font-size: 1.1rem; max-width: 700px; margin: 15px auto 0;">Every device is physically inspected and 72-point tested by our certified technicians.</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+        <!-- Pristine Card -->
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; border-top: 5px solid #2ecc71; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+          <i class="fas fa-gem" style="font-size: 3rem; color: #2ecc71; margin-bottom: 25px;"></i>
+          <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; color: #1e293b;">Pristine (Like New)</h3>
+          <p style="color: #64748b; line-height: 1.7; margin-bottom: 20px;">Zero visible scratches or dents. Practically indistinguishable from a brand new device.</p>
+          <div style="background: #dcfce7; color: #15803d; font-weight: 800; padding: 8px 15px; border-radius: 100px; display: inline-block; font-size: 0.85rem;">85%+ Battery Health</div>
+        </div>
+
+        <!-- Good Card -->
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; border-top: 5px solid #3498db; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+          <i class="fas fa-check-circle" style="font-size: 3rem; color: #3498db; margin-bottom: 25px;"></i>
+          <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; color: #1e293b;">Good (Certified)</h3>
+          <p style="color: #64748b; line-height: 1.7; margin-bottom: 20px;">Very light, hairline scratches visible only on close inspection. No cracks or deep dents.</p>
+          <div style="background: #dbeafe; color: #1e40af; font-weight: 800; padding: 8px 15px; border-radius: 100px; display: inline-block; font-size: 0.85rem;">80% to 85% Battery Health</div>
+        </div>
+
+        <!-- Fair Card -->
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; border-top: 5px solid #f39c12; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+          <i class="fas fa-leaf" style="font-size: 3rem; color: #f39c12; margin-bottom: 25px;"></i>
+          <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; color: #1e293b;">Fair (Eco-Value)</h3>
+          <p style="color: #64748b; line-height: 1.7; margin-bottom: 20px;">Visible scratches on frame or back. Perfectly functional screen and hardware.</p>
+          <div style="background: #fef3c7; color: #92400e; font-weight: 800; padding: 8px 15px; border-radius: 100px; display: inline-block; font-size: 0.85rem;">70% to 80% Battery Health</div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 50px;">
+        <a href="policies.html#condition" class="btn btn-outline" style="padding: 15px 40px; border-radius: 100px; text-decoration: none; font-weight: 800; border: 2px solid #e2e8f0; color: #64748b; transition: 0.2s;">
+          View Detailed 72-Point Inspection Checklist <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="section" id="categories">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle">Browse By</span>
+        <h2>Shop Categories</h2>
+        <p>Explore our curated collection of certified refurbished devices across every category.</p>
+      </div>
+      <div class="categories-grid">
+        <a href="products.html?cat=phones" class="category-card">
+          <div class="category-icon">📱</div>
+          <h3>Smartphones</h3>
+          <p>120+ devices</p>
+        </a>
+        <a href="products.html?cat=laptops" class="category-card">
+          <div class="category-icon">💻</div>
+          <h3>Laptops</h3>
+          <p>85+ devices</p>
+        </a>
+        <a href="products.html?cat=tablets" class="category-card">
+          <div class="category-icon">📟</div>
+          <h3>Tablets</h3>
+          <p>40+ devices</p>
+        </a>
+        <a href="products.html?cat=accessories" class="category-card">
+          <div class="category-icon">🎧</div>
+          <h3>Accessories</h3>
+          <p>200+ items</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop By Brand -->
+  <section class="section" id="brands" style="padding-bottom: 20px;">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle">Top Brands</span>
+        <h2>Shop By Brand</h2>
+      </div>
+      <div style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: thin; justify-content: flex-start;">
+        
+        <a href="products.html?brand=Apple" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
+          <i class="fab fa-apple" style="font-size: 2.5rem; margin-bottom: 12px; color: #000;"></i>
+          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Apple</h3>
+        </a>
+        
+        <a href="products.html?brand=Samsung" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
+          <div style="font-weight: 800; font-size: 1.4rem; letter-spacing: -1px; margin-bottom: 8px; color: #034EA2;">SAMSUNG</div>
+          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Samsung</h3>
+        </a>
+        
+        <a href="products.html?brand=OnePlus" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
+          <div style="font-size: 2.2rem; margin-bottom: 6px; font-weight: 900; letter-spacing: -2px; color: #E50914;">1+</div>
+          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">OnePlus</h3>
+        </a>
+
+        <a href="products.html?brand=Google" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
+          <i class="fab fa-google" style="font-size: 2.2rem; margin-bottom: 12px; color: #4285F4;"></i>
+          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Google</h3>
+        </a>
+
+        <a href="products.html?brand=Xiaomi" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
+          <div style="font-size: 1.6rem; margin-bottom: 8px; font-weight: 800; color: #FF6900;">mi</div>
+          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Xiaomi</h3>
+        </a>
+
+        <a href="products.html?brand=Vivo" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
+          <div style="font-size: 1.6rem; margin-bottom: 8px; font-weight: 800; color: #415FFF; font-style: italic;">vivo</div>
+          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Vivo</h3>
+        </a>
+
+        <a href="products.html?brand=Motorola" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
+          <div style="font-size: 2rem; margin-bottom: 6px; font-weight: 900; color: #000000; font-family: sans-serif;">M</div>
+          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Motorola</h3>
+        </a>
+
+        <a href="products.html?brand=Oppo" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
+          <div style="font-size: 1.3rem; margin-bottom: 8px; font-weight: 800; color: #00875F;">OPPO</div>
+          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Oppo</h3>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deal of the Day / Flash Sale (Flipkart Inspired) -->
+  <section class="section" id="deal-of-the-day" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 50px 0;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 20px; margin-bottom: 30px; flex-wrap: wrap; gap: 20px;">
+        <div style="display: flex; align-items: center; gap: 25px; flex-wrap: wrap;">
+          <h2 style="margin: 0; color: white; display: flex; align-items: center; gap: 12px; font-size: 2.2rem; font-family: sans-serif; font-weight: 800;">
+            Deal of the Day
+          </h2>
+          <div style="display: flex; align-items: center; gap: 10px; color: white; font-size: 1.1rem;">
+            <i class="far fa-clock"></i> Ends In:
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <div style="background: #FFD700; color: #1e3c72; padding: 6px 10px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; text-align: center; min-width: 48px;"><span id="hours">11</span><br><small style="font-size:0.6rem; font-weight:600;">HRS</small></div>
+              <span style="color: #FFD700; font-weight: 900; font-size: 1.4rem;">:</span>
+              <div style="background: #FFD700; color: #1e3c72; padding: 6px 10px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; text-align: center; min-width: 48px;"><span id="minutes">24</span><br><small style="font-size:0.6rem; font-weight:600;">MIN</small></div>
+              <span style="color: #FFD700; font-weight: 900; font-size: 1.4rem;">:</span>
+              <div style="background: #FFD700; color: #1e3c72; padding: 6px 10px; border-radius: 4px; font-weight: 800; font-size: 1.1rem; text-align: center; min-width: 48px;"><span id="seconds">59</span><br><small style="font-size:0.6rem; font-weight:600;">SEC</small></div>
+            </div>
+          </div>
+        </div>
+        <a href="products.html" class="btn btn-primary" style="background: white; color: #1e3c72; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">View All Deals</a>
+      </div>
+      
+      <div class="products-grid" id="deal-of-the-day-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+        <!-- Will be populated dynamically by script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Refurbished iPhones Section -->
+  <section class="section" id="iphones">
+    <div class="container">
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 15px;">
+        <div style="margin: 0;">
+          <span class="subtitle">Apple Ecosystem</span>
+          <h2 style="margin: 0;">Refurbished iPhones</h2>
+        </div>
+        <a href="products.html?brand=Apple" class="btn btn-outline">View All iPhones →</a>
+      </div>
+      <div class="products-grid" id="iphone-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Refurbished Androids / Mobile Phones -->
+  <section class="section" id="androids" style="background: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 15px;">
+        <div style="margin: 0;">
+          <span class="subtitle">Top Tier Androids</span>
+          <h2 style="margin: 0;">Refurbished Mobile Phones</h2>
+        </div>
+        <a href="products.html?cat=phones" class="btn btn-outline">View All Phones →</a>
+      </div>
+      <div class="products-grid" id="android-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Budget Section -->
+  <section class="section" id="budget">
+    <div class="container">
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 15px;">
+        <div style="margin: 0;">
+          <span class="subtitle">Incredible Value</span>
+          <h2 style="margin: 0;">Best Phones Under ₹15,000</h2>
+        </div>
+        <a href="products.html?maxPrice=15000" class="btn btn-outline">Shop Budget Phones →</a>
+      </div>
+      <div class="products-grid" id="budget-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products Section -->
+  <section class="section" style="background: var(--bg-secondary);" id="featured">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle">Handpicked For You</span>
+        <h2>Featured Products</h2>
+        <p>Our most popular certified refurbished devices — tested, verified, and ready for you.</p>
+      </div>
+      <div class="products-grid" id="featuredProducts">
+        <!-- Dynamic Content -->
+      </div>
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="products.html" class="btn btn-outline btn-lg">View All Products <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle">Why TrueCycle?</span>
+        <h2>The Smart Way to Buy Tech</h2>
+        <p>We take the guesswork out of refurbished electronics. Here's why thousands trust us.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>72-Point Inspection</h3>
+          <p>Every device undergoes a rigorous 72-point quality check to ensure it looks and performs like new.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>12-Month Warranty</h3>
+          <p>All our devices come with a comprehensive warranty covering hardware defects and battery performance.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>7-Day Easy Returns</h3>
+          <p>Not satisfied? Return your device within 7 days — no questions asked. We'll process a full refund.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔋</div>
+          <h3>Battery Health 80%+</h3>
+          <p>We guarantee a minimum 80% battery health on every smartphone. Most are 85%+ or replaced brand new.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+          <h3>Complete Accessories</h3>
+          <p>Every device ships with a charger, cable, and protective case — ready to use right out of the box.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💳</div>
+          <h3>Easy EMI Available</h3>
+          <p>Pay in comfortable monthly installments with 0% EMI options available on select devices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deal Banner -->
+  <section class="deal-banner">
+    <div class="container">
+      <div class="deal-content">
+        <h2>⚡ Flash Sale — Up to 60% Off</h2>
+        <p>Limited time deals on Samsung, Apple and OnePlus devices. Hurry, stock is limited!</p>
+        <a href="products.html" class="btn btn-secondary btn-lg">Shop the Sale</a>
+      </div>
+      <div class="deal-timer">
+        <div class="timer-box">
+          <span class="time" id="days">02</span>
+          <span class="time-label">Days</span>
+        </div>
+        <div class="timer-box">
+          <span class="time" id="hours">14</span>
+          <span class="time-label">Hours</span>
+        </div>
+        <div class="timer-box">
+          <span class="time" id="minutes">36</span>
+          <span class="time-label">Mins</span>
+        </div>
+        <div class="timer-box">
+          <span class="time" id="seconds">51</span>
+          <span class="time-label">Secs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" id="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle">Customer Love</span>
+        <h2>What Our Customers Say</h2>
+        <p>Real reviews from real customers who chose TrueCycle.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Bought an iPhone 14 Pro and it literally looks brand new. The battery health was 92%! Absolutely impressed by the quality and packaging. Will definitely buy again."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">RK</div>
+            <div class="testimonial-author-info">
+              <strong>Rahul Kumar</strong>
+              <span>Verified Buyer · Delhi</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Saved ₹40,000 on a MacBook Air M2. The condition was excellent — no scratches, no dents. The 12-month warranty gives real peace of mind. Amazing service!"</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">PS</div>
+            <div class="testimonial-author-info">
+              <strong>Priya Sharma</strong>
+              <span>Verified Buyer · Mumbai</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★☆</div>
+          <p class="testimonial-text">"Was skeptical about refurbished at first but the OnePlus 12 I received was spotless. Fast delivery, great customer support. Highly recommend TrueCycle to everyone!"</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">AV</div>
+            <div class="testimonial-author-info">
+              <strong>Amit Verma</strong>
+              <span>Verified Buyer · Bangalore</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter">
+    <div class="container">
+      <h2>Stay in the Loop</h2>
+      <p>Subscribe for exclusive deals, new arrivals, and tech tips delivered to your inbox.</p>
+      <form class="newsletter-form" id="newsletterForm" onsubmit="handleNewsletter(event)">
+        <input type="email" placeholder="Enter your email address" required>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="logo.png" alt="TrueCycle Logo" style="height: 45px; width: auto; display: block; object-fit: contain; margin-bottom: 20px;">
+          </a>
+          <p>India's most trusted destination for certified refurbished phones and electronics. Save big without compromising on quality.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4>Quick Links</h4>
+          <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="about.html">Why TrueCycle?</a></li>
+            <li><a href="contact.html">Help Center</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="admin-orders.html">Track Order</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:sm1807489@gmail.com">sm1807489@gmail.com</a></li>
+            <li><a href="tel:+919876543210">+91 98765 43210</a></li>
+            <li><a href="#">Mon-Sat, 10AM - 7PM</a></li>
+            <li><a href="#">New Delhi, India</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 TrueCycle. All rights reserved.</span>
+        <div class="footer-payments">
+          <span>VISA</span>
+          <span>Mastercard</span>
+          <span>UPI</span>
+          <span>RuPay</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top -->
+  <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <script src="wishlistService.js?v=2"></script>
+  <script src="script.js?v=2"></script>
+</body>
+</html>

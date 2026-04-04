@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Product Creator - TrueCycle Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --admin-primary: #006778;
+            --admin-bg: #f8fafc;
+            --admin-card-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            --admin-border: #e2e8f0;
+        }
+
+        body { background: var(--admin-bg); display: flex; min-height: 100vh; }
+        .admin-layout { display: grid; grid-template-columns: 260px 1fr; width: 100%; }
+        
+        .main-content { padding: 50px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .admin-card { background: #fff; padding: 35px; border-radius: 20px; box-shadow: var(--admin-card-shadow); margin-bottom: 30px; border: 1px solid var(--admin-border); }
+        .card-header { font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 25px; display: flex; align-items: center; gap: 12px; }
+        .card-header i { color: var(--admin-primary); }
+
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-weight: 700; font-size: 0.9rem; color: #64748b; }
+        .form-group input, .form-group select, .form-group textarea { 
+            padding: 14px; border: 2px solid var(--admin-border); border-radius: 12px; font-size: 1rem; outline: none; transition: 0.2s; 
+        }
+        .form-group input:focus { border-color: var(--admin-primary); }
+
+        /* Variant Table */
+        .variant-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .variant-table th { text-align: left; padding: 12px; background: #f1f5f9; font-size: 0.85rem; color: #475569; }
+        .variant-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+
+        /* Color Row */
+        .color-row { display: grid; grid-template-columns: 1fr 100px 1fr 1fr 50px; gap: 15px; align-items: flex-end; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
+        .color-preview-circle { width: 44px; height: 44px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 2px #e2e8f0; }
+
+        .image-slot-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .img-slot {
+            background: #ffffff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            height: 180px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            padding-top: 35px;
+        }
+
+        .img-slot:hover { border-color: var(--admin-primary); background: #f0f9ff; }
+        .img-slot.filled { border-style: solid; border-color: var(--admin-primary); background: white; }
+        
+        .img-slot img { width: 90%; height: 80px; object-fit: contain; margin-bottom: 5px; }
+        .img-slot .slot-label { 
+            position: absolute; top: 0; left: 0; right: 0; 
+            background: #f1f5f9; color: #475569; 
+            padding: 5px; text-align: center;
+            font-size: 0.65rem; font-weight: 800; border-bottom: 1px solid #e2e8f0;
+        }
+        .img-slot .slot-label.main { background: var(--admin-primary); color: white; }
+
+        .slot-actions {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(30, 41, 59, 0.9);
+            padding: 8px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            transform: translateY(100%);
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .img-slot:hover .slot-actions { transform: translateY(0); }
+        .action-btn { background: white; color: #1e293b; border: none; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; }
+        .action-btn:hover { background: var(--admin-primary); color: white; }
+        .action-btn.danger:hover { background: #e74c3c; }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f0f9ff;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px dashed var(--admin-primary);
+        }
+
+        .pricing-summary {
+            grid-column: span 2;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--admin-primary);
+        }
+
+        /* Color Table */
+        .color-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .color-table th { text-align: left; padding: 12px; background: #f8fafc; font-size: 0.8rem; color: #64748b; border-bottom: 2px solid #edf2f7; }
+        .color-table td { padding: 15px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        
+        .picker-container { display: flex; align-items: center; gap: 10px; }
+        .color-preview-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 1px #e2e8f0; flex-shrink: 0; }
+        .color-input-small { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; }
+        
+        .live-preview-box { background: #1e293b; color: white; padding: 25px; border-radius: 20px; position: sticky; top: 50px; border: 4px solid #334155; }
+        .live-preview-box h3 { margin-bottom: 20px; font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Sidebar Fixes */
+        .sidebar { background: #1e293b; color: white; padding: 30px 20px; display: flex; flex-direction: column; flex-shrink: 0; min-height: 100vh; }
+        .sidebar-logo { font-size: 1.5rem; font-weight: 800; color: var(--admin-primary); text-decoration: none; display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
+        .nav-menu { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .nav-link { text-decoration: none; color: #94a3b8; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; font-weight: 600; transition: 0.3s; }
+        .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-link.active { background: var(--admin-primary); color: white; }
+
+        .btn-add { background: #f1f5f9; color: #475569; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn-add:hover { background: var(--admin-primary); color: white; }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo"><i class="fas fa-recycle"></i> TrueCycle</a>
+            <div class="nav-menu">
+                <a href="admin-dashboard.html" class="nav-link" id="nav-dash"><i class="fas fa-th-large"></i> Dashboard</a>
+                <a href="admin-products.html" class="nav-link" id="nav-inventory"><i class="fas fa-mobile-alt"></i> Products</a>
+                <a href="admin-edit-product.html?mode=add" class="nav-link" id="nav-add"><i class="fas fa-plus-circle"></i> Add Product</a>
+                <a href="admin-orders.html" class="nav-link" id="nav-orders"><i class="fas fa-shopping-cart"></i> Orders</a>
+                <a href="admin-settings.html" class="nav-link" id="nav-settings"><i class="fas fa-cog"></i> Settings</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <h1 id="pageTitle">Add New Product</h1>
+                <button class="btn btn-primary" onclick="saveMasterProduct()" style="padding: 15px 40px; font-weight: 800;" id="saveBtn">
+                    <i class="fas fa-save"></i> Publish Product
+                </button>
+            </header>
+
+            <div style="display: grid; grid-template-columns: 1fr 340px; gap: 40px;">
+                <div>
+                    <!-- 1. Basic Info -->
+                    <div class="admin-card">
+                        <div class="card-header"><i class="fas fa-info-circle"></i> Basic Product Info</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Product Marketing Name</label>
+                                <input type="text" id="prdName" oninput="updateLivePreview()" placeholder="e.g. iPhone 15 Pro, S24 Ultra">
+                            </div>
+                            <div class="form-group">
+                                <label>Brand</label>
+                                <select id="prdBrand">
+                                    <option value="apple">Apple</option>
+                                    <option value="samsung">Samsung</option>
+                                    <option value="oneplus">OnePlus</option>
+                                    <option value="google">Google</option>
+                                    <option value="xiaomi">Xiaomi / Poco / Redmi</option>
+                                    <option value="vivo">Vivo / iQOO</option>
+                                    <option value="oppo">Oppo</option>
+                                    <option value="realme">Realme</option>
+                                    <option value="motorola">Motorola</option>
+                                    <option value="nothing">Nothing</option>
+                                    <option value="infinix">Infinix</option>
+                                    <option value="tecno">Tecno</option>
+                                    <option value="lava">Lava</option>
+                                    <option value="micromax">Micromax</option>
+                                    <option value="asus">ASUS / ROG</option>
+                                    <option value="sony">Sony</option>
+                                    <option value="other">Other Brand</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="prdCategory">
+                                    <option value="phones">Smartphones</option>
+                                    <option value="laptops">Laptops</option>
+                                    <option value="tablets">Tablets</option>
+                                    <option value="smartwatches">Smartwatches</option>
+                                    <option value="audio">Audio / Earbuds</option>
+                                    <option value="accessories">Accessories</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 2. NEW PRICING SECTION -->
+                        <div class="card-header" style="margin-top: 20px; font-size: 1rem;"><i class="fas fa-tag"></i> Pricing Structure</div>
+                        <div class="pricing-grid" style="grid-template-columns: 1fr;">
+                            <div class="form-group">
+                                <label>Original Price (MRP) ₹</label>
+                                <input type="number" id="mrpPrice" oninput="updateLivePreview()" placeholder="Official Official Launch Price">
+                            </div>
+                            <div class="pricing-summary" id="pricingSummary">
+                                <span>Base Discount Preview: ₹0</span>
+                                <span style="background:var(--admin-primary); color:white; padding:2px 10px; border-radius:4px;">0% OFF</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 25px;">
+                            <label>Product Description (Short & Sweet)</label>
+                            <textarea id="prdDesc" rows="3" placeholder="Explain the condition and top USP..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 3. Manage Variants (Definitions) -->
+                    <div class="admin-card">
+                        <div class="card-header"><i class="fas fa-microchip"></i> 1. Define RAM/Storage Options</div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--admin-border);">
+                            <div class="form-row" style="margin-bottom: 0;">
+                                <div class="form-group">
+                                    <label>RAM</label>
+                                    <input type="text" id="defRam" placeholder="e.g. 8GB">
+                                </div>
+                                <div class="form-group">
+                                    <label>Storage</label>
+                                    <input type="text" id="defStore" placeholder="e.g. 128GB">
+                                </div>
+                                <button class="btn-add" style="align-self: flex-end;" onclick="addVariantDef()">Add Option</button>
+                            </div>
+                        </div>
+                        <table class="variant-table" style="margin-top:20px;">
+                            <thead><tr><th>RAM</th><th>Storage</th><th>Action</th></tr></thead>
+                            <tbody id="variantDefBody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- 4. Manage Colors (Definitions) -->
+                    <div class="admin-card">
+                        <div class="card-header"><i class="fas fa-palette"></i> 2. Define Available Colors</div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--admin-border);">
+                            <div class="form-row" style="margin-bottom: 0;">
+                                <div class="form-group" style="flex:2;">
+                                    <label>Color Name</label>
+                                    <input type="text" id="defColName" placeholder="e.g. Midnight Black" oninput="handleColorAuto(this)">
+                                </div>
+                                <div class="form-group" style="width: 80px;">
+                                    <label>Hex</label>
+                                    <input type="color" id="defColHex" value="#000000" style="width:100%; height:44px; padding:0; border:none;">
+                                </div>
+                                <button class="btn-add" style="align-self: flex-end;" onclick="addColorDef()">Add Color</button>
+                            </div>
+                        </div>
+                        <table class="variant-table" style="margin-top:20px;">
+                            <thead><tr><th>Name</th><th>Swatch</th><th>Action</th></tr></thead>
+                            <tbody id="colorDefBody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- 5. MASTER PRICING MATRIX -->
+                    <div class="admin-card" style="border: 3px solid var(--admin-primary);">
+                        <div class="card-header" style="color: var(--admin-primary); justify-content: space-between;">
+                            <span><i class="fas fa-th"></i> 3. Master Pricing Matrix (Manual Control)</span>
+                            <button class="btn-add" onclick="generatePricingMatrix()" style="background: var(--admin-primary); color: white;">Refresh Grid</button>
+                        </div>
+                        <p style="color: #64748b; font-size: 0.8rem; margin-top: -15px; margin-bottom: 20px;">Type the exact price for every combination. These prices appear directly on the site.</p>
+                        
+                        <div style="overflow-x: auto;">
+                            <table class="variant-table" id="masterMatrixTable">
+                                <thead>
+                                    <tr>
+                                        <th>Combination</th>
+                                        <th style="background:#fff7ed; width:150px;">Fair Price (₹)</th>
+                                        <th style="background:#f0fdf4; width:150px;">Good Price (₹)</th>
+                                        <th style="background:#eff6ff; width:150px;">Superb Price (₹)</th>
+                                        <th style="width:80px;">Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="matrixBody">
+                                    <tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;">Add Variants & Colors above, then click "Refresh Grid"</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <!-- 5. Image Upload (SLOT SYSTEM) -->
+                    <div class="admin-card">
+                        <div class="card-header"><i class="fas fa-images"></i> Product Images</div>
+                        <p style="font-size: 0.8rem; color: #64748b; margin-top: -15px; margin-bottom: 20px;">Upload at least 5 images. The first image will be the <strong>Main display image</strong> on the store.</p>
+                        
+                        <div class="image-slot-grid" id="imageSlotGrid">
+                            <!-- JS will render 5 slots here -->
+                        </div>
+
+                        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
+                        <div id="imageError" style="color: #e74c3c; font-size: 0.8rem; margin-top: 15px; display: none; font-weight: 700;">
+                            ⚠️ Error: All 5 primary image slots must be filled to publish.
+                        </div>
+                    </div>
+                </div>
+
+                <aside>
+                    <div class="live-preview-box">
+                        <h3>Live User View</h3>
+                        <div id="prevMainImg" style="width:100%; height:180px; background:#f8fafc; border-radius:12px; margin-bottom:20px; overflow:hidden;">
+                            <img src="" style="width:100%; height:100%; object-fit:contain; display:none;">
+                            <div class="no-img" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.8rem;">No Main Image</div>
+                        </div>
+
+                        <div style="font-size: 1.25rem; font-weight: 800; margin-bottom: 20px;" id="prevName">iPhone 11</div>
+                        
+                        <div id="prevConfig" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px;">
+                            Good / 128GB / Black
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <div style="font-size: 1.8rem; font-weight: 900; color: var(--eco-green);" id="prevPrice">₹14,000</div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="text-decoration: line-through; color: #64748b;" id="prevOrig">₹30,000</span>
+                                <span style="background: var(--eco-green); color: #1e293b; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 900;" id="prevOff">53% OFF</span>
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                            <div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 10px;">Selected Color</div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div id="prevColorCircle" style="width: 24px; height: 24px; border-radius: 50%; background: #000; border: 2px solid white;"></div>
+                                <span id="prevColorName">Black</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin-auth.js"></script>
+    <script src="productService.js"></script>
+    <script src="script.js"></script>
+    <script>
+        let productImages = [null, null, null, null, null]; // Fixed 5 slots
+        let editProductId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            editProductId = params.get('id');
+            const mode = params.get('mode');
+
+            if (editProductId) {
+                document.getElementById('nav-inventory').classList.add('active');
+                loadProductData(editProductId);
+            } else {
+                document.getElementById('nav-add').classList.add('active');
+                addColorDef('Midnight Black', '#1e1e1e');
+                renderImageSlots();
+                updateLivePreview();
+            }
+        });
+
+
+        function loadProductData(id) {
+            const product = productService.getProductById(id);
+            if (!product) {
+                showToast('Product not found!', 'error');
+                return;
+            }
+
+            // Update UI Labels
+            document.getElementById('pageTitle').textContent = `Edit Product: ${product.name}`;
+            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-save"></i> Update Product';
+
+            // Basic Info
+            document.getElementById('prdName').value = product.name;
+            document.getElementById('prdBrand').value = product.brand;
+            document.getElementById('prdCategory').value = product.category || 'phones';
+            document.getElementById('mrpPrice').value = product.originalPrice;
+            document.getElementById('prdDesc').value = product.description || '';
+
+            // Images
+            if (product.images && product.images.length > 0) {
+                productImages = [...product.images];
+                while (productImages.length < 5) productImages.push(null);
+            }
+            renderImageSlots();
+
+            // Variants
+            const variantBody = document.getElementById('variantBody');
+            variantBody.innerHTML = '';
+            if (product.variants) {
+                product.variants.forEach(v => {
+                    const row = document.createElement('tr');
+                    row.className = 'v-data-row';
+                    // Extract prices map or use fallbacks
+                    const pFair = v.prices ? (v.prices.fair || 0) : 0;
+                    const pGood = v.prices ? (v.prices.good || 0) : 0;
+                    const pSuperb = v.prices ? (v.prices.superb || 0) : 0;
+
+                    row.innerHTML = `
+                        <td data-val="${v.ram || ''}">${v.ram || 'No RAM'}</td>
+                        <td data-val="${v.storage || 'Standard'}">${v.storage}</td>
+                        <td data-val="${pFair}">₹${pFair.toLocaleString('en-IN')}</td>
+                        <td data-val="${pGood}">₹${pGood.toLocaleString('en-IN')}</td>
+                        <td data-val="${pSuperb}">₹${pSuperb.toLocaleString('en-IN')}</td>
+                        <td data-val="${v.stock}">${v.stock}</td>
+                        <td><button onclick="this.parentElement.parentElement.remove(); updateLivePreview();" style="color:#e74c3c; border:none; background:none; cursor:pointer;"><i class="fas fa-trash"></i></button></td>
+                    `;
+                    variantBody.appendChild(row);
+                });
+            }
+
+            // Colors
+            const colorContainer = document.getElementById('colorContainer');
+            colorContainer.innerHTML = '';
+            if (product.colors) {
+                product.colors.forEach(c => {
+                    addColorRow(c.name, c.hex, c.stock, c.priceAdd);
+                });
+            }
+
+            // Conditions
+            if (product.conditions) {
+                activeConditions = { Fair: false, Good: false, Superb: false };
+                product.conditions.forEach(c => {
+                    activeConditions[c.label] = true;
+                });
+                ['Fair', 'Good', 'Superb'].forEach(type => {
+                    document.getElementById(`btnCond${type}`).classList.toggle('active', activeConditions[type]);
+                });
+            }
+
+            updateLivePreview();
+        }
+
+        // -----------------
+        // Image Slot Logic
+        // -----------------
+        function renderImageSlots() {
+            const grid = document.getElementById('imageSlotGrid');
+            grid.innerHTML = '';
+
+            const labels = ['MAIN IMAGE', 'SIDE VIEW', 'BACK VIEW', 'TOP VIEW', 'INTERIOR'];
+
+            productImages.forEach((img, idx) => {
+                const isFilled = img !== null;
+                const slot = document.createElement('div');
+                slot.className = `img-slot ${isFilled ? 'filled' : ''}`;
+                
+                slot.innerHTML = `
+                    <div class="slot-label ${idx === 0 ? 'main' : ''}">${labels[idx]}</div>
+                    ${isFilled ? `
+                        <img src="${img}">
+                        <div style="width:100%; padding:5px;">
+                            <button class="btn-add" onclick="removeImage(${idx})" style="width:100%; background:#ffeeee; color:#cc0000; padding:5px; font-size:0.65rem;">
+                                <i class="fas fa-trash"></i> REMOVE
+                            </button>
+                        </div>
+                    ` : `
+                        <div style="text-align:center; padding:10px;">
+                            <i class="fas fa-camera-retro" style="font-size:1.5rem; color:#cbd5e1; margin-bottom:10px; display:block;"></i>
+                            <button class="btn-add" onclick="triggerUpload(${idx})" style="padding: 6px 12px; font-size: 0.6rem;">
+                                <i class="fas fa-plus"></i> CHOOSE
+                            </button>
+                        </div>
+                    `}
+                `;
+                grid.appendChild(slot);
+            });
+            updateLivePreview();
+        }
+
+        let targetSlot = -1;
+        function triggerUpload(idx) {
+            targetSlot = idx;
+            document.getElementById('fileInput').click();
+        }
+
+        function handleImageUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (targetSlot !== -1) {
+                    productImages[targetSlot] = e.target.result;
+                } else {
+                    // Find first empty slot
+                    const emptyIdx = productImages.findIndex(i => i === null);
+                    if (emptyIdx !== -1) productImages[emptyIdx] = e.target.result;
+                }
+                renderImageSlots();
+                input.value = '';
+                targetSlot = -1;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage(idx) {
+            productImages[idx] = null;
+            renderImageSlots();
+        }
+
+        function moveImage(idx, dir) {
+            const swapIdx = dir === 'left' ? idx - 1 : idx + 1;
+            if (swapIdx < 0 || swapIdx >= productImages.length) return;
+
+            const temp = productImages[idx];
+            productImages[idx] = productImages[swapIdx];
+            productImages[swapIdx] = temp;
+            renderImageSlots();
+        }
+
+        // --- New Grid Management ---
+        function addVariantDef() {
+            const ram = document.getElementById('defRam').value;
+            const store = document.getElementById('defStore').value;
+            if (!store) return;
+            const tbody = document.getElementById('variantDefBody');
+            const tr = document.createElement('tr');
+            tr.className = 'v-def-row';
+            tr.innerHTML = `<td>${ram || '-'}</td><td>${store}</td><td><button onclick="this.parentElement.parentElement.remove()" class="action-btn danger"><i class="fas fa-trash"></i></button></td>`;
+            tbody.appendChild(tr);
+            document.getElementById('defRam').value = ''; document.getElementById('defStore').value = '';
+        }
+
+        function addColorDef() {
+            const name = document.getElementById('defColName').value;
+            const hex = document.getElementById('defColHex').value;
+            if (!name) return;
+            const tbody = document.getElementById('colorDefBody');
+            const tr = document.createElement('tr');
+            tr.className = 'c-def-row';
+            tr.innerHTML = `<td>${name}</td><td><div class="color-preview-circle" style="background:${hex}; width:24px; height:24px;"></div><span style="display:none" class="hex-val">${hex}</span></td><td><button onclick="this.parentElement.parentElement.remove()" class="action-btn danger"><i class="fas fa-trash"></i></button></td>`;
+            tbody.appendChild(tr);
+            document.getElementById('defColName').value = '';
+        }
+
+        function handleColorAuto(input) {
+            const name = input.value.toLowerCase().trim();
+            if (standardColors[name]) document.getElementById('defColHex').value = standardColors[name];
+        }
+
+        function generatePricingMatrix() {
+            const vRows = Array.from(document.querySelectorAll('.v-def-row'));
+            const cRows = Array.from(document.querySelectorAll('.c-def-row'));
+            const tbody = document.getElementById('matrixBody');
+
+            if (vRows.length === 0 || cRows.length === 0) {
+                showToast('Please add at least 1 Variant and 1 Color first.', 'error');
+                return;
+            }
+
+            tbody.innerHTML = '';
+            vRows.forEach((vr, vIdx) => {
+                cRows.forEach((cr, cIdx) => {
+                    const ram = vr.children[0].textContent;
+                    const store = vr.children[1].textContent;
+                    const cName = cr.children[0].textContent;
+                    const cHex = cr.querySelector('.hex-val').textContent;
+                    
+                    const rowId = `${vIdx}-${cIdx}`;
+                    const tr = document.createElement('tr');
+                    tr.className = 'matrix-row';
+                    tr.dataset.vidx = vIdx;
+                    tr.dataset.cidx = cIdx;
+                    tr.dataset.ram = ram;
+                    tr.dataset.store = store;
+                    tr.dataset.cname = cName;
+                    tr.dataset.chex = cHex;
+
+                    tr.innerHTML = `
+                        <td style="font-weight:700; font-size:0.85rem;">
+                            ${ram !== '-' ? ram + ' / ' : ''}${store}<br>
+                            <span style="color:var(--admin-primary)">${cName}</span>
+                        </td>
+                        <td style="background:#fff7ed;"><input type="number" class="p-fair" placeholder="Fair Price" style="width:100%; padding:8px; border:1px solid #fed7aa; border-radius:6px;"></td>
+                        <td style="background:#f0fdf4;"><input type="number" class="p-good" placeholder="Good Price" style="width:100%; padding:8px; border:1px solid #bbf7d0; border-radius:6px;"></td>
+                        <td style="background:#eff6ff;"><input type="number" class="p-superb" placeholder="Superb Price" style="width:100%; padding:8px; border:1px solid #bfdbfe; border-radius:6px;"></td>
+                        <td><input type="number" class="p-stock" value="10" style="width:100%; padding:8px; border:1px solid #e2e8f0; border-radius:6px;"></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+            showToast('Pricing Matrix updated!');
+        }
+
+        function updateLivePreview() {
+            const name = document.getElementById('prdName').value || 'New Device';
+            const mrp = parseFloat(document.getElementById('mrpPrice').value) || 0;
+            
+            // Try to get price from first row of matrix if available
+            const firstGoodInput = document.querySelector('.matrix-row .p-good');
+            let selling = firstGoodInput ? (parseFloat(firstGoodInput.value) || 0) : 0;
+            
+            // Image Preview (Slot 1)
+            const prevImgContainer = document.getElementById('prevMainImg');
+            if (prevImgContainer) {
+                const imgEl = prevImgContainer.querySelector('img');
+                const noImgEl = prevImgContainer.querySelector('.no-img');
+                if (productImages[0]) {
+                    imgEl.src = productImages[0];
+                    imgEl.style.display = 'block';
+                    noImgEl.style.display = 'none';
+                } else {
+                    imgEl.style.display = 'none';
+                    noImgEl.style.display = 'flex';
+                }
+            }
+
+            // Pricing Summaries
+            if (mrp > 0 && selling > 0) {
+                const savings = mrp - selling;
+                const discountPerc = Math.round((savings / mrp) * 100);
+                const summary = document.getElementById('pricingSummary');
+                if (summary) summary.innerHTML = `<span>Preview Discount: ₹${savings.toLocaleString('en-IN')}</span> <span style="background:var(--admin-primary); color:white; padding:2px 10px; border-radius:4px;">${discountPerc}% OFF</span>`;
+                
+                const prevNameEl = document.getElementById('prevName');
+                const prevPriceEl = document.getElementById('prevPrice');
+                const prevOrigEl = document.getElementById('prevOrig');
+                const prevOffEl = document.getElementById('prevOff');
+
+                if (prevNameEl) prevNameEl.textContent = name;
+                if (prevPriceEl) prevPriceEl.textContent = `₹${selling.toLocaleString('en-IN')}`;
+                
+                if (mrp > selling) {
+                    if (prevOrigEl) {
+                        prevOrigEl.style.display = 'inline';
+                        prevOrigEl.textContent = `₹${mrp.toLocaleString('en-IN')}`;
+                    }
+                    if (prevOffEl) {
+                        prevOffEl.style.display = 'inline';
+                        prevOffEl.textContent = `${discountPerc}% OFF`;
+                    }
+                }
+            }
+        }
+
+        function saveMasterProduct() {
+            const mrp = parseFloat(document.getElementById('mrpPrice').value);
+            const mRows = Array.from(document.querySelectorAll('.matrix-row'));
+            
+            if (!mrp || mRows.length === 0) { showToast('Complete Basic Info & Pricing Matrix!', 'error'); return; }
+
+            const filledImages = productImages.filter(img => img !== null);
+            if (filledImages.length < 1) { showToast('Add at least 1 image.', 'error'); return; }
+
+            const pricingGrid = {};
+            const variants = [];
+            const colors = [];
+
+            // Extract Combinations
+            mRows.forEach(row => {
+                const vIdx = row.dataset.vidx;
+                const cIdx = row.dataset.cidx;
+                const pFair = parseFloat(row.querySelector('.p-fair').value) || 0;
+                const pGood = parseFloat(row.querySelector('.p-good').value) || 0;
+                const pSuperb = parseFloat(row.querySelector('.p-superb').value) || 0;
+                const stock = parseInt(row.querySelector('.p-stock').value) || 0;
+
+                pricingGrid[`${vIdx}-${cIdx}-fair`] = pFair;
+                pricingGrid[`${vIdx}-${cIdx}-good`] = pGood;
+                pricingGrid[`${vIdx}-${cIdx}-superb`] = pSuperb;
+                pricingGrid[`${vIdx}-${cIdx}-stock`] = stock;
+
+                // Sync basic lists for legacy search/filters
+                if (!variants[vIdx]) variants[vIdx] = { ram: row.dataset.ram, storage: row.dataset.store };
+                if (!colors[cIdx]) colors[cIdx] = { name: row.dataset.cname, hex: row.dataset.chex };
+            });
+
+            // Find starting price for listing
+            const allPrices = Object.values(pricingGrid).filter(p => typeof p === 'number' && p > 0);
+            const minPrice = Math.min(...allPrices);
+
+            const masterData = {
+                name: document.getElementById('prdName').value,
+                brand: document.getElementById('prdBrand').value,
+                category: document.getElementById('prdCategory').value,
+                description: document.getElementById('prdDesc').value,
+                originalPrice: mrp,
+                basePrice: minPrice, // "Starts from"
+                images: filledImages,
+                variants: variants.filter(v => v),
+                colors: colors.filter(c => c),
+                pricingGrid: pricingGrid,
+                conditions: [{label:'Fair'}, {label:'Good'}, {label:'Superb'}]
+            };
+
+            if (editProductId) {
+                productService.updateProduct(editProductId, masterData);
+                showToast('Product Updated! 🚀');
+            } else {
+                productService.addProduct(masterData);
+                showToast('Product Published! 🚀');
+            }
+            setTimeout(() => location.href = 'admin-products.html', 1000);
+        }
+
+        const standardColors = {
+            'black': '#000000', 'white': '#FFFFFF', 'red': '#FF0000', 'blue': '#0000FF',
+            'green': '#008000', 'yellow': '#FFFF00', 'purple': '#800080', 'pink': '#FFC0CB',
+            'orange': '#FFA500', 'gold': '#FFD700', 'silver': '#C0C0C0', 'gray': '#808080',
+            'titanium': '#BEBAA7', 'natural titanium': '#BEBAA7', 'blue titanium': '#2F3641',
+            'black titanium': '#212121', 'white titanium': '#E1E1E1', 'midnight': '#1e1e1e',
+            'starlight': '#F8F1E7', 'deep purple': '#4B3D4D', 'sierra blue': '#9FBBD3',
+            'graphite': '#3C3B37', 'space gray': '#53565A', 'rose gold': '#B76E79'
+        };
+    </script>
+</body>
+</html>
