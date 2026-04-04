@@ -105,15 +105,16 @@ const productService = {
                 this.cache = localData;
             }
             this.isLoaded = true;
-            
-            // Trigger UI refresh if script.js is already running
+            // Notify UI components that data is ready
+            window.dispatchEvent(new CustomEvent('productsReady'));
             if (window.ProductUI && window.ProductUI.init && document.getElementById('productsGrid')) window.ProductUI.init();
-            if (window.HomePageUI && window.HomePageUI.init && document.getElementById('deal-of-the-day-grid')) window.HomePageUI.init();
-            
+            if (window.HomeUI && window.HomeUI.init && document.querySelector('[id$="-grid"]')) window.HomeUI.init();
+
         } catch (err) {
             console.error("Supabase Initialization Error:", err);
-            this.cache = JSON.parse(localStorage.getItem(this.key) || '[]');
+            this.cache = JSON.parse(localStorage.getItem(this.key) || JSON.stringify(this.seedData));
             this.isLoaded = true;
+            window.dispatchEvent(new CustomEvent('productsReady'));
         }
     },
 

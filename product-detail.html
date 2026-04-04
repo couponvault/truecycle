@@ -49,7 +49,7 @@
           </a>
           <a href="cart.html" class="action-btn" title="Cart">
             <i class="fas fa-shopping-bag"></i>
-            <span class="cart-count" id="cartCount">3</span>
+            <span class="cart-count" id="cartCount">0</span>
           </a>
           <button class="action-btn" title="Account" onclick="toggleProfileModal()"><i class="far fa-user"></i></button>
         </div>
@@ -108,17 +108,9 @@
           <p id="displaySavingsText" style="color: #64748b; font-size: 0.9rem; margin-top: 5px;">You save ₹0</p>
         </div>
 
-        <!-- NEW: Condition Selection -->
-        <div class="selection-group" style="margin-top: 30px;">
-          <h4 style="margin-bottom: 12px; font-size: 1rem;">1. Select Condition <a href="policies.html#condition" style="font-size: 0.8rem; color: var(--primary); margin-left: 10px;">Learn More</a></h4>
-          <div class="condition-selector-grid" id="conditionSelector" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-            <!-- Dynamic Condition Cards -->
-          </div>
-        </div>
-
         <!-- NEW: Storage Selection -->
-        <div class="selection-group" id="storageSelectionGroup" style="margin-top: 25px;">
-          <h4 style="margin-bottom: 12px; font-size: 1rem;">2. Select Storage</h4>
+        <div class="selection-group" id="storageSelectionGroup" style="margin-top: 30px;">
+          <h4 style="margin-bottom: 12px; font-size: 1rem;">1. Select Storage</h4>
           <div class="storage-selector-btns" id="storageSelector" style="display: flex; gap: 10px; flex-wrap: wrap;">
             <!-- Dynamic Storage Buttons -->
           </div>
@@ -126,9 +118,17 @@
 
         <!-- NEW: Color Selection -->
         <div class="selection-group" style="margin-top: 25px;">
-          <h4 style="margin-bottom: 12px; font-size: 1rem;">3. Select Color</h4>
+          <h4 style="margin-bottom: 12px; font-size: 1rem;">2. Select Color</h4>
           <div class="color-selector-circles" id="colorSelector" style="display: flex; gap: 15px; align-items: center;">
             <!-- Dynamic Color Circles -->
+          </div>
+        </div>
+
+        <!-- NEW: Condition Selection -->
+        <div class="selection-group" style="margin-top: 25px;">
+          <h4 style="margin-bottom: 12px; font-size: 1rem;">3. Select Condition <a href="policies.html#condition" style="font-size: 0.8rem; color: var(--primary); margin-left: 10px;">Learn More</a></h4>
+          <div class="condition-selector-grid" id="conditionSelector" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            <!-- Dynamic Condition Cards -->
           </div>
         </div>
 
@@ -372,9 +372,9 @@
           }
 
           // 5. Update Gallery Thumbnails
-          const thumbRow = document.querySelector('.thumbnail-row');
-          if (p.images && p.images.length > 0) {
-              thumbRow.innerHTML = p.images.map((img, idx) => `
+          const thumbRow2 = document.querySelector('.thumbnail-row');
+          if (p.images && p.images.length > 0 && thumbRow2) {
+              thumbRow2.innerHTML = p.images.map((img, idx) => `
                 <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="changeImage(this, '${img}')">
                     <img src="${img}" alt="${p.name} ${idx + 1}">
                 </div>
@@ -529,11 +529,11 @@
             <div class="product-card">
               <span class="product-badge ${p.basePrice > 70000 ? 'badge-trending' : 'badge-new'}">${p.basePrice > 70000 ? 'Flagship' : 'Best Value'}</span>
               <button class="product-wishlist" onclick="event.preventDefault(); WishlistUI.handleToggle(this)"><i class="far fa-heart"></i></button>
-              <a href="product-detail?id=${p.id}" class="product-image" style="height:180px; padding:15px;">
+              <a href="product-detail.html?id=${p.id}" class="product-image" style="height:180px; padding:15px;">
                 <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}" style="object-fit:contain; max-height:100%;">
               </a>
               <div class="product-info" style="padding:15px;">
-                <h3 style="font-size:0.9rem;"><a href="product-detail?id=${p.id}">${p.name}</a></h3>
+                <h3 style="font-size:0.9rem;"><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
                 <div class="product-price">
                   <span class="current-price" style="font-size:1rem;">₹${(p.basePrice || 0).toLocaleString('en-IN')} onwards</span>
                 </div>

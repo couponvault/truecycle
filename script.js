@@ -144,19 +144,8 @@ function updateQty(delta) {
 const Cart = {
   items: JSON.parse(localStorage.getItem('truecycle_cart')) || [],
   init: function() {
-    if (!localStorage.getItem('truecycle_cart_initialized')) {
-      // Seed initial data to match previous hardcoded state
-      this.items = [
-        { id: 'cartItem1', name: 'Apple iPhone 15 Pro – 256GB', price: 89999, qty: 1, img: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=150&h=150&fit=crop', spec: 'Natural Titanium · Excellent Condition' },
-        { id: 'cartItem2', name: 'Samsung Galaxy S24 Ultra – 512GB', price: 79999, qty: 1, img: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=150&h=150&fit=crop', spec: 'Titanium Black · Like New' },
-        { id: 'cartItem3', name: 'Sony WH-1000XM5 Headphones', price: 18999, qty: 1, img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=150&fit=crop', spec: 'Black · Like New' }
-      ];
-      localStorage.setItem('truecycle_cart_initialized', 'true');
-      this.save();
-    } else {
-      this.updateCounters();
-      this.renderCartPage();
-    }
+    this.updateCounters();
+    this.renderCartPage();
   },
   discount: 0,
   couponCode: '',
@@ -315,6 +304,18 @@ const Cart = {
 document.addEventListener('DOMContentLoaded', () => {
   Cart.init();
   WishlistUI.init();
+
+  // If products are already loaded (sync/local), init UI immediately
+  if (typeof productService !== 'undefined' && productService.isLoaded) {
+    ProductUI.init();
+    HomeUI.init();
+  }
+});
+
+// Re-init product UIs when async productService data becomes available
+window.addEventListener('productsReady', () => {
+  if (document.getElementById('productsGrid')) ProductUI.init();
+  HomeUI.init();
 });
 
 // --- Add to Cart ---
@@ -567,14 +568,122 @@ function handleWishlistToCart(id) {
     showToast('Product shifted to cart! 🛒');
 }
 
+// --- User Authentication System ---
+const UserAuth = {
+  USERS_KEY: 'truecycle_users',
+  SESSION_KEY: 'truecycle_user_session',
+
+  /** SHA-256 hash */
+  async hash(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text + '_tc_user_salt_v1');
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  },
+
+  getUsers() {
+    return JSON.parse(localStorage.getItem(this.USERS_KEY)) || [];
+  },
+
+  saveUsers(users) {
+    localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
+  },
+
+  isLoggedIn() {
+    const session = localStorage.getItem(this.SESSION_KEY);
+    if (!session) return false;
+    try {
+      const data = JSON.parse(session);
+      if (Date.now() > data.expires) {
+        localStorage.removeItem(this.SESSION_KEY);
+        return false;
+      }
+      return true;
+    } catch { return false; }
+  },
+
+  getSession() {
+    if (!this.isLoggedIn()) return null;
+    try { return JSON.parse(localStorage.getItem(this.SESSION_KEY)); } catch { return null; }
+  },
+
+  async signup(name, email, password) {
+    if (!name || !email || !password) return { success: false, message: 'All fields are required.' };
+    if (password.length < 6) return { success: false, message: 'Password must be at least 6 characters.' };
+
+    const users = this.getUsers();
+    const emailLower = email.toLowerCase().trim();
+    if (users.find(u => u.email === emailLower)) {
+      return { success: false, message: 'An account with this email already exists.' };
+    }
+
+    const hashedPw = await this.hash(password);
+    const newUser = {
+      id: 'user_' + Math.random().toString(36).substr(2, 9),
+      name: name.trim(),
+      email: emailLower,
+      password: hashedPw,
+      createdAt: new Date().toISOString()
+    };
+
+    users.push(newUser);
+    this.saveUsers(users);
+
+    // Auto-login after signup
+    this._createSession(newUser);
+    return { success: true, user: newUser };
+  },
+
+  async login(email, password) {
+    if (!email || !password) return { success: false, message: 'Email and password are required.' };
+
+    const users = this.getUsers();
+    const emailLower = email.toLowerCase().trim();
+    const user = users.find(u => u.email === emailLower);
+
+    if (!user) return { success: false, message: 'No account found with this email.' };
+
+    const hashedPw = await this.hash(password);
+    if (hashedPw !== user.password) return { success: false, message: 'Incorrect password. Please try again.' };
+
+    this._createSession(user);
+    return { success: true, user };
+  },
+
+  _createSession(user) {
+    const session = {
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+      loggedIn: true,
+      timestamp: Date.now(),
+      expires: Date.now() + (7 * 24 * 60 * 60 * 1000) // 7 days
+    };
+    localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
+  },
+
+  logout() {
+    localStorage.removeItem(this.SESSION_KEY);
+  }
+};
+
 // --- Profile / Account Modal ---
 function toggleProfileModal() {
   let modal = document.getElementById('profileModal');
-  if (!modal) {
+  if (modal) {
+    if (modal.style.display === 'flex') {
+      modal.style.display = 'none';
+    } else {
+      // Re-render the account view to reflect current login state
+      renderAccountView();
+      modal.style.display = 'flex';
+    }
+  } else {
     createProfileModal();
     modal = document.getElementById('profileModal');
+    modal.style.display = 'flex';
   }
-  modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
 }
 
 function createProfileModal() {
@@ -592,46 +701,12 @@ function createProfileModal() {
         <div id="profileTabsContainer" style="padding:32px;">
           <!-- Account View -->
           <div id="viewAccount">
-            <div id="authViewContainer">
-              <div id="signInView">
-                <div style="text-align:center; margin-bottom:24px;">
-                  <div style="width:70px; height:70px; border-radius:50%; background:var(--bg-secondary); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:var(--primary);">
-                    <i class="far fa-user"></i>
-                  </div>
-                  <h2 style="margin-bottom:4px;">Welcome Back!</h2>
-                  <p style="font-size:0.85rem; color:var(--text-muted);">Access your TrueCycle account</p>
-                </div>
-                <form onsubmit="event.preventDefault(); showToast('Signing in...')">
-                  <div style="display:flex; flex-direction:column; gap:16px;">
-                    <input type="email" required placeholder="Email Address" style="padding:12px; border:1px solid var(--border); border-radius:8px;">
-                    <input type="password" required placeholder="Password" style="padding:12px; border:1px solid var(--border); border-radius:8px;">
-                    <button type="submit" class="btn btn-primary" style="width:100%; padding:14px;">Sign In</button>
-                    <p style="text-align:center; font-size:0.85rem;">Don't have an account? <a href="javascript:void(0)" onclick="switchAuthView('signup')" style="color:var(--primary); font-weight:600;">Sign up</a></p>
-                  </div>
-                </form>
-              </div>
-              <div id="signUpView" style="display:none;">
-                <div style="text-align:center; margin-bottom:24px;">
-                  <h2 style="margin-bottom:8px;">Join TrueCycle</h2>
-                  <p style="font-size:0.85rem; color:var(--text-muted);">Create your account for better shopping</p>
-                </div>
-                <form onsubmit="event.preventDefault(); showToast('Account created successfully!')">
-                  <div style="display:flex; flex-direction:column; gap:12px;">
-                    <input type="text" required placeholder="Full Name" style="padding:12px; border:1px solid var(--border); border-radius:8px;">
-                    <input type="email" required placeholder="Email Address" style="padding:12px; border:1px solid var(--border); border-radius:8px;">
-                    <input type="password" required placeholder="Create Password" style="padding:12px; border:1px solid var(--border); border-radius:8px;">
-                    <button type="submit" class="btn btn-primary" style="width:100%; padding:14px;">Create Account</button>
-                    <p style="text-align:center; font-size:0.85rem;">Already have an account? <a href="javascript:void(0)" onclick="switchAuthView('signin')" style="color:var(--primary); font-weight:600;">Sign in</a></p>
-                  </div>
-                </form>
-              </div>
-            </div>
+            <!-- Dynamically rendered by renderAccountView() -->
           </div>
 
           <!-- Addresses View -->
           <div id="viewAddresses" style="display:none;">
             <div id="profileAddressList" style="max-height:300px; overflow-y:auto; margin-bottom:20px;">
-              <!-- Loaded dynamically -->
             </div>
             <button onclick="openNewAddressPrompt()" class="btn btn-outline" style="width:100%; border-style:dashed;">+ Add New Address</button>
           </div>
@@ -641,7 +716,182 @@ function createProfileModal() {
   `;
   document.body.insertAdjacentHTML('beforeend', modalHTML);
   document.getElementById('profileModal').addEventListener('click', (e) => { if (e.target.id === 'profileModal') toggleProfileModal(); });
+  renderAccountView();
 }
+
+/** Dynamically renders the account tab content based on login state */
+function renderAccountView() {
+  const container = document.getElementById('viewAccount');
+  if (!container) return;
+
+  if (UserAuth.isLoggedIn()) {
+    const session = UserAuth.getSession();
+    const initials = session.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+    container.innerHTML = `
+      <div style="text-align:center;">
+        <div style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg, var(--primary), #76C043); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:white; font-weight:800;">
+          ${initials}
+        </div>
+        <h2 style="margin-bottom:4px; font-size:1.4rem;">${escapeHTML(session.name)}</h2>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:24px;">${escapeHTML(session.email)}</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:24px;">
+        <a href="orders.html" style="display:flex; align-items:center; gap:12px; padding:14px 16px; border:1px solid var(--border-light); border-radius:10px; color:var(--text-primary); transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)';this.style.background='#f0fafa'" onmouseout="this.style.borderColor='var(--border-light)';this.style.background='transparent'">
+          <i class="fas fa-box" style="color:var(--primary); width:20px; text-align:center;"></i>
+          <div style="flex:1"><div style="font-weight:600; font-size:0.92rem;">My Orders</div><div style="font-size:0.75rem; color:var(--text-muted);">Track and manage your orders</div></div>
+          <i class="fas fa-chevron-right" style="color:#ddd;"></i>
+        </a>
+        <a href="wishlist.html" style="display:flex; align-items:center; gap:12px; padding:14px 16px; border:1px solid var(--border-light); border-radius:10px; color:var(--text-primary); transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)';this.style.background='#f0fafa'" onmouseout="this.style.borderColor='var(--border-light)';this.style.background='transparent'">
+          <i class="fas fa-heart" style="color:#E74C3C; width:20px; text-align:center;"></i>
+          <div style="flex:1"><div style="font-weight:600; font-size:0.92rem;">My Wishlist</div><div style="font-size:0.75rem; color:var(--text-muted);">Your saved items</div></div>
+          <i class="fas fa-chevron-right" style="color:#ddd;"></i>
+        </a>
+        <a href="cart.html" style="display:flex; align-items:center; gap:12px; padding:14px 16px; border:1px solid var(--border-light); border-radius:10px; color:var(--text-primary); transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)';this.style.background='#f0fafa'" onmouseout="this.style.borderColor='var(--border-light)';this.style.background='transparent'">
+          <i class="fas fa-shopping-bag" style="color:var(--primary); width:20px; text-align:center;"></i>
+          <div style="flex:1"><div style="font-weight:600; font-size:0.92rem;">My Cart</div><div style="font-size:0.75rem; color:var(--text-muted);">View your shopping cart</div></div>
+          <i class="fas fa-chevron-right" style="color:#ddd;"></i>
+        </a>
+      </div>
+      <button onclick="handleUserLogout()" class="btn" style="width:100%; padding:14px; background:#fff5f5; color:#E74C3C; border:1px solid #fecaca; border-radius:10px; font-weight:600; transition:all 0.2s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fff5f5'">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    `;
+  } else {
+    container.innerHTML = `
+      <div id="authViewContainer">
+        <div id="signInView">
+          <div style="text-align:center; margin-bottom:24px;">
+            <div style="width:70px; height:70px; border-radius:50%; background:var(--bg-secondary); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:var(--primary);">
+              <i class="far fa-user"></i>
+            </div>
+            <h2 style="margin-bottom:4px;">Welcome Back!</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted);">Access your TrueCycle account</p>
+          </div>
+          <div id="loginError" style="display:none; background:#fff5f5; border:1px solid #fecaca; color:#dc2626; padding:10px 14px; border-radius:8px; font-size:0.82rem; margin-bottom:16px; text-align:center;"></div>
+          <form id="loginForm" onsubmit="event.preventDefault(); handleUserLogin()">
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <input id="loginEmail" type="email" required placeholder="Email Address" style="padding:12px 16px; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+              <input id="loginPassword" type="password" required placeholder="Password" style="padding:12px 16px; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+              <button id="loginBtn" type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:0.95rem;">Sign In</button>
+              <p style="text-align:center; font-size:0.85rem;">Don't have an account? <a href="javascript:void(0)" onclick="switchAuthView('signup')" style="color:var(--primary); font-weight:600;">Sign up</a></p>
+            </div>
+          </form>
+        </div>
+        <div id="signUpView" style="display:none;">
+          <div style="text-align:center; margin-bottom:24px;">
+            <div style="width:70px; height:70px; border-radius:50%; background:var(--bg-secondary); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:var(--primary);">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <h2 style="margin-bottom:8px;">Join TrueCycle</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted);">Create your account for better shopping</p>
+          </div>
+          <div id="signupError" style="display:none; background:#fff5f5; border:1px solid #fecaca; color:#dc2626; padding:10px 14px; border-radius:8px; font-size:0.82rem; margin-bottom:16px; text-align:center;"></div>
+          <form id="signupForm" onsubmit="event.preventDefault(); handleUserSignup()">
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <input id="signupName" type="text" required placeholder="Full Name" style="padding:12px 16px; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+              <input id="signupEmail" type="email" required placeholder="Email Address" style="padding:12px 16px; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+              <input id="signupPassword" type="password" required placeholder="Create Password (min 6 chars)" style="padding:12px 16px; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+              <button id="signupBtn" type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:0.95rem;">Create Account</button>
+              <p style="text-align:center; font-size:0.85rem;">Already have an account? <a href="javascript:void(0)" onclick="switchAuthView('signin')" style="color:var(--primary); font-weight:600;">Sign in</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+  }
+}
+
+/** Handle user login */
+async function handleUserLogin() {
+  const btn = document.getElementById('loginBtn');
+  const errorBox = document.getElementById('loginError');
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+  errorBox.style.display = 'none';
+
+  // Small delay for UX
+  await new Promise(r => setTimeout(r, 400));
+
+  const result = await UserAuth.login(email, password);
+
+  if (result.success) {
+    btn.innerHTML = '<i class="fas fa-check"></i> Welcome back!';
+    btn.style.backgroundColor = '#27AE60';
+    showToast(`Welcome back, ${result.user.name}! 🎉`, 'success');
+    updateProfileIcon();
+    setTimeout(() => {
+      renderAccountView();
+    }, 800);
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = 'Sign In';
+    btn.style.backgroundColor = '';
+    errorBox.textContent = result.message;
+    errorBox.style.display = 'block';
+  }
+}
+
+/** Handle user signup */
+async function handleUserSignup() {
+  const btn = document.getElementById('signupBtn');
+  const errorBox = document.getElementById('signupError');
+  const name = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+  errorBox.style.display = 'none';
+
+  // Small delay for UX
+  await new Promise(r => setTimeout(r, 400));
+
+  const result = await UserAuth.signup(name, email, password);
+
+  if (result.success) {
+    btn.innerHTML = '<i class="fas fa-check"></i> Account Created!';
+    btn.style.backgroundColor = '#27AE60';
+    showToast(`Welcome to TrueCycle, ${result.user.name}! 🎉`, 'success');
+    updateProfileIcon();
+    setTimeout(() => {
+      renderAccountView();
+    }, 800);
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = 'Create Account';
+    btn.style.backgroundColor = '';
+    errorBox.textContent = result.message;
+    errorBox.style.display = 'block';
+  }
+}
+
+/** Handle logout */
+function handleUserLogout() {
+  UserAuth.logout();
+  updateProfileIcon();
+  showToast('You have been logged out.', 'info');
+  renderAccountView();
+}
+
+/** Update the profile icon in navbar to reflect login state */
+function updateProfileIcon() {
+  const profileBtns = document.querySelectorAll('.nav-actions .action-btn[title="Account"] i, .nav-actions button[title="Account"] i');
+  profileBtns.forEach(icon => {
+    if (UserAuth.isLoggedIn()) {
+      icon.className = 'fas fa-user';
+      icon.style.color = 'var(--primary)';
+    } else {
+      icon.className = 'far fa-user';
+      icon.style.color = '';
+    }
+  });
+}
+
+// Initialize profile icon state on load
+document.addEventListener('DOMContentLoaded', () => { updateProfileIcon(); });
 
 function switchProfileTab(tab) {
   const acc = document.getElementById('viewAccount');
@@ -673,9 +923,9 @@ function renderProfileAddresses() {
 
   container.innerHTML = addresses.map(addr => `
     <div style="border:1px solid var(--border-light); padding:16px; border-radius:8px; margin-bottom:12px; position:relative;">
-      <div style="font-weight:600; margin-bottom:4px;">${addr.name}</div>
-      <div style="font-size:0.85rem; color:#666;">${addr.area}, ${addr.city}, ${addr.state}</div>
-      <div style="font-size:0.85rem; color:#888; margin-top:4px;">${addr.phone}</div>
+      <div style="font-weight:600; margin-bottom:4px;">${escapeHTML(addr.name)}</div>
+      <div style="font-size:0.85rem; color:#666;">${escapeHTML(addr.area)}, ${escapeHTML(addr.city)}, ${escapeHTML(addr.state)}</div>
+      <div style="font-size:0.85rem; color:#888; margin-top:4px;">${escapeHTML(addr.phone)}</div>
       <button onclick="deleteProfileAddress('${addr.id}')" style="position:absolute; top:16px; right:16px; background:none; border:none; color:#ff4d4d; cursor:pointer;"><i class="fas fa-trash"></i></button>
     </div>
   `).join('');
@@ -1232,26 +1482,6 @@ function closeConditionModal() {
   if (modal) modal.remove();
 }
 
-// --- Toast Notification Utility ---
-function showToast(message, type = 'success') {
-  const toast = document.createElement('div');
-  toast.className = `toast toast-${type}`;
-  toast.innerHTML = `
-    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-    <span>${message}</span>
-  `;
-  document.body.appendChild(toast);
-  
-  // Show animation
-  setTimeout(() => toast.classList.add('show'), 100);
-  
-  // Remove after 3s
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
-}
-
 // --- Search Logic ---
 function doSearch(query) {
   if (!query || query.trim() === '') return;
@@ -1490,7 +1720,7 @@ const ProductUI = {
         <div class="product-card" data-id="${p.id}" data-category="${p.category}" data-brand="${p.brand}" data-price="${price}">
           ${p.badgeText ? `<span class="product-badge ${p.badge}">${p.badgeText}</span>` : ''}
           <button class="product-wishlist" onclick="WishlistUI.handleToggle(this)"><i class="${wishlistService.isInWishlist(p.id) ? 'fas' : 'far'} fa-heart" ${wishlistService.isInWishlist(p.id) ? 'style="color:#E74C3C"' : ''}></i></button>
-          <a href="product-detail?id=${p.id}" class="product-image">
+          <a href="product-detail.html?id=${p.id}" class="product-image">
             <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}">
             <div class="product-quick-actions">
               <button class="quick-action-btn" title="View Detail"><i class="fas fa-eye"></i></button>
@@ -1500,7 +1730,7 @@ const ProductUI = {
           </a>
           <div class="product-info">
             <div class="product-condition">✓ Certified Refurbished</div>
-            <h3><a href="product-detail?id=${p.id}">${p.name}</a></h3>
+            <h3><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
             <div class="product-rating"><span class="stars">${'★'.repeat(p.rating || 5)}${'☆'.repeat(5 - (p.rating || 5))}</span><span class="rating-count">(${p.reviews || 0})</span></div>
             <div class="product-price">
               <span class="current-price">₹${price.toLocaleString('en-IN')}${p.images ? ' onwards' : ''}</span>
@@ -1573,8 +1803,8 @@ const HomeUI = {
         const androids = this.products.filter(p => p.brand !== 'apple' && p.category === 'phones');
         this.renderToGrid('android-grid', androids.slice(0, 5));
 
-        // 4. Budget (Under 15k)
-        const budget = this.products.filter(p => p.price <= 15000);
+        // 4. Budget (Under 30k)
+        const budget = this.products.filter(p => (p.basePrice || p.price || 0) <= 30000);
         this.renderToGrid('budget-grid', budget.slice(0, 5));
 
         // 5. Featured
@@ -1590,7 +1820,7 @@ const HomeUI = {
             <div class="product-card" data-id="${p.id}">
               <button class="product-wishlist" onclick="WishlistUI.handleToggle(this)"><i class="${wishlistService.isInWishlist(p.id) ? 'fas' : 'far'} fa-heart" ${wishlistService.isInWishlist(p.id) ? 'style="color:#E74C3C"' : ''}></i></button>
               ${p.badgeText ? `<span class="product-badge ${p.badge}">${p.badgeText}</span>` : ''}
-              <a href="product-detail?id=${p.id}" class="product-image" style="height: 200px; padding: 20px;">
+              <a href="product-detail.html?id=${p.id}" class="product-image" style="height: 200px; padding: 20px;">
                 <img src="${p.images ? p.images[0] : p.img}" style="object-fit: contain; max-height: 100%;" alt="${p.name}">
                 <div class="product-quick-actions">
                   <button class="quick-action-btn" onclick="addToCart(event)" title="Add to Cart"><i class="fas fa-shopping-cart"></i></button>
@@ -1598,7 +1828,7 @@ const HomeUI = {
                 </div>
               </a>
               <div class="product-info" style="padding: 15px;">
-                <h3 style="font-size: 0.95rem; margin-bottom: 8px;"><a href="product-detail?id=${p.id}">${p.name}</a></h3>
+                <h3 style="font-size: 0.95rem; margin-bottom: 8px;"><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
                 ${showAssured ? `
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
                   <span style="background: var(--primary); color: white; font-size: 0.65rem; font-weight: 700; font-style: italic; padding: 2px 6px; border-radius: 2px;"><i class="fas fa-check-circle" style="font-size:0.6rem;"></i> TC-Assured</span>
@@ -1630,11 +1860,11 @@ function showToast(message, type = 'success') {
         padding: 16px 32px; border-radius: 100px; color: white; font-weight: 800;
         box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 10000; display: flex; align-items: center; gap: 12px;
         font-family: 'Inter', sans-serif; animation: toastIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
-        background: ${type === 'success' ? '#006778' : '#e74c3c'};
+        background: ${type === 'success' ? '#006778' : type === 'info' ? '#475569' : '#e74c3c'};
     `;
 
     const icon = document.createElement('i');
-    icon.className = `fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}`;
+    icon.className = `fas ${type === 'success' ? 'fa-check-circle' : type === 'info' ? 'fa-info-circle' : 'fa-exclamation-triangle'}`;
     const msgSpan = document.createElement('span');
     msgSpan.textContent = message; // textContent prevents XSS
     toast.appendChild(icon);

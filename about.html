@@ -21,17 +21,50 @@
   </style>
 </head>
 <body>
-  <nav class="navbar">
+  <!-- Top Bar -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-top">
+      <div class="container">
+        <span>📞 +91 98765 43210 &nbsp;|&nbsp; 📧 sm1807489@gmail.com</span>
+        <div>
+          <a href="admin-orders.html">Track Order</a> &nbsp;|&nbsp;
+          <a href="about.html">About Us</a> &nbsp;|&nbsp;
+          <a href="contact.html">Help</a>
+        </div>
+      </div>
+    </div>
     <div class="navbar-main">
       <div class="container">
         <a href="index.html" class="logo">
-          <img src="logo.png" alt="TrueCycle Logo" style="height: 48px;">
+          <img src="logo.png" alt="TrueCycle Logo" style="height: 48px; width: auto; display: block; object-fit: contain;">
         </a>
-        <div class="nav-links">
-          <a href="index.html">Home</a>
+        <div class="nav-search">
+          <input id="navSearchInput" type="text" placeholder="Search for phones, brands, laptops..." onkeydown="if(event.key==='Enter'){doSearch(this.value)}">
+          <i class="fas fa-search"></i>
+          <button class="search-btn" onclick="doSearch(document.getElementById('navSearchInput').value)"><i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div class="nav-links" id="navLinks">
+          <a href="index.html" class="active">Home</a>
           <a href="products.html">Products</a>
-          <a href="about.html" class="active">About</a>
-          <a href="contact.html">Contact</a>
+          <a href="products.html?cat=phones">Phones</a>
+          <a href="#" onclick="openSmartlink(event)" style="color: #76C043; font-weight: 800;">Deals</a>
+          <a href="compare.html">Compare</a>
+        </div>
+        <div class="nav-actions">
+          <a href="wishlist.html" class="action-btn" title="Wishlist">
+            <i class="far fa-heart"></i>
+            <span class="cart-count" id="wishlistCount" style="display:none;">0</span>
+          </a>
+          <a href="cart.html" class="action-btn" title="Cart">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </a>
+          <button class="action-btn" title="Account" onclick="toggleProfileModal()"><i class="far fa-user"></i></button>
+        </div>
+        <div class="mobile-toggle" id="mobileToggle" onclick="toggleNav()">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
       </div>
     </div>
