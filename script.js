@@ -28,40 +28,7 @@ function toggleNav() {
   toggle.classList.toggle('active');
 }
 
-// Add mobile nav styles dynamically
-const mobileNavStyle = document.createElement('style');
-mobileNavStyle.textContent = `
-  @media (max-width: 768px) {
-    .nav-links.mobile-open {
-      display: flex !important;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      padding: 20px;
-      box-shadow: var(--shadow-lg);
-      gap: 16px;
-      border-top: 1px solid var(--border-light);
-      animation: slideDown 0.3s ease;
-    }
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .mobile-toggle.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-    .mobile-toggle.active span:nth-child(2) {
-      opacity: 0;
-    }
-    .mobile-toggle.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-  }
-`;
-document.head.appendChild(mobileNavStyle);
+// Mobile nav styles moved to styles.css
 
 // --- Scroll to Top ---
 const scrollTopBtn = document.getElementById('scrollTop');
@@ -264,15 +231,15 @@ const Cart = {
               <p>${item.selection || item.spec || 'Certified Refurbished'}</p>
             </div>
           </div>
-          <div class="cart-price">₹${item.price.toLocaleString('en-IN')}</div>
-          <div>
+          <div class="cart-price" data-label="Price">₹${item.price.toLocaleString('en-IN')}</div>
+          <div data-label="Quantity">
             <div class="qty-control">
               <button class="qty-btn" onclick="Cart.updateQty('${item.id}', -1)">−</button>
               <input type="number" class="qty-input" value="${item.qty}" readonly>
               <button class="qty-btn" onclick="Cart.updateQty('${item.id}', 1)">+</button>
             </div>
           </div>
-          <div class="cart-total-price">₹${itemTotal.toLocaleString('en-IN')}</div>
+          <div class="cart-total-price" data-label="Total">₹${itemTotal.toLocaleString('en-IN')}</div>
           <button class="cart-remove" onclick="Cart.remove('${item.id}')"><i class="fas fa-times"></i></button>
         </div>
       `;
