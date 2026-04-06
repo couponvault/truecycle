@@ -301,6 +301,15 @@
             }
             changeStep(2);
         } else if (currentStep === 2) {
+            if (typeof UserAuth !== 'undefined' && !UserAuth.isLoggedIn()) {
+                if (typeof showToast !== 'undefined') {
+                    showToast('Please login or signup to complete your purchase', 'info');
+                } else {
+                    alert('Please login or signup to complete your purchase');
+                }
+                toggleProfileModal();
+                return;
+            }
             changeStep(3);
         } else if (currentStep === 3) {
             triggerMockPayment();

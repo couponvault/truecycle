@@ -964,6 +964,33 @@ const observerOptions = {
   rootMargin: '0px 0px -50px 0px'
 };
 
+// --- Filter Toggle Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+    const filterToggle = document.getElementById('filterToggle');
+    const closeFilters = document.getElementById('closeFilters');
+    const filterOverlay = document.getElementById('filterOverlay');
+    const filtersSidebar = document.getElementById('filtersSidebar');
+
+    if (filterToggle && filtersSidebar) {
+        filterToggle.addEventListener('click', () => {
+            filtersSidebar.classList.add('active');
+            filterOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+    }
+
+    const closeMenu = () => {
+        if (filtersSidebar) {
+            filtersSidebar.classList.remove('active');
+            filterOverlay.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+    };
+
+    if (closeFilters) closeFilters.addEventListener('click', closeMenu);
+    if (filterOverlay) filterOverlay.addEventListener('click', closeMenu);
+});
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -1851,3 +1878,29 @@ styleSheet.innerHTML = `
     @keyframes toastOut { from { top: 30px; opacity: 1; } to { top: -50px; opacity: 0; } }
 `;
 document.head.appendChild(styleSheet);
+
+// --- Scroll Reveal Animation ---
+window.addEventListener('load', () => {
+    const revealElements = document.querySelectorAll('.section, .feature-card, .category-card, .product-card, .deal-banner');
+    
+    revealElements.forEach(el => {
+        if (!el.classList.contains('reveal')) {
+            el.classList.add('reveal');
+        }
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+});
+

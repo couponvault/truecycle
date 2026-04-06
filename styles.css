@@ -57,6 +57,30 @@
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+/* --- Reveal Animation --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
 /* --- Toast Notifications --- */
@@ -212,18 +236,39 @@ input, select, textarea {
   letter-spacing: 0.3px;
   position: relative;
   overflow: hidden;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.96) !important;
 }
 
 .btn-primary {
   background: var(--primary-btn);
   color: white;
   border: none;
+  box-shadow: 0 4px 14px 0 rgba(90, 125, 101, 0.2);
 }
 
 .btn-primary:hover {
   background: var(--primary-btn-hover);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(90, 125, 101, 0.2);
+  box-shadow: 0 6px 20px rgba(90, 125, 101, 0.23);
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.5s;
+}
+
+.btn-primary:hover::after {
+  left: 100%;
 }
 
 .btn-secondary {
@@ -276,14 +321,17 @@ input, select, textarea {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition: all var(--transition-normal);
 }
 
 .navbar.scrolled {
-  box-shadow: var(--shadow-sm);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+  padding-top: 5px;
 }
 
 .navbar-top {
@@ -829,7 +877,7 @@ input, select, textarea {
   padding: 32px 24px;
   text-align: center;
   border: 1px solid var(--border-light);
-  transition: all var(--transition-normal);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   cursor: pointer;
 }
 
@@ -886,8 +934,9 @@ input, select, textarea {
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+  border-color: rgba(118, 192, 67, 0.3);
 }
 
 .product-badge {
@@ -1410,18 +1459,70 @@ input, select, textarea {
 }
 
 .products-layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 30px;
-  padding: 40px 0;
+  display: block;
+  padding: 20px 0 60px;
 }
 
-/* --- Filters Sidebar --- */
+/* --- Filters Sidebar (Drawer Style) --- */
 .filters-sidebar {
-  position: sticky;
-  top: 120px;
-  align-self: start;
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 320px;
+  height: 100vh;
+  background: white;
+  z-index: 3000;
+  padding: 30px;
+  box-shadow: 20px 0 50px rgba(0,0,0,0.1);
+  overflow-y: auto;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
 }
+
+.filters-sidebar.active {
+  transform: translateX(320px);
+  visibility: visible;
+}
+
+/* Filter Overlay */
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 2999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.filter-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.btn-filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-filter-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #f8fafc;
+}
+
 
 .filter-group {
   margin-bottom: 28px;
@@ -2326,9 +2427,11 @@ input, select, textarea {
   }
 
   .hero-btns {
+    display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
     align-items: center;
+    width: 100%;
   }
 
   .hero-btns .btn {
@@ -2693,8 +2796,13 @@ input, select, textarea {
   html, body { overflow-x: hidden !important; position: relative; width: 100%; }
 
   .hero-content h1 { font-size: 1.8rem !important; }
-  .hero-btns { flex-direction: column; }
-  .hero-btns .btn { width: 100%; }
+  .hero-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+  }
   
   .hero-stats { grid-template-columns: 1fr !important; }
 
@@ -2935,22 +3043,29 @@ input, select, textarea {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
   padding: 20px;
+  animation: modalFadeIn 0.3s ease;
 }
 
 .modal-content {
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-lg);
   position: relative;
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   max-height: 90vh;
   overflow-y: auto;
+  transform: scale(0.95);
+  animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .modal-close {
@@ -3106,7 +3221,22 @@ input, select, textarea {
 
 /* Animations */
 @keyframes selectedPop {
- 0% { transform: scale(0.95); opacity: 0.8; }
- 50% { transform: scale(1.05); }
- 100% { transform: scale(1); opacity: 1; }
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }

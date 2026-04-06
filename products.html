@@ -37,13 +37,13 @@
           <i class="fas fa-search"></i>
           <button class="search-btn" onclick="doSearch(document.getElementById('navSearchInput').value)"><i class="fas fa-arrow-right"></i></button>
         </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="products.html" class="active">Products</a></li>
-            <li><a href="#" onclick="openSmartlink(event)" style="color: #76C043; font-weight: 800;">🎁 Deals</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
+        <div class="nav-links" id="navLinks">
+          <a href="index.html">Home</a>
+          <a href="products.html" class="active">Products</a>
+          <a href="#" onclick="openSmartlink(event)" style="color: #76C043; font-weight: 800;">Deals</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
         <div class="nav-actions">
           <a href="wishlist.html" class="action-btn" title="Wishlist">
             <i class="far fa-heart"></i>
@@ -76,9 +76,17 @@
 
   <!-- Products Layout -->
   <section class="container">
+    <!-- Filter Overlay -->
+    <div class="filter-overlay" id="filterOverlay"></div>
+    
     <div class="products-layout">
-      <!-- Filters Sidebar -->
-      <aside class="filters-sidebar">
+      <!-- Filters Sidebar (Enhanced to Drawer) -->
+      <aside class="filters-sidebar" id="filtersSidebar">
+        <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border-light);">
+          <h3 style="margin: 0; font-size: 1.2rem;">Filters</h3>
+          <button id="closeFilters" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted);"><i class="fas fa-times"></i></button>
+        </div>
+
         <div class="filter-group">
           <h4>Category <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></h4>
           <div class="filter-options" data-filter="category">
@@ -134,8 +142,14 @@
           </div>
           
           <!-- Row 2: Results & Sorting -->
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="results-count" style="font-size: 0.95rem; color: #64748b;">Showing <strong id="currentCount">...</strong> products</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+              <button class="btn btn-outline btn-sm" id="filterToggle" style="display: flex; align-items: center; gap: 8px; font-weight: 700; border-radius: 8px; padding: 10px 20px;">
+                <i class="fas fa-filter"></i> Filters
+              </button>
+              <span class="results-count" style="font-size: 0.95rem; color: #64748b;">Showing <strong id="currentCount">...</strong> products</span>
+            </div>
+            
             <div class="sort-dropdown" style="display: flex; align-items: center; gap: 10px;">
               <label style="font-size: 0.85rem; color: #94a3b8;">Sort by:</label>
               <select id="productSort" onchange="applyFilters()" style="padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none; cursor: pointer;">

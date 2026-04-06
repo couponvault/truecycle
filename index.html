@@ -120,40 +120,117 @@
       </div>
     </div>
   </section>
+  <style>
+    /* Brands Horizontal Scroll Enhancement */
+    .brand-scroll-container {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 10px 5px 25px;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;  /* IE/Edge */
+      justify-content: flex-start;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .brand-scroll-container::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+    .brand-card {
+      flex: 0 0 160px;
+      height: 140px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      background: white;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+    }
+    .brand-card:hover {
+      border-color: #76C043;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    }
+  </style>
 
-  <!-- Trust Bar -->
-  <section class="trust-bar">
+  <!-- Shop By Brand (Repositioned) -->
+  <section class="section" id="brands" style="padding: 40px 0 20px;">
     <div class="container">
-      <div class="trust-item">
-        <div class="trust-icon">🔒</div>
-        <div class="trust-text">
-          <strong>Secure Checkout</strong>
-          <span>100% secure payment</span>
-        </div>
+      <div class="section-header" style="text-align: left; margin-bottom: 30px;">
+        <span class="subtitle">Top Brands</span>
+        <h2 style="font-size: 1.8rem;">Shop By Brand</h2>
       </div>
-      <div class="trust-item">
-        <div class="trust-icon">🔄</div>
-        <div class="trust-text">
-          <strong>7-Day Returns</strong>
-          <span>No questions asked</span>
-        </div>
-      </div>
-      <div class="trust-item">
-        <div class="trust-icon">🛡️</div>
-        <div class="trust-text">
-          <strong>Warranty Included</strong>
-          <span>6-12 months coverage</span>
-        </div>
-      </div>
-      <div class="trust-item">
-        <div class="trust-icon">🚚</div>
-        <div class="trust-text">
-          <strong>Free Shipping</strong>
-          <span>On orders over ₹999</span>
-        </div>
+      <div class="brand-scroll-container">
+        
+        <a href="products.html?brand=Apple" class="brand-card">
+          <i class="fab fa-apple" style="font-size: 2.2rem; margin-bottom: 10px; color: #000;"></i>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Apple</h3>
+        </a>
+        
+        <a href="products.html?brand=Samsung" class="brand-card">
+          <div style="font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; margin-bottom: 8px; color: #034EA2;">SAMSUNG</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Samsung</h3>
+        </a>
+
+        <a href="products.html?brand=Realme" class="brand-card">
+          <div style="background: #FFC900; color: #000; padding: 4px 10px; border-radius: 4px; font-weight: 900; font-size: 1.1rem; margin-bottom: 8px;">realme</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Realme</h3>
+        </a>
+        
+        <a href="products.html?brand=OnePlus" class="brand-card">
+          <div style="font-size: 2rem; margin-bottom: 4px; font-weight: 900; letter-spacing: -2px; color: #E50914;">1+</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">OnePlus</h3>
+        </a>
+
+        <a href="products.html?brand=Google" class="brand-card">
+          <i class="fab fa-google" style="font-size: 2rem; margin-bottom: 10px; color: #4285F4;"></i>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Google</h3>
+        </a>
+
+        <a href="products.html?brand=Xiaomi" class="brand-card">
+          <div style="font-size: 1.4rem; margin-bottom: 8px; font-weight: 800; color: #FF6900;">mi</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Xiaomi</h3>
+        </a>
+
+        <a href="products.html?brand=Nothing" class="brand-card">
+          <div style="font-family: monospace; font-size: 1.2rem; margin-bottom: 8px; font-weight: 900; color: #000; letter-spacing: 2px;">NOTHING</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Nothing</h3>
+        </a>
+
+        <a href="products.html?brand=Vivo" class="brand-card">
+          <div style="font-size: 1.4rem; margin-bottom: 8px; font-weight: 800; color: #415FFF; font-style: italic;">vivo</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Vivo</h3>
+        </a>
+
+        <a href="products.html?brand=iQOO" class="brand-card">
+          <div style="font-size: 1.4rem; margin-bottom: 8px; font-weight: 900; color: #F6AD00;">iQOO</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">iQOO</h3>
+        </a>
+
+        <a href="products.html?brand=Motorola" class="brand-card">
+          <div style="font-size: 1.8rem; margin-bottom: 6px; font-weight: 900; color: #000000; font-family: sans-serif;">M</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Motorola</h3>
+        </a>
+
+        <a href="products.html?brand=Asus" class="brand-card">
+          <div style="font-size: 1rem; margin-bottom: 8px; font-weight: 900; color: #0047BA;">ASUS</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Asus</h3>
+        </a>
+
+        <a href="products.html?brand=Oppo" class="brand-card">
+          <div style="font-size: 1.1rem; margin-bottom: 8px; font-weight: 800; color: #00875F;">OPPO</div>
+          <h3 style="font-size: 0.95rem; margin: 0; font-weight: 700;">Oppo</h3>
+        </a>
       </div>
     </div>
   </section>
+
+
 
   <!-- Deal of the Day / Flash Sale (Flipkart Inspired) -->
   <section class="section" id="deal-of-the-day" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 50px 0;">
@@ -281,57 +358,7 @@
     </div>
   </section>
 
-  <!-- Shop By Brand -->
-  <section class="section" id="brands" style="padding-bottom: 20px;">
-    <div class="container">
-      <div class="section-header">
-        <span class="subtitle">Top Brands</span>
-        <h2>Shop By Brand</h2>
-      </div>
-      <div style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: thin; justify-content: flex-start;">
-        
-        <a href="products.html?brand=Apple" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
-          <i class="fab fa-apple" style="font-size: 2.5rem; margin-bottom: 12px; color: #000;"></i>
-          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Apple</h3>
-        </a>
-        
-        <a href="products.html?brand=Samsung" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
-          <div style="font-weight: 800; font-size: 1.4rem; letter-spacing: -1px; margin-bottom: 8px; color: #034EA2;">SAMSUNG</div>
-          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Samsung</h3>
-        </a>
-        
-        <a href="products.html?brand=OnePlus" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
-          <div style="font-size: 2.2rem; margin-bottom: 6px; font-weight: 900; letter-spacing: -2px; color: #E50914;">1+</div>
-          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">OnePlus</h3>
-        </a>
 
-        <a href="products.html?brand=Google" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
-          <i class="fab fa-google" style="font-size: 2.2rem; margin-bottom: 12px; color: #4285F4;"></i>
-          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Google</h3>
-        </a>
-
-        <a href="products.html?brand=Xiaomi" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
-          <div style="font-size: 1.6rem; margin-bottom: 8px; font-weight: 800; color: #FF6900;">mi</div>
-          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Xiaomi</h3>
-        </a>
-
-        <a href="products.html?brand=Vivo" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
-          <div style="font-size: 1.6rem; margin-bottom: 8px; font-weight: 800; color: #415FFF; font-style: italic;">vivo</div>
-          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Vivo</h3>
-        </a>
-
-        <a href="products.html?brand=Motorola" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
-          <div style="font-size: 2rem; margin-bottom: 6px; font-weight: 900; color: #000000; font-family: sans-serif;">M</div>
-          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Motorola</h3>
-        </a>
-
-        <a href="products.html?brand=Oppo" style="flex: 0 0 160px; height: 140px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: white; transition: all 0.3s ease; box-shadow: var(--shadow-sm); text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dark);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor='var(--border-light)'; this.style.transform='none';">
-          <div style="font-size: 1.3rem; margin-bottom: 8px; font-weight: 800; color: #00875F;">OPPO</div>
-          <h3 style="font-size: 1.05rem; margin: 0; font-weight: 600;">Oppo</h3>
-        </a>
-      </div>
-    </div>
-  </section>
 
   <!-- Why Choose Us -->
   <section class="section" id="features">
@@ -494,17 +521,42 @@
     </div>
   </section>
 
-  <!-- Newsletter -->
-  <section class="newsletter">
+  </section>
+
+  <!-- Trust Bar (Repositioned to Footer Area) -->
+  <section class="trust-bar" style="background: white; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
     <div class="container">
-      <h2>Stay in the Loop</h2>
-      <p>Subscribe for exclusive deals, new arrivals, and tech tips delivered to your inbox.</p>
-      <form class="newsletter-form" id="newsletterForm" onsubmit="handleNewsletter(event)">
-        <input type="email" placeholder="Enter your email address" required>
-        <button type="submit" class="btn btn-primary">Subscribe</button>
-      </form>
+      <div class="trust-item">
+        <div class="trust-icon">🔒</div>
+        <div class="trust-text">
+          <strong>Secure Checkout</strong>
+          <span>100% secure payment</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🔄</div>
+        <div class="trust-text">
+          <strong>7-Day Returns</strong>
+          <span>No questions asked</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🛡️</div>
+        <div class="trust-text">
+          <strong>Warranty Included</strong>
+          <span>6-12 months coverage</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🚚</div>
+        <div class="trust-text">
+          <strong>Free Shipping</strong>
+          <span>On orders over ₹999</span>
+        </div>
+      </div>
     </div>
   </section>
+
 
   <!-- Footer -->
   <footer class="footer">
