@@ -13,9 +13,13 @@
   <link rel="stylesheet" href="styles.css?v=2">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script src="supabaseClient.js"></script>
+
   <script src="ads.js"></script>
+
   <script src="productService.js"></script>
+
 </head>
 <body>
   <!-- Top Bar -->
@@ -26,7 +30,14 @@
         <div>
           <a href="admin-orders.html">Track Order</a> &nbsp;|&nbsp;
           <a href="about.html">About Us</a> &nbsp;|&nbsp;
-          <a href="contact.html">Help</a>
+          <a href="contact.html">Help</a> &nbsp;|&nbsp;
+          <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">
+            <option value="INR" style="color:#333">INR (₹)</option>
+            <option value="USD" style="color:#333">USD ($)</option>
+            <option value="GBP" style="color:#333">GBP (£)</option>
+            <option value="EUR" style="color:#333">EUR (€)</option>
+            <option value="AED" style="color:#333">AED (د.إ)</option>
+          </select>
         </div>
       </div>
     </div>
@@ -110,7 +121,7 @@
           </div>
           <div class="hero-float-card card-2">
             <div class="float-card-label">Actual Value</div>
-            <div class="float-card-value" style="color: var(--success);">You Save ₹18,000</div>
+            <div class="float-card-value" style="color: var(--success);" data-price-prefix="You Save " data-price="18000">You Save ₹18,000</div>
           </div>
           <div class="hero-float-card card-3">
             <div class="float-card-label">Peace of Mind</div>
@@ -298,7 +309,7 @@
       <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 15px;">
         <div style="margin: 0;">
           <span class="subtitle">Incredible Value</span>
-          <h2 style="margin: 0;">Best Phones Under ₹15,000</h2>
+          <h2 style="margin: 0;" data-price-prefix="Best Phones Under " data-price="15000">Best Phones Under ₹15,000</h2>
         </div>
         <a href="products.html?maxPrice=15000" class="btn btn-outline">Shop Budget Phones →</a>
       </div>
@@ -497,7 +508,7 @@
         </div>
         <div class="testimonial-card">
           <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Saved ₹40,000 on a MacBook Air M2. The condition was excellent — no scratches, no dents. The 12-month warranty gives real peace of mind. Amazing service!"</p>
+          <p class="testimonial-text">"Saved <span data-price="40000">₹40,000</span> on a MacBook Air M2. The condition was excellent — no scratches, no dents. The 12-month warranty gives real peace of mind. Amazing service!"</p>
           <div class="testimonial-author">
             <div class="testimonial-avatar">PS</div>
             <div class="testimonial-author-info">
@@ -519,8 +530,6 @@
         </div>
       </div>
     </div>
-  </section>
-
   </section>
 
   <!-- Trust Bar (Repositioned to Footer Area) -->
@@ -551,7 +560,7 @@
         <div class="trust-icon">🚚</div>
         <div class="trust-text">
           <strong>Free Shipping</strong>
-          <span>On orders over ₹999</span>
+          <span data-price-prefix="On orders over " data-price="999">On orders over ₹999</span>
         </div>
       </div>
     </div>
@@ -620,7 +629,12 @@
     <i class="fas fa-chevron-up"></i>
   </button>
 
+  <script src="currencyService.js"></script>
+
   <script src="wishlistService.js?v=2"></script>
+
   <script src="script.js?v=2"></script>
+
+  <script src="components.js"></script>
 </body>
 </html>

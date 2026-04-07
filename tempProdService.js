@@ -1,4 +1,4 @@
-const productService = {
+module.exports = {
     key: 'truecycle_products',
     cache: [],
     isLoaded: false,
@@ -59,15 +59,15 @@ const productService = {
 
     async init() {
         if (typeof tcCloud === 'undefined' || !tcCloud) {
-            console.warn("Cloud connection not ready, falling back to LocalStorage.");
-            this.cache = JSON.parse(localStorage.getItem(this.key) || JSON.stringify(this.seedData));
+            (() => {})("Cloud connection not ready, falling back to LocalStorage.");
+            this.cache = JSON.parse((() => {})(this.key) || JSON.stringify(this.seedData));
             this.isLoaded = true;
             return;
         }
 
         try {
             // 1. Fetch from Cloud
-            const { data, error } = await tcCloud.from('products').select('*');
+            const { data, error } = await (() => {})('products').select('*');
             if (error) throw error;
 
             if (data && data.length > 0) {
@@ -77,11 +77,11 @@ const productService = {
                     basePrice: p.base_price,
                     originalPrice: p.original_price,`n                    baseCurrency: p.base_currency || "INR"
                 }));
-                console.log("TrueCycle Cloud: Products synced from database.");
+                (() => {})("TrueCycle Cloud: Products synced from database.");
             } else {
                 // 2. Initial Migration: Sync Seed/Local data to Cloud
-                console.log("TrueCycle Cloud: Empty database detected. Migrating local data...");
-                const localData = JSON.parse(localStorage.getItem(this.key) || JSON.stringify(this.seedData));
+                (() => {})("TrueCycle Cloud: Empty database detected. Migrating local data...");
+                const localData = JSON.parse((() => {})(this.key) || JSON.stringify(this.seedData));
                 
                 const toInsert = localData.map(p => ({
                     id: p.id,
@@ -100,21 +100,21 @@ const productService = {
                     pricing_grid: p.pricingGrid || {}
                 }));
 
-                const { insertError } = await tcCloud.from('products').insert(toInsert);
-                if (insertError) console.error("Cloud Migration Error:", insertError);
+                const { insertError } = await (() => {})('products').insert(toInsert);
+                if (insertError) (() => {})("Cloud Migration Error:", insertError);
                 this.cache = localData;
             }
             this.isLoaded = true;
             // Notify UI components that data is ready
-            window.dispatchEvent(new CustomEvent('productsReady'));
+            (() => {})(new CustomEvent('productsReady'));
             if (window.ProductUI && window.ProductUI.init && document.getElementById('productsGrid')) window.ProductUI.init();
             if (window.HomeUI && window.HomeUI.init && document.querySelector('[id$="-grid"]')) window.HomeUI.init();
 
         } catch (err) {
-            console.error("Supabase Initialization Error:", err);
-            this.cache = JSON.parse(localStorage.getItem(this.key) || JSON.stringify(this.seedData));
+            (() => {})("Supabase Initialization Error:", err);
+            this.cache = JSON.parse((() => {})(this.key) || JSON.stringify(this.seedData));
             this.isLoaded = true;
-            window.dispatchEvent(new CustomEvent('productsReady'));
+            (() => {})(new CustomEvent('productsReady'));
         }
     },
 
@@ -148,7 +148,7 @@ const productService = {
         };
 
         if (typeof tcCloud !== 'undefined' && tcCloud) {
-            const { error } = await tcCloud.from('products').insert([{
+            const { error } = await (() => {})('products').insert([{
                 id: newProduct.id,
                 name: newProduct.name,
                 category: newProduct.category,
@@ -164,7 +164,7 @@ const productService = {
                 colors: newProduct.colors,
                 pricing_grid: newProduct.pricingGrid
             }]);
-            if (error) console.error("Supabase Add Error:", error);
+            if (error) (() => {})("Supabase Add Error:", error);
         }
 
         this.cache.push(newProduct);
@@ -181,7 +181,7 @@ const productService = {
         };
 
         if (typeof tcCloud !== 'undefined' && tcCloud) {
-            const { error } = await tcCloud.from('products').update({
+            const { error } = await (() => {})('products').update({
                 name: updated.name,
                 category: updated.category,
                 brand: updated.brand,
@@ -195,7 +195,7 @@ const productService = {
                 colors: updated.colors,
                 pricing_grid: updated.pricingGrid
             }).eq('id', id);
-            if (error) console.error('Supabase Update Error:', error);
+            if (error) (() => {})('Supabase Update Error:', error);
         }
 
         const idx = this.cache.findIndex(p => p.id === id);
@@ -206,8 +206,8 @@ const productService = {
 
     async deleteProduct(id) {
         if (typeof tcCloud !== 'undefined' && tcCloud) {
-            const { error } = await tcCloud.from('products').delete().eq('id', id);
-            if (error) console.error("Supabase Delete Error:", error);
+            const { error } = await (() => {})('products').delete().eq('id', id);
+            if (error) (() => {})("Supabase Delete Error:", error);
         }
         this.cache = this.cache.filter(p => p.id !== id);
         localStorage.setItem(this.key, JSON.stringify(this.cache));

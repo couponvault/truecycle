@@ -92,10 +92,49 @@ function changeImage(thumbnail, src) {
   const mainImg = document.getElementById('mainImg');
   if (mainImg) {
     mainImg.src = src;
-    // Update active thumbnail
     document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
     thumbnail.classList.add('active');
   }
+}
+
+/** SEO - Injects JSON-LD Product Schema for Google Search Rich Snippets */
+function injectProductSchema(product) {
+  if (!product) return;
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  
+  const schema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.images || [],
+    "description": product.description || "",
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand || "TrueCycle"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": window.location.href,
+      "priceCurrency": "INR",
+      "price": product.basePrice || 0,
+      "itemCondition": "https://schema.org/UsedCondition",
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "TrueCycle"
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": product.rating || 4.5,
+      "reviewCount": product.reviews || 0
+    }
+  };
+  
+  script.text = JSON.stringify(schema);
+  document.head.appendChild(script);
+  console.log("SEO: Product Schema injected.");
 }
 
 // --- Quantity Controls ---
@@ -125,7 +164,7 @@ const Cart = {
     if (code.toUpperCase() === 'FIRST300') {
       this.discount = 300;
       this.couponCode = 'FIRST300';
-      feedback.textContent = 'Coupon applied: ₹300 Discount! 🎉';
+      feedback.textContent = `Coupon applied: ${CurrencySystem.format(300)} Discount! 🎉`;
       feedback.style.color = '#27AE60';
       if (offerBox) { offerBox.style.background = '#EBF9F1'; offerBox.style.borderColor = '#27AE60'; }
       if (offerBtn) { offerBtn.textContent = 'APPLIED'; offerBtn.style.background = '#27AE60'; offerBtn.classList.remove('btn-primary'); offerBtn.style.color = 'white'; }
@@ -188,59 +227,66 @@ const Cart = {
   },
   renderCartPage: function() {
     const container = document.getElementById('cartItemsContainer');
-    if (!container) return;
+    const summary = document.getElementById('cartSummary');
+    if (!container || !summary) return;
     
     if (this.items.length === 0) {
       container.innerHTML = `
-        <div style="text-align:center; padding: 40px 0; grid-column: 1 / -1;">
-          <i class="fas fa-shopping-bag" style="font-size: 3rem; color: #ccc; margin-bottom: 16px;"></i>
-          <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Your cart is empty</h3>
-          <p style="color: var(--text-secondary); margin-bottom: 24px;">Looks like you haven't added anything yet.</p>
-          <a href="products.html" class="btn btn-primary">Start Shopping</a>
+        <div style="text-align:center; padding: 60px 20px; grid-column: 1 / -1; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+          <div style="width: 120px; height: 120px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+            <i class="fas fa-shopping-cart" style="font-size: 3rem; color: var(--primary); opacity: 0.2;"></i>
+          </div>
+          <h3 style="font-size: 1.8rem; font-weight: 800; color: #1e293b; margin-bottom: 12px;">Your cart is feeling lonely</h3>
+          <p style="color: #64748b; font-size: 1.05rem; margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto;">Explore our premium collection of certified refurbished devices and fill it with joy.</p>
+          <a href="products.html" class="btn btn-primary btn-lg">Start Shopping Fresh</a>
         </div>
       `;
-      document.getElementById('cartSummary').style.display = 'none';
+      summary.style.display = 'none';
       return;
     }
 
-    document.getElementById('cartSummary').style.display = 'block';
+    summary.style.display = 'block';
+    summary.classList.add('glass-card'); 
+    summary.style.padding = '30px';
 
-    let html = `
-      <div class="cart-header">
-        <span>Product</span>
-        <span>Price</span>
-        <span>Qty</span>
-        <span>Total</span>
-        <span></span>
-      </div>
-    `;
+    let html = ''; 
 
     let subtotal = 0;
 
     this.items.forEach(item => {
       const itemTotal = item.price * item.qty;
-      subtotal += itemTotal;
+      const itemPriceConverted = CurrencySystem.getConvertedAmount ? CurrencySystem.getConvertedAmount(item.price, '', item.baseCurrency || 'INR') : item.price;
+      subtotal += (itemPriceConverted * item.qty);
+      
       html += `
-        <div class="cart-item" id="cartItem-${item.id}">
-          <div class="cart-product">
-            <div class="cart-product-image">
-              <img src="${item.img}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-            <div class="cart-product-info">
-              <h4>${item.name}</h4>
-              <p>${item.selection || item.spec || 'Certified Refurbished'}</p>
+        <div class="cart-card-modern" id="cartItem-${item.id}">
+          <div class="cart-img-wrap">
+            <img src="${item.img}" alt="${item.name}" class="cart-img-modern">
+          </div>
+          <div class="cart-info-modern">
+            <h4>${item.name}</h4>
+            <p style="margin-bottom: 10px;">${item.selection || item.spec || 'Certified Refurbished'}</p>
+            <div style="display: flex; align-items: center; gap: 15px;">
+               <span class="price-modern">${CurrencySystem.format(item.price, "", item.baseCurrency || "INR")}</span>
+               <span style="font-size: 0.75rem; color: #10b981; background: #ecfdf5; padding: 2px 8px; border-radius: 4px; font-weight: 600;">In Stock</span>
             </div>
           </div>
-          <div class="cart-price" data-label="Price">₹${item.price.toLocaleString('en-IN')}</div>
-          <div data-label="Quantity">
-            <div class="qty-control">
-              <button class="qty-btn" onclick="Cart.updateQty('${item.id}', -1)">−</button>
-              <input type="number" class="qty-input" value="${item.qty}" readonly>
-              <button class="qty-btn" onclick="Cart.updateQty('${item.id}', 1)">+</button>
+          <div class="cart-qty-col">
+            <div class="qty-control" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 50px; padding: 4px;">
+              <button class="qty-btn" onclick="Cart.updateQty('${item.id}', -1)" style="width: 28px; height: 28px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 700;">−</button>
+              <input type="number" class="qty-input" value="${item.qty}" readonly style="width: 35px; background: transparent; font-weight: 700; text-align: center;">
+              <button class="qty-btn" onclick="Cart.updateQty('${item.id}', 1)" style="width: 28px; height: 28px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 700;">+</button>
             </div>
           </div>
-          <div class="cart-total-price" data-label="Total">₹${itemTotal.toLocaleString('en-IN')}</div>
-          <button class="cart-remove" onclick="Cart.remove('${item.id}')"><i class="fas fa-times"></i></button>
+          <div class="cart-price-col">
+            <div style="text-align: right;">
+               <div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Item Total</div>
+               <div class="price-modern" style="font-size: 1.15rem;">${CurrencySystem.format(itemTotal, "", item.baseCurrency || "INR")}</div>
+            </div>
+            <button class="cart-remove" onclick="Cart.remove('${item.id}')" style="margin-top: 15px; font-size: 0.8rem; color: #94a3b8; display: flex; align-items: center; gap: 5px; background: none; border: none;">
+               <i class="far fa-trash-alt"></i> Remove
+            </button>
+          </div>
         </div>
       `;
     });
@@ -250,7 +296,7 @@ const Cart = {
     const total = Math.max(0, subtotal - this.discount);
 
     document.getElementById('summaryItemCount').textContent = `Subtotal (${this.items.length} items)`;
-    document.getElementById('summarySubtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+    document.getElementById('summarySubtotal').textContent = CurrencySystem.format(subtotal, '', CurrencySystem.selected);
     
     // Update Discount UI if element exists
     const discountRow = document.getElementById('summaryDiscountRow');
@@ -258,13 +304,13 @@ const Cart = {
     if (discountRow && discountEl) {
       if (this.discount > 0) {
         discountRow.style.display = 'flex';
-        discountEl.innerHTML = `<span>-₹${this.discount.toLocaleString('en-IN')}</span> <a href="javascript:void(0)" onclick="Cart.removeCoupon()" style="color:#E74C3C; font-size:0.7rem; margin-left:8px; text-decoration:underline;">Remove</a>`;
+        discountEl.innerHTML = `<span>-${CurrencySystem.format(this.discount)}</span> <a href="javascript:void(0)" onclick="Cart.removeCoupon()" style="color:#E74C3C; font-size:0.7rem; margin-left:8px; text-decoration:underline;">Remove</a>`;
       } else {
         discountRow.style.display = 'none';
       }
     }
 
-    document.getElementById('summaryTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
+    document.getElementById('summaryTotal').textContent = CurrencySystem.format(total, '', CurrencySystem.selected);
   }
 };
 
@@ -327,7 +373,9 @@ function addToCart(e) {
     const nameEl = productCard.querySelector('h3');
     if (nameEl) product.name = nameEl.textContent;
     const priceEl = productCard.querySelector('.current-price');
-    if (priceEl) product.price = parseInt(priceEl.textContent.replace(/[^0-9]/g, '')) || 49999;
+    const baseCurr = productCard.dataset.baseCurrency || "INR";
+    if (priceEl) product.price = parseInt(priceEl.textContent.replace(/[^0-9]/g, "")) || 49999;
+    product.baseCurrency = baseCurr;
     const imgEl = productCard.querySelector('img');
     if (imgEl) product.img = imgEl.src;
   } else {
@@ -504,7 +552,7 @@ const WishlistUI = {
           <div class="product-info" style="padding: 15px;">
             <h3 style="font-size: 0.95rem; margin-bottom: 8px;"><a href="#">${item.name}</a></h3>
             <div class="product-price">
-              <span class="current-price" style="font-size: 1.1rem;">₹${item.price.toLocaleString('en-IN')}</span>
+              <span class="current-price" style="font-size: 1.1rem;">${CurrencySystem.format(item.price)}</span>
             </div>
             <div style="margin-top: 15px; display: flex; gap: 8px;">
                <button class="btn btn-primary btn-sm" style="flex:1" onclick="handleWishlistToCart('${item.id}')">Add to Cart</button>
@@ -1054,7 +1102,7 @@ function setPriceFilter(max) {
         
         ProductUI.pagination.currentPage = 1;
         ProductUI.render();
-        showToast(`Budget Filter: ${max === Infinity ? 'All Prices' : 'Under ₹' + max.toLocaleString()}`);
+        showToast(`Budget Filter: ${max === Infinity ? 'All Prices' : 'Under ' + CurrencySystem.format(max)}`);
         scrollToTop();
     }
 }
@@ -1064,7 +1112,7 @@ console.log('🔧 TrueCycle loaded successfully!');
 // Helper to get total price from different pages (Cart or Checkout)
 function getCheckoutAmount() {
   const el = document.getElementById('summaryFinalPrice') || document.getElementById('summaryTotal');
-  return el ? el.textContent : '₹0';
+  return el ? el.textContent : CurrencySystem.format(0);
 }
 
 // --- Mock Payment Gateway (Always Fails) ---
@@ -1660,7 +1708,8 @@ const ProductUI = {
       let matchSearch = true;
       if (this.filters.search) {
           const q = this.filters.search.toLowerCase();
-          const underMatch = q.match(/(?:under|below|less than|within|prices?|rs|₹)\s?(\d+)/i);
+          // Search regex: Handles "under 15000", "below 15000", and currency symbols
+          const underMatch = q.match(/(?:under|below|less than|within|prices?|rs|₹|[\$\€\£\د.إ])\s?(\d+)/i);
           const aboveMatch = q.match(/(?:above|over|more than)\s?(\d+)/i);
           
           let priceLimit = null;
@@ -1669,7 +1718,7 @@ const ProductUI = {
           if (underMatch) { priceLimit = parseInt(underMatch[1]); priceType = 'under'; } 
           else if (aboveMatch) { priceLimit = parseInt(aboveMatch[1]); priceType = 'above'; }
 
-          const cleanQ = q.replace(/(?:under|below|less than|within|above|over|more than|prices?|rs|₹)\s?(\d+)/ig, '').trim();
+          const cleanQ = q.replace(/(?:under|below|less than|within|above|over|more than|prices?|rs|₹|[\$\€\£\د.إ])\s?(\d+)/ig, '').trim();
 
           if (cleanQ) {
               matchSearch = p.name.toLowerCase().includes(cleanQ) || 
@@ -1678,8 +1727,15 @@ const ProductUI = {
           }
           
           if (matchSearch && priceLimit) {
-              if (priceType === 'under') matchSearch = price <= priceLimit;
-              if (priceType === 'above') matchSearch = price >= priceLimit;
+              const currentCurrency = localStorage.getItem('tc_currency') || 'INR';
+              const rates = JSON.parse(localStorage.getItem('tc_rates') || '{}');
+              const rate = rates[currentCurrency] || 1;
+              
+              // Convert the product price (INR) to the current user's currency for comparison
+              const convertedPrice = price / rate;
+              
+              if (priceType === 'under') matchSearch = convertedPrice <= priceLimit;
+              if (priceType === 'above') matchSearch = convertedPrice >= priceLimit;
           }
       }
       
@@ -1707,32 +1763,48 @@ const ProductUI = {
         <p style="color:#888;">Try adjusting your filters or search query.</p>
       </div>`;
     } else {
-      this.container.innerHTML = paginated.map(p => {
+      let finalHTML = "";
+      paginated.forEach((p, index) => {
         const price = p.basePrice || p.price || 0;
         const origPrice = p.originalPrice || 0;
-        return `
-        <div class="product-card" data-id="${p.id}" data-category="${p.category}" data-brand="${p.brand}" data-price="${price}">
-          ${p.badgeText ? `<span class="product-badge ${p.badge}">${p.badgeText}</span>` : ''}
-          <button class="product-wishlist" onclick="WishlistUI.handleToggle(this)"><i class="${wishlistService.isInWishlist(p.id) ? 'fas' : 'far'} fa-heart" ${wishlistService.isInWishlist(p.id) ? 'style="color:#E74C3C"' : ''}></i></button>
-          <a href="product-detail.html?id=${p.id}" class="product-image">
-            <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}">
-            <div class="product-quick-actions">
-              <button class="quick-action-btn" title="View Detail"><i class="fas fa-eye"></i></button>
-              <button class="quick-action-btn" onclick="addToCart(event)" title="Add to Cart"><i class="fas fa-shopping-cart"></i></button>
-              <button class="quick-action-btn btn-compare" data-id="${p.id}" onclick="toggleCompare(event, '${p.id}', '${p.name}', ${price}, '${p.images ? p.images[0] : p.img}')" title="Compare"><i class="fas fa-exchange-alt"></i></button>
-            </div>
-          </a>
-          <div class="product-info">
-            <div class="product-condition">✓ Certified Refurbished</div>
-            <h3><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
-            <div class="product-rating"><span class="stars">${'★'.repeat(p.rating || 5)}${'☆'.repeat(5 - (p.rating || 5))}</span><span class="rating-count">(${p.reviews || 0})</span></div>
-            <div class="product-price">
-              <span class="current-price">₹${price.toLocaleString('en-IN')}${p.images ? ' onwards' : ''}</span>
-              ${origPrice > price ? `<span class="original-price">₹${origPrice.toLocaleString('en-IN')}</span>` : ''}
+        
+        finalHTML += `
+          <div class="product-card" data-id="${p.id}" data-category="${p.category}" data-brand="${p.brand}" data-price="${price}">
+            ${p.badgeText ? `<span class="product-badge ${p.badge}">${p.badgeText}</span>` : ''}
+            <button class="product-wishlist" onclick="WishlistUI.handleToggle(this)"><i class="${wishlistService.isInWishlist(p.id) ? 'fas' : 'far'} fa-heart" ${wishlistService.isInWishlist(p.id) ? 'style="color:#E74C3C"' : ''}></i></button>
+            <a href="product-detail.html?id=${p.id}" class="product-image">
+              <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}">
+              <div class="product-quick-actions">
+                <button class="quick-action-btn" title="View Detail" onclick="event.preventDefault(); window.location.href='product-detail.html?id=${p.id}'"><i class="fas fa-eye"></i></button>
+                <button class="quick-action-btn" onclick="addToCart(event)" title="Add to Cart"><i class="fas fa-shopping-cart"></i></button>
+                <button class="quick-action-btn btn-compare" data-id="${p.id}" onclick="toggleCompare(event, '${p.id}', '${p.name}', ${price}, '${p.images ? p.images[0] : p.img}')" title="Compare"><i class="fas fa-exchange-alt"></i></button>
+              </div>
+            </a>
+            <div class="product-info">
+              <div class="product-condition">✓ Certified Refurbished</div>
+              <h3><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
+              <div class="product-rating"><span class="stars">${'★'.repeat(p.rating || 5)}${'☆'.repeat(5 - (p.rating || 5))}</span><span class="rating-count">(${p.reviews || 0})</span></div>
+              <div class="product-price">
+                <span class="current-price">${CurrencySystem.format(price, "", p.baseCurrency || "INR")}${p.images ? ' onwards' : ''}</span>
+                ${origPrice > price ? `<span class="original-price">${CurrencySystem.format(origPrice, "", p.baseCurrency || "INR")}</span>` : ''}
+              </div>
             </div>
           </div>
-        </div>
-      `}).join('');
+        `;
+
+        // Success Formula: Inject Ad every 6 items
+        if ((index + 1) % 6 === 0) {
+          finalHTML += `
+            <div class="product-card promo-card" style="background:#f8fafc; border:2px dashed #e2e8f0; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px;">
+              <div style="background:#76C043; color:white; padding:4px 12px; border-radius:4px; font-size:0.7rem; font-weight:700; margin-bottom:15px;">SPONSORED</div>
+              <h4 style="margin-bottom:10px;">Looking for Finance?</h4>
+              <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">Get 0% EMI on all iPhone models today!</p>
+              <button class="btn btn-outline btn-sm" onclick="openSmartlink(event)">Check Eligibility</button>
+            </div>
+          `;
+        }
+      });
+      this.container.innerHTML = finalHTML;
     }
 
     // 5. Update Results Count
@@ -1828,8 +1900,8 @@ const HomeUI = {
                   <span style="background: var(--primary); color: white; font-size: 0.65rem; font-weight: 700; font-style: italic; padding: 2px 6px; border-radius: 2px;"><i class="fas fa-check-circle" style="font-size:0.6rem;"></i> TC-Assured</span>
                 </div>` : ''}
                 <div class="product-price">
-                  <span class="current-price" style="font-size: 1.1rem;">₹${(p.basePrice || p.price).toLocaleString('en-IN')}${p.images ? ' onwards' : ''}</span>
-                  ${(p.originalPrice > (p.basePrice || p.price)) ? `<span class="original-price" style="font-size: 0.85rem;">₹${p.originalPrice.toLocaleString('en-IN')}</span>` : ''}
+                  <span class="current-price" style="font-size: 1.1rem;">${CurrencySystem.format(p.basePrice || p.price, "", p.baseCurrency || "INR")}${p.images ? ' onwards' : ''}</span>
+                  ${(p.originalPrice > (p.basePrice || p.price)) ? `<span class="original-price" style="font-size: 0.85rem;">${CurrencySystem.format(p.originalPrice, "", p.baseCurrency || "INR")}</span>` : ''}
                 </div>
               </div>
             </div>

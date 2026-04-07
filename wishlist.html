@@ -17,7 +17,14 @@
         <div>
           <a href="#">Track Order</a> &nbsp;|&nbsp;
           <a href="about.html">About Us</a> &nbsp;|&nbsp;
-          <a href="contact.html">Help</a>
+          <a href="contact.html">Help</a> &nbsp;|&nbsp;
+          <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">
+            <option value="INR" style="color:#333">INR (₹)</option>
+            <option value="USD" style="color:#333">USD ($)</option>
+            <option value="GBP" style="color:#333">GBP (£)</option>
+            <option value="EUR" style="color:#333">EUR (€)</option>
+            <option value="AED" style="color:#333">AED (د.إ)</option>
+          </select>
         </div>
       </div>
     </div>
@@ -116,7 +123,12 @@
   </footer>
 
   <button class="scroll-top" id="scrollTop" onclick="scrollToTop()"><i class="fas fa-chevron-up"></i></button>
+  <script src="currencyService.js"></script>
+
   <script src="wishlistService.js?v=2"></script>
+
   <script src="script.js?v=2"></script>
+
+  <script src="components.js"></script>
 </body>
 </html>

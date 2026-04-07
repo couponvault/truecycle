@@ -8,8 +8,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script src="supabaseClient.js"></script>
+
   <script src="ads.js"></script>
+
   <style>
     .content-section { max-width: 800px; margin: 80px auto; padding: 0 24px; line-height: 1.8; color: #334155; }
     .content-section h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #0f172a; margin-bottom: 20px; }
@@ -21,6 +24,21 @@
 </head>
 <body>
   <nav class="navbar">
+    <div class="navbar-top" style="background: #1e293b; color: white; padding: 8px 0; font-size: 0.75rem;">
+      <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>📞 +91 98765 43210 &nbsp;|&nbsp; 📧 sm1807489@gmail.com</span>
+        <div>
+          <a href="about.html" style="color: white; text-decoration: none;">About Us</a> &nbsp;|&nbsp;
+          <a href="contact.html" style="color: white; text-decoration: none;">Help</a> &nbsp;|&nbsp;
+          <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">
+            <option value="INR" style="color:#333">INR (₹)</option>
+            <option value="USD" style="color:#333">USD ($)</option>
+            <option value="EUR" style="color:#333">EUR (€)</option>
+            <option value="AED" style="color:#333">AED (د.إ)</option>
+          </select>
+        </div>
+      </div>
+    </div>
     <div class="navbar-main">
       <div class="container">
         <a href="index.html" class="logo">
@@ -79,5 +97,8 @@
       <p style="color: #64748b;">© 2026 TrueCycle. All rights reserved.</p>
     </div>
   </footer>
+  <script src="currencyService.js"></script>
+
+  <script src="components.js"></script>
 </body>
 </html>

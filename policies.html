@@ -21,6 +21,21 @@
 </head>
 <body>
     <nav class="navbar" id="navbar">
+        <div class="navbar-top">
+            <div class="container">
+                <span>📞 +91 98765 43210 &nbsp;|&nbsp; 📧 sm1807489@gmail.com</span>
+                <div>
+                    <a href="about.html">About Us</a> &nbsp;|&nbsp;
+                    <a href="contact.html">Help</a> &nbsp;|&nbsp;
+                    <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">
+                        <option value="INR" style="color:#333">INR (₹)</option>
+                        <option value="USD" style="color:#333">USD ($)</option>
+                        <option value="EUR" style="color:#333">EUR (€)</option>
+                        <option value="AED" style="color:#333">AED (د.إ)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <div class="navbar-main" style="border-bottom: 1px solid #eee;">
              <div class="container">
                 <a href="index.html" class="logo">
@@ -152,5 +167,8 @@
             });
         };
     </script>
+  <script src="currencyService.js"></script>
+
+  <script src="components.js"></script>
 </body>
 </html>

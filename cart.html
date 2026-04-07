@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="ads.js"></script>
+
   <script src="productService.js"></script>
+
 </head>
 <body>
   <!-- Navigation -->
@@ -19,7 +21,14 @@
         <div>
           <a href="#">Track Order</a> &nbsp;|&nbsp;
           <a href="about.html">About Us</a> &nbsp;|&nbsp;
-          <a href="contact.html">Help</a>
+          <a href="contact.html">Help</a> &nbsp;|&nbsp;
+          <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">
+            <option value="INR" style="color:#333">INR (₹)</option>
+            <option value="USD" style="color:#333">USD ($)</option>
+            <option value="GBP" style="color:#333">GBP (£)</option>
+            <option value="EUR" style="color:#333">EUR (€)</option>
+            <option value="AED" style="color:#333">AED (د.إ)</option>
+          </select>
         </div>
       </div>
     </div>
@@ -77,29 +86,77 @@
         <div class="cart-items" id="cartItemsContainer">
         </div>
 
-        <!-- Cart Summary -->
-        <div class="cart-summary" id="cartSummary">
-          <h3>Order Summary</h3>
-          <div class="summary-row">
-            <span id="summaryItemCount">Subtotal (3 items)</span>
-            <span id="summarySubtotal">₹1,88,997</span>
+                <!-- Cart Summary -->
+        <div class="cart-summary glass-card" id="cartSummary" style="padding: 30px; position: sticky; top: 100px;">
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: #1e293b; margin-bottom: 24px;">Order Summary</h3>
+          <div class="summary-row" style="margin-bottom: 12px; font-size: 0.95rem;">
+            <span id="summaryItemCount" style="color: #64748b;">Subtotal</span>
+            <span id="summarySubtotal" style="font-weight: 700; color: #1e293b;">-</span>
           </div>
-          <div class="summary-row" id="summaryDiscountRow" style="display: none; color: #27AE60; font-weight: 600;">
+          <div class="summary-row" id="summaryDiscountRow" style="display: none; color: #10b981; font-weight: 700; margin-bottom: 12px;">
             <span>Coupon Discount</span>
-            <span id="summaryDiscount">-₹300</span>
+            <span id="summaryDiscount">-</span>
           </div>
 
-          <!-- Available Offers -->
-          <div id="first300Box" style="background: #F0F9FA; padding: 12px; border: 1px dashed #006778; border-radius: 8px; margin: 15px 0; transition: all 0.3s ease;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+          <!-- Premium Offers Box -->
+          <div id="first300Box" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 16px; border: 1px solid #bbf7d0; border-radius: 12px; margin: 20px 0; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: -10px; right: -10px; opacity: 0.1; font-size: 4rem;"><i class="fas fa-tags"></i></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1;">
               <div>
-                <span style="font-size: 0.75rem; color: #006778; font-weight: 700; display: block; margin-bottom: 2px;">SPECIAL OFFER</span>
-                <span id="promoCodeLabel" style="font-weight: 700; color: #333; font-size: 0.95rem;">FIRST300</span>
-                <p style="font-size: 0.75rem; color: #666; margin: 0;">₹300 Off on your 1st order</p>
+                <span style="font-size: 0.7rem; color: #15803d; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 4px;">WELCOME OFFER</span>
+                <span id="promoCodeLabel" style="font-weight: 800; color: #166534; font-size: 1.1rem;">FIRST300</span>
+                <p id="first300Text" style="font-size: 0.75rem; color: #15803d; margin: 0; opacity: 0.9;">Flat discount on your first order!</p>
               </div>
-              <button id="first300Btn" class="btn btn-primary btn-xs" onclick="Cart.applyCoupon('FIRST300')" style="padding: 6px 12px; font-size: 0.75rem; transition: all 0.3s ease;">Apply</button>
+              <button id="first300Btn" class="btn btn-primary btn-sm" onclick="Cart.applyCoupon('FIRST300')" style="background: #166534; border: none; padding: 8px 16px;">Apply</button>
             </div>
           </div>
+
+          <div class="coupon-box" style="margin-bottom: 24px;">
+            <div class="coupon-input" style="display: flex; gap: 10px;">
+              <input type="text" id="couponField" placeholder="Other code?" style="flex: 1; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; outline: none; transition: 0.2s;">
+              <button class="btn btn-outline btn-sm" onclick="Cart.applyCoupon(document.getElementById('couponField').value)" style="border-radius: 8px;">Apply</button>
+            </div>
+            <div id="couponFeedback" style="font-size: 0.75rem; margin-top: 8px; font-weight: 600;"></div>
+          </div>
+
+          <div class="summary-row total" style="padding-top: 20px; border-top: 2px dashed #e2e8f0; margin-top: 20px;">
+            <span style="font-size: 1.1rem; font-weight: 700; color: #1e293b;">Final Total</span>
+            <span id="summaryTotal" style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">-</span>
+          </div>
+
+          <button class="btn btn-primary btn-lg" style="width: 100%; margin-top: 24px; padding: 18px; border-radius: 12px; font-size: 1.1rem; box-shadow: 0 4px 14px rgba(0, 103, 120, 0.25);" onclick="window.location.href='checkout.html'">
+            Checkout Securely <i class="fas fa-arrow-right" style="margin-left: 10px; font-size: 0.9rem; opacity: 0.8;"></i>
+          </button>
+
+          <div class="secure-badge" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; font-size: 0.75rem; color: #94a3b8; font-weight: 600;">
+            <i class="fas fa-lock" style="font-size: 0.8rem;"></i> SSL SECURED & 256-BIT ENCRYPTED
+          </div>
+
+          <div style="margin-top: 30px; padding-top: 24px; border-top: 1px solid #f1f5f9;">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+               <div style="width: 32px; height: 32px; background: #fff1f2; color: #e11d48; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;"><i class="fas fa-shield-heart"></i></div>
+               <div>
+                  <div style="font-size: 0.85rem; font-weight: 700; color: #1e293b;">12-Month Warranty</div>
+                  <div style="font-size: 0.7rem; color: #64748b;">Full peace of mind guaranteed</div>
+               </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+               <div style="width: 32px; height: 32px; background: #ecfdf5; color: #10b981; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;"><i class="fas fa-truck-fast"></i></div>
+               <div>
+                  <div style="font-size: 0.85rem; font-weight: 700; color: #1e293b;">Express Free Delivery</div>
+                  <div style="font-size: 0.7rem; color: #64748b;">Dispatched within 24 hours</div>
+               </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+               <div style="width: 32px; height: 32px; background: #eff6ff; color: #2563eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;"><i class="fas fa-rotate-left"></i></div>
+               <div>
+                  <div style="font-size: 0.85rem; font-weight: 700; color: #1e293b;">Easy 7-Day Returns</div>
+                  <div style="font-size: 0.7rem; color: #64748b;">No-questions-asked policy</div>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
           <div class="coupon-box" style="margin-bottom: 15px;">
             <div class="coupon-input">
@@ -111,7 +168,7 @@
 
           <div class="summary-row total">
             <span>Total</span>
-            <span id="summaryTotal">₹2,23,016</span>
+            <span id="summaryTotal">-</span>
           </div>
 
           <button class="btn btn-primary btn-lg" style="width: 100%; margin-top: 20px;" onclick="window.location.href='checkout.html'">
@@ -170,7 +227,12 @@
   </footer>
 
   <button class="scroll-top" id="scrollTop" onclick="scrollToTop()"><i class="fas fa-chevron-up"></i></button>
+  <script src="currencyService.js"></script>
+
   <script src="wishlistService.js"></script>
+
   <script src="script.js"></script>
+
+  <script src="components.js"></script>
 </body>
 </html>

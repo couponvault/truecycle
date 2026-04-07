@@ -122,7 +122,16 @@
                      <div class="f-group"><label>Support Email</label><input type="text" value="sm1807489@gmail.com"></div>
                  </div>
                  <div class="form-row">
-                     <div class="f-group"><label>Currency</label><input type="text" value="INR (₹)" disabled></div>
+                     <div class="f-group">
+                         <label>Default Store Currency</label>
+                         <select id="storeBaseCurrency" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; outline:none;">
+                             <option value="INR">INR (₹) - Indian Rupee</option>
+                             <option value="USD">USD ($) - US Dollar</option>
+                             <option value="GBP">GBP (£) - British Pound</option>
+                             <option value="EUR">EUR (€) - Euro</option>
+                             <option value="AED">AED (د.إ) - UAE Dirham</option>
+                         </select>
+                     </div>
                      <div class="f-group"><label>Timezone</label><input type="text" value="Asia/Kolkata"></div>
                  </div>
              </div>
@@ -205,6 +214,7 @@
             }
         }
     </script>
+  <script src="currencyService.js"></script>
 </body>
 </html>
 

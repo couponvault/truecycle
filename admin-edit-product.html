@@ -211,9 +211,21 @@
                         <!-- 2. NEW PRICING SECTION -->
                         <div class="card-header" style="margin-top: 20px; font-size: 1rem;"><i class="fas fa-tag"></i> Pricing Structure</div>
                         <div class="pricing-grid" style="grid-template-columns: 1fr;">
-                            <div class="form-group">
-                                <label>Original Price (MRP) ₹</label>
-                                <input type="number" id="mrpPrice" oninput="updateLivePreview()" placeholder="Official Official Launch Price">
+                            <div class="form-row">
+                                <div class="form-group" style="flex:2;">
+                                    <label>Original Price (MRP)</label>
+                                    <input type="number" id="mrpPrice" oninput="updateLivePreview()" placeholder="Official Official Launch Price">
+                                </div>
+                                <div class="form-group" style="flex:1;">
+                                    <label>Base Currency</label>
+                                    <select id="prdBaseCurrency" onchange="updateMatrixHeaders(); updateLivePreview();" style="padding:14px; border:2px solid var(--admin-border); border-radius:12px; font-size:1rem; outline:none; transition:0.2s;">
+                                        <option value="INR">INR (₹)</option>
+                                        <option value="USD">USD ($)</option>
+                                        <option value="GBP">GBP (£)</option>
+                                        <option value="EUR">EUR (€)</option>
+                                        <option value="AED">AED (د.إ)</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="pricing-summary" id="pricingSummary">
                                 <span>Base Discount Preview: ₹0</span>
@@ -284,9 +296,9 @@
                                 <thead>
                                     <tr>
                                         <th>Combination</th>
-                                        <th style="background:#fff7ed; width:150px;">Fair Price (₹)</th>
-                                        <th style="background:#f0fdf4; width:150px;">Good Price (₹)</th>
-                                        <th style="background:#eff6ff; width:150px;">Superb Price (₹)</th>
+                                        <th style="background:#fff7ed; width:150px;" class="matrix-h-fair">Fair Price (₹)</th>
+                                        <th style="background:#f0fdf4; width:150px;" class="matrix-h-good">Good Price (₹)</th>
+                                        <th style="background:#eff6ff; width:150px;" class="matrix-h-superb">Superb Price (₹)</th>
                                         <th style="width:80px;">Stock</th>
                                     </tr>
                                 </thead>
@@ -389,7 +401,7 @@
             document.getElementById('prdBrand').value = product.brand;
             document.getElementById('prdCategory').value = product.category || 'phones';
             document.getElementById('mrpPrice').value = product.originalPrice;
-            document.getElementById('prdDesc').value = product.description || '';
+            document.getElementById('prdDesc').value = product.description || '';`n            document.getElementById('prdBaseCurrency').value = product.baseCurrency || 'INR';`n            if (typeof updateMatrixHeaders === 'function') updateMatrixHeaders();
 
             // Images
             if (product.images && product.images.length > 0) {
@@ -410,12 +422,13 @@
                     const pGood = v.prices ? (v.prices.good || 0) : 0;
                     const pSuperb = v.prices ? (v.prices.superb || 0) : 0;
 
+                    const curr = product.baseCurrency || 'INR';
                     row.innerHTML = `
                         <td data-val="${v.ram || ''}">${v.ram || 'No RAM'}</td>
                         <td data-val="${v.storage || 'Standard'}">${v.storage}</td>
-                        <td data-val="${pFair}">₹${pFair.toLocaleString('en-IN')}</td>
-                        <td data-val="${pGood}">₹${pGood.toLocaleString('en-IN')}</td>
-                        <td data-val="${pSuperb}">₹${pSuperb.toLocaleString('en-IN')}</td>
+                        <td data-val="${pFair}">${CurrencySystem.format(pFair, '', curr)}</td>
+                        <td data-val="${pGood}">${CurrencySystem.format(pGood, '', curr)}</td>
+                        <td data-val="${pSuperb}">${CurrencySystem.format(pSuperb, '', curr)}</td>
                         <td data-val="${v.stock}">${v.stock}</td>
                         <td><button onclick="this.parentElement.parentElement.remove(); updateLivePreview();" style="color:#e74c3c; border:none; background:none; cursor:pointer;"><i class="fas fa-trash"></i></button></td>
                     `;
@@ -598,9 +611,19 @@
             showToast('Pricing Matrix updated!');
         }
 
+        function updateMatrixHeaders() {
+            const symbols = { INR: '₹', USD: '$', GBP: '£', EUR: '€', AED: 'د.إ' };
+            const curr = document.getElementById('prdBaseCurrency').value;
+            const sym = symbols[curr] || '₹';
+            document.querySelector('.matrix-h-fair').textContent = `Fair Price (${sym})`;
+            document.querySelector('.matrix-h-good').textContent = `Good Price (${sym})`;
+            document.querySelector('.matrix-h-superb').textContent = `Superb Price (${sym})`;
+        }
+
         function updateLivePreview() {
             const name = document.getElementById('prdName').value || 'New Device';
             const mrp = parseFloat(document.getElementById('mrpPrice').value) || 0;
+            const curr = document.getElementById('prdBaseCurrency').value || 'INR';
             
             // Try to get price from first row of matrix if available
             const firstGoodInput = document.querySelector('.matrix-row .p-good');
@@ -634,12 +657,12 @@
                 const prevOffEl = document.getElementById('prevOff');
 
                 if (prevNameEl) prevNameEl.textContent = name;
-                if (prevPriceEl) prevPriceEl.textContent = `₹${selling.toLocaleString('en-IN')}`;
+                if (prevPriceEl) prevPriceEl.textContent = CurrencySystem.format(selling, '', curr);
                 
                 if (mrp > selling) {
                     if (prevOrigEl) {
                         prevOrigEl.style.display = 'inline';
-                        prevOrigEl.textContent = `₹${mrp.toLocaleString('en-IN')}`;
+                        prevOrigEl.textContent = CurrencySystem.format(mrp, '', curr);
                     }
                     if (prevOffEl) {
                         prevOffEl.style.display = 'inline';
@@ -696,6 +719,7 @@
                 variants: variants.filter(v => v),
                 colors: colors.filter(c => c),
                 pricingGrid: pricingGrid,
+                baseCurrency: document.getElementById('prdBaseCurrency').value,
                 conditions: [{label:'Fair'}, {label:'Good'}, {label:'Superb'}]
             };
 
@@ -719,5 +743,6 @@
             'graphite': '#3C3B37', 'space gray': '#53565A', 'rose gold': '#B76E79'
         };
     </script>
+  <script src="currencyService.js"></script>
 </body>
 </html>

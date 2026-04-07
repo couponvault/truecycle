@@ -10,9 +10,13 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script src="supabaseClient.js"></script>
+
   <script src="ads.js"></script>
+
   <script src="productService.js"></script>
+
 </head>
 <body>
   <!-- Navigation -->
@@ -23,7 +27,14 @@
         <div>
           <a href="orders.html">Track Order</a> &nbsp;|&nbsp;
           <a href="about.html">About Us</a> &nbsp;|&nbsp;
-          <a href="contact.html">Help</a>
+          <a href="contact.html">Help</a> &nbsp;|&nbsp;
+          <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">
+            <option value="INR" style="color:#333">INR (₹)</option>
+            <option value="USD" style="color:#333">USD ($)</option>
+            <option value="GBP" style="color:#333">GBP (£)</option>
+            <option value="EUR" style="color:#333">EUR (€)</option>
+            <option value="AED" style="color:#333">AED (د.إ)</option>
+          </select>
         </div>
       </div>
     </div>
@@ -120,9 +131,9 @@
         <div class="filter-group">
           <h4>Price Range <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></h4>
           <div class="price-range">
-            <input type="number" id="minPrice" placeholder="₹ Min" min="0">
+            <input type="number" id="minPrice" data-price="0" data-price-suffix=" Min" placeholder="₹ Min" min="0">
             <span>—</span>
-            <input type="number" id="maxPrice" placeholder="₹ Max" min="0">
+            <input type="number" id="maxPrice" data-price="0" data-price-suffix=" Max" placeholder="₹ Max" min="0">
           </div>
         </div>
         <button id="applyFiltersBtn" class="btn btn-primary btn-sm" style="width:100%; margin-top: 8px;">Apply Filters</button>
@@ -135,9 +146,9 @@
           <!-- Row 1: Budget Shortcuts -->
           <div class="budget-shortcuts" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
             <span style="font-weight: 600; font-size: 0.9rem;">Quick Budget:</span>
-            <button class="budget-chip" onclick="setPriceFilter(15000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">Under ₹15k</button>
+            <button class="budget-chip" data-price="15000" data-price-prefix="Under " onclick="setPriceFilter(15000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">Under ₹15k</button>
             <button class="budget-chip" onclick="setPriceFilter(30000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">₹15k - ₹30k</button>
-            <button class="budget-chip" onclick="setPriceFilter(50000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">Under ₹50k</button>
+            <button class="budget-chip" data-price="50000" data-price-prefix="Under " onclick="setPriceFilter(50000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">Under ₹50k</button>
             <button class="budget-chip" onclick="setPriceFilter(Infinity)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">All Prices</button>
           </div>
           
@@ -203,7 +214,12 @@
   </footer>
 
   <button class="scroll-top" id="scrollTop" onclick="scrollToTop()"><i class="fas fa-chevron-up"></i></button>
+  <script src="currencyService.js"></script>
+
   <script src="wishlistService.js"></script>
+
   <script src="script.js"></script>
+
+  <script src="components.js"></script>
 </body>
 </html>

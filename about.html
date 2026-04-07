@@ -8,8 +8,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script src="supabaseClient.js"></script>
+
   <script src="ads.js"></script>
+
   <style>
     .page-header { background: #f8fafc; padding: 80px 0; text-align: center; border-bottom: 1px solid #e2e8f0; }
     .page-header h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #1e293b; margin-bottom: 15px; }
@@ -29,7 +32,14 @@
         <div>
           <a href="admin-orders.html">Track Order</a> &nbsp;|&nbsp;
           <a href="about.html">About Us</a> &nbsp;|&nbsp;
-          <a href="contact.html">Help</a>
+          <a href="contact.html">Help</a> &nbsp;|&nbsp;
+          <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">
+            <option value="INR" style="color:#333">INR (₹)</option>
+            <option value="USD" style="color:#333">USD ($)</option>
+            <option value="GBP" style="color:#333">GBP (£)</option>
+            <option value="EUR" style="color:#333">EUR (€)</option>
+            <option value="AED" style="color:#333">AED (د.إ)</option>
+          </select>
         </div>
       </div>
     </div>
@@ -120,5 +130,8 @@
       </div>
     </div>
   </footer>
+  <script src="currencyService.js"></script>
+
+  <script src="components.js"></script>
 </body>
 </html>

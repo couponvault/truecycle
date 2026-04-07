@@ -631,10 +631,6 @@ input, select, textarea {
   padding: 40px 0;
 }
 
-.page-hero {
-  margin-top: 100px;
-  padding: 40px 0 20px;
-}
 
 .hero .container {
   display: grid;
@@ -1431,7 +1427,7 @@ input, select, textarea {
 /* --- Products Page --- */
 .page-hero {
   background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
-  padding: 140px 0 60px;
+  padding: 100px 0 40px; margin-top: 80px;
   text-align: center;
 }
 
@@ -2269,7 +2265,7 @@ input, select, textarea {
   }
 
   .filters-sidebar {
-    position: static;
+    position: fixed;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
@@ -2280,7 +2276,7 @@ input, select, textarea {
   }
 
   .product-gallery {
-    position: static;
+    position: fixed;
   }
 
   .cart-layout {
@@ -2776,7 +2772,7 @@ input, select, textarea {
   }
   .hero-stat { text-align: center; }
 
-  .page-hero { padding: 80px 0 30px; }
+  .page-hero { padding: 60px 0 30px; margin-top: 70px; }
   .products-toolbar { flex-direction: column; gap: 15px; align-items: stretch; }
   .filters-sidebar { grid-template-columns: 1fr 1fr; gap: 15px; }
   
@@ -3236,7 +3232,204 @@ input, select, textarea {
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+/* ============================================
+   Modern UI Overhaul: Premium Components
+   ============================================ */
+
+/* 1. Glass Cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1);
+}
+
+/* 2. Modern Checkout Stepper */
+.stepper-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto 40px;
+}
+
+.stepper-modern::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #e2e8f0;
+  z-index: 0;
+}
+
+.step-modern {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.step-dot {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  transition: all 0.3s ease;
+}
+
+.step-modern.active .step-dot {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(0, 103, 120, 0.2);
+}
+
+.step-modern.completed .step-dot {
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
+}
+
+.step-label-modern {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.step-modern.active .step-label-modern {
+  color: var(--primary);
+}
+
+/* 3. Address & Payment Tiles */
+.selectable-tile {
+  background: #fff;
+  border: 2px solid #f1f5f9;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.selectable-tile:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.selectable-tile.selected {
+  border-color: var(--primary);
+  background: rgba(0, 103, 120, 0.03);
+}
+
+.selectable-tile.selected::after {
+  content: '\f058';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+
+/* 4. Payment Icons Grid */
+.payment-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.payment-method-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 2px solid #f1f5f9;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.payment-method-card:hover { border-color: #cbd5e1; }
+.payment-method-card.active { border-color: var(--primary); background: rgba(0, 103, 120, 0.03); }
+
+.payment-icon-lg {
+  font-size: 1.8rem;
+  color: #475569;
+}
+
+.active .payment-icon-lg { color: var(--primary); }
+
+.payment-label-sm {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* 5. Cart Item Modern Layout */
+.cart-card-modern {
+  display: grid;
+  grid-template-columns: 120px 1fr 150px 100px;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  background: #fff;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.2s;
+}
+
+.cart-card-modern:hover { background: #fcfcfc; }
+
+.cart-img-modern {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.cart-info-modern h4 { font-size: 1.1rem; margin-bottom: 6px; color: #1e293b; }
+.cart-info-modern p { font-size: 0.85rem; color: #64748b; }
+
+.price-modern { font-weight: 700; color: #1e293b; font-size: 1rem; }
+
+/* 6. Mobile Optimization for Modern Cart */
+@media (max-width: 768px) {
+  .cart-card-modern {
+    grid-template-columns: 100px 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+    padding: 16px;
+  }
+  .cart-price-col { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 12px; }
 }
