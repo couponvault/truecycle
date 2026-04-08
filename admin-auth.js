@@ -1,16 +1,16 @@
 ﻿/**
- * TrueCycle Admin Authentication Guard
+ * Prime Device Admin Authentication Guard
  * Client-side access control for the Admin Panel.
  * ---
- * Default PIN: truecycle2026
+ * Default PIN: Prime Device2026
  * Change via Admin Panel â†’ Settings â†’ Security
  */
 
 const AdminAuth = {
-    SESSION_KEY: 'tc_admin_session',
-    HASH_KEY: 'tc_admin_hash',
-    ATTEMPTS_KEY: 'tc_admin_attempts',
-    LOCKOUT_KEY: 'tc_admin_lockout',
+    SESSION_KEY: 'pd_admin_session',
+    HASH_KEY: 'pd_admin_hash',
+    ATTEMPTS_KEY: 'pd_admin_attempts',
+    LOCKOUT_KEY: 'pd_admin_lockout',
     SESSION_DURATION: 30 * 60 * 1000, // 30 minutes
     MAX_ATTEMPTS: 5,
     LOCKOUT_DURATION: 5 * 60 * 1000, // 5 minutes
@@ -18,7 +18,7 @@ const AdminAuth = {
     /** SHA-256 hash using Web Crypto API */
     async hash(text) {
         const encoder = new TextEncoder();
-        const data = encoder.encode(text + '_tc_salt_x9k2');
+        const data = encoder.encode(text + '_pd_salt_x9k2');
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
@@ -26,19 +26,19 @@ const AdminAuth = {
 
     /** Check if a password hash has been set; if not, fetch from Cloud or use default */
     async ensureDefaultPassword() {
-        const defaultPIN = 'truecycle2026';
+        const defaultPIN = 'Prime Device2026';
         const defaultHash = await this.hash(defaultPIN);
 
-        if (typeof tcCloud !== 'undefined' && tcCloud) {
+        if (typeof pdCloud !== 'undefined' && pdCloud) {
             try {
-                const { data, error } = await tcCloud.from('site_config').select('value').eq('key', 'admin_hash').single();
+                const { data, error } = await pdCloud.from('site_config').select('value').eq('key', 'admin_hash').single();
                 if (data && data.value) {
                     localStorage.setItem(this.HASH_KEY, data.value);
                     console.log("AdminAuth: Cloud security hash synced.");
                     return;
                 } else if (error) {
                     // If table exists but empty or error, insert default
-                    await tcCloud.from('site_config').insert([{ key: 'admin_hash', value: defaultHash }]);
+                    await pdCloud.from('site_config').insert([{ key: 'admin_hash', value: defaultHash }]);
                 }
             } catch (e) { console.warn("Cloud Auth Sync Failed:", e); }
         }
@@ -150,8 +150,8 @@ const AdminAuth = {
         const newHash = await this.hash(newPassword);
         
         // Update Cloud first
-        if (typeof tcCloud !== 'undefined' && tcCloud) {
-            const { error } = await tcCloud.from('site_config').upsert({ key: 'admin_hash', value: newHash });
+        if (typeof pdCloud !== 'undefined' && pdCloud) {
+            const { error } = await pdCloud.from('site_config').upsert({ key: 'admin_hash', value: newHash });
             if (error) return { success: false, message: 'Cloud sync failed: ' + error.message };
         }
 
@@ -296,7 +296,7 @@ const AdminAuth = {
                 </form>
 
                 <div class="auth-footer">
-                    <i class="fas fa-recycle" style="color:#006778;"></i> TrueCycle Admin Â· Secured Access
+                    <i class="fas fa-recycle" style="color:#006778;"></i> Prime Device Admin Â· Secured Access
                 </div>
             </div>
         `;
@@ -442,3 +442,4 @@ function updateLockoutUI() {
 document.addEventListener('DOMContentLoaded', () => {
     AdminAuth.init();
 });
+

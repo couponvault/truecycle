@@ -113,9 +113,9 @@
           const tbody = document.querySelector('.admin-table tbody');
           let orders = [];
 
-          if (typeof tcCloud !== 'undefined' && tcCloud) {
+          if (typeof pdCloud !== 'undefined' && pdCloud) {
               try {
-                  const { data, error } = await tcCloud.from('orders').select('*').order('created_at', { ascending: false });
+                  const { data, error } = await pdCloud.from('orders').select('*').order('created_at', { ascending: false });
                   if (data) {
                       orders = data.map(o => ({
                           id: o.id.toString().substring(0, 8).toUpperCase(),
@@ -166,4 +166,5 @@
   <script src="currencyService.js"></script>
 </body>
 </html>
+
 

@@ -25,7 +25,7 @@ const injection = `
         "@type": "Product",
         "name": currentProduct.name,
         "image": currentProduct.images ? currentProduct.images[0] : currentProduct.img,
-        "description": currentProduct.description || "Certified Refurbished Device by TrueCycle",
+        "description": currentProduct.description || "Certified Refurbished Device by Prime Device",
         "sku": currentProduct.id,
         "brand": { "@type": "Brand", "name": currentProduct.brand },
         "offers": {
@@ -45,3 +45,4 @@ content = content.replace(/currentProduct\.temp_selection = \`\$\{memLabel\}\$\{
 
 fs.writeFileSync(filePath, content, 'utf8');
 console.log('âœ… JSON-LD Schema Logic Injected implicitly into calculateAndDisplay');
+

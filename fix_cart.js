@@ -9,3 +9,4 @@ files.forEach(f => {
     console.log('Updated ' + f);
   }
 });
+

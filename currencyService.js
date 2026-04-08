@@ -1,5 +1,5 @@
 ﻿/**
- * TrueCycle - Universal Global Currency System
+ * Prime Device - Universal Global Currency System
  * Automatically detects ANY country and converts prices using Intl API.
  */
 
@@ -9,7 +9,7 @@ const CurrencySystem = {
     lastFetch: localStorage.getItem('tc_rates_ts') || 0,
 
     async init() {
-        console.log("TrueCycle: Initializing Global Currency System...");
+        console.log("Prime Device: Initializing Global Currency System...");
         
         // 1. Auto-detect currency via IP if no preference saved
         if (!localStorage.getItem('tc_currency')) {
@@ -31,12 +31,12 @@ const CurrencySystem = {
             const data = await res.json();
             
             if (data && data.currency) {
-                console.log("TrueCycle: Detected Currency -", data.currency);
+                console.log("Prime Device: Detected Currency -", data.currency);
                 this.selected = data.currency;
                 localStorage.setItem('tc_currency', this.selected);
             }
         } catch (e) {
-            console.warn("TrueCycle: GeoIP detection failed, defaulting to INR.");
+            console.warn("Prime Device: GeoIP detection failed, defaulting to INR.");
             this.selected = 'INR';
         }
         
@@ -55,10 +55,10 @@ const CurrencySystem = {
                 this.lastFetch = Date.now();
                 localStorage.setItem('tc_rates', JSON.stringify(this.rates));
                 localStorage.setItem('tc_rates_ts', this.lastFetch);
-                console.log("TrueCycle: Exchange rates updated.");
+                console.log("Prime Device: Exchange rates updated.");
             }
         } catch (e) {
-            console.warn("TrueCycle: Rates update failed.", e);
+            console.warn("Prime Device: Rates update failed.", e);
         }
     },
 
@@ -153,3 +153,4 @@ const CurrencySystem = {
 
 // AUTO-INIT as soon as file is loaded
 CurrencySystem.init();
+

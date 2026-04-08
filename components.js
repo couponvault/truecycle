@@ -1,9 +1,9 @@
 ﻿/**
- * TrueCycle Shared Components Manager (Premium UI)
+ * Prime Device Shared Components Manager (Premium UI)
  * Manages consistent UI elements like the Global Header and Currency Dropdown.
  */
 
-const TrueCycleUI = {
+const Prime DeviceUI = {
   currencies: [
     { code: 'INR', symbol: 'â‚¹', flag: 'ðŸ‡®ðŸ‡³' },
     { code: 'USD', symbol: '$', flag: 'ðŸ‡ºðŸ‡¸' },
@@ -19,7 +19,7 @@ const TrueCycleUI = {
     this.injectStyles();
     this.hydrateCurrencyDropdown();
     this.setupClickOutside();
-    console.log("TrueCycle UI: Components hydrated.");
+    console.log("Prime Device UI: Components hydrated.");
   },
 
   injectStyles() {
@@ -161,7 +161,7 @@ const TrueCycleUI = {
     container.id = 'tcCurrencyRoot';
 
     container.innerHTML = `
-      <div class="tc-dropdown-trigger" onclick="TrueCycleUI.toggleDropdown()">
+      <div class="tc-dropdown-trigger" onclick="Prime DeviceUI.toggleDropdown()">
         <span class="flag">${activeData.flag}</span>
         <span class="code">${activeData.code}</span>
         <i class="fas fa-chevron-down"></i>
@@ -169,7 +169,7 @@ const TrueCycleUI = {
       <div class="tc-dropdown-list">
         ${this.currencies.map(c => `
           <div class="tc-currency-item ${c.code === currentCurrency ? 'active' : ''}" 
-               onclick="TrueCycleUI.selectCurrency('${c.code}')">
+               onclick="Prime DeviceUI.selectCurrency('${c.code}')">
             <span class="flag">${c.flag}</span>
             <span class="code">${c.code}</span>
             <span class="symbol">${c.symbol}</span>
@@ -210,7 +210,8 @@ const TrueCycleUI = {
 
 // Auto-init when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => TrueCycleUI.init());
+  document.addEventListener('DOMContentLoaded', () => Prime DeviceUI.init());
 } else {
-  TrueCycleUI.init();
+  Prime DeviceUI.init();
 }
+

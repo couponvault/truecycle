@@ -1,5 +1,5 @@
 ﻿/**
- * TrueCycle High-Revenue Monetization (Triveni Style)
+ * Prime Device High-Revenue Monetization (Triveni Style)
  * Advanced User Tracking & Ad Injection
  */
 
@@ -78,7 +78,7 @@ function showVignette(url) {
     card.className = 'vignette-card';
     card.innerHTML = `
         <div class="vignette-header">
-            <h3>TrueCycle Exclusive Offer</h3>
+            <h3>Prime Device Exclusive Offer</h3>
             <span class="vignette-timer">Navigating in <b id="v-countdown">2</b>s...</span>
         </div>
         <div class="vignette-ad-slot">
@@ -144,3 +144,4 @@ function openSmartlink(event) {
     // Your High-CPM Smartlink (noopener prevents reverse tabnabbing)
     window.open('https://your-smartlink-here.com', '_blank', 'noopener,noreferrer');
 }
+

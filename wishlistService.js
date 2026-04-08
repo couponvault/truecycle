@@ -3,7 +3,7 @@
  * Designed to be future-ready: can be easily swapped for a backend API.
  */
 
-const STORAGE_KEY = 'truecycle_wishlist_items';
+const STORAGE_KEY = 'primedevice_wishlist';
 
 const wishlistService = {
   /**
@@ -93,3 +93,4 @@ if (typeof module !== 'undefined' && module.exports) {
 } else {
   window.wishlistService = wishlistService;
 }
+

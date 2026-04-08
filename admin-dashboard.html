@@ -264,8 +264,8 @@
             let orders = [];
 
             // 1. Fetch real orders from Cloud
-            if (typeof tcCloud !== 'undefined' && tcCloud) {
-                const { data, error } = await tcCloud.from('orders').select('*').order('created_at', { ascending: false });
+            if (typeof pdCloud !== 'undefined' && pdCloud) {
+                const { data, error } = await pdCloud.from('orders').select('*').order('created_at', { ascending: false });
                 if (!error && data) orders = data;
             } else {
                 orders = JSON.parse(localStorage.getItem('Prime Device_orders') || '[]');
@@ -327,3 +327,4 @@
   <script src="currencyService.js"></script>
 </body>
 </html>
+

@@ -17,3 +17,4 @@ if (navMatch) {
 } else {
     console.error("Could not find Top Bar in index.html");
 }
+

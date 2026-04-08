@@ -58,7 +58,7 @@
     ],
 
     async init() {
-        if (typeof tcCloud === 'undefined' || !tcCloud) {
+        if (typeof pdCloud === 'undefined' || !pdCloud) {
             console.warn("Cloud connection not ready, falling back to LocalStorage.");
             this.cache = JSON.parse(localStorage.getItem(this.key) || JSON.stringify(this.seedData));
             this.isLoaded = true;
@@ -67,7 +67,7 @@
 
         try {
             // 1. Fetch from Cloud
-            const { data, error } = await tcCloud.from('products').select('*');
+            const { data, error } = await pdCloud.from('products').select('*');
             if (error) throw error;
 
             if (data && data.length > 0) {
@@ -78,10 +78,10 @@
                     originalPrice: p.original_price,
                     baseCurrency: p.base_currency || "INR"
                 }));
-                console.log("TrueCycle Cloud: Products synced from database.");
+                console.log("Prime Device Cloud: Products synced from database.");
             } else {
                 // 2. Initial Migration: Sync Seed/Local data to Cloud
-                console.log("TrueCycle Cloud: Empty database detected. Migrating local data...");
+                console.log("Prime Device Cloud: Empty database detected. Migrating local data...");
                 const localData = JSON.parse(localStorage.getItem(this.key) || JSON.stringify(this.seedData));
                 
                 const toInsert = localData.map(p => ({
@@ -102,7 +102,7 @@
                     pricing_grid: p.pricingGrid || {}
                 }));
 
-                const { insertError } = await tcCloud.from('products').insert(toInsert);
+                const { insertError } = await pdCloud.from('products').insert(toInsert);
                 if (insertError) console.error("Cloud Migration Error:", insertError);
                 this.cache = localData;
             }
@@ -149,8 +149,8 @@
             originalPrice: parseInt(product.originalPrice) || 0
         };
 
-        if (typeof tcCloud !== 'undefined' && tcCloud) {
-            const { error } = await tcCloud.from('products').insert([{
+        if (typeof pdCloud !== 'undefined' && pdCloud) {
+            const { error } = await pdCloud.from('products').insert([{
                 id: newProduct.id,
                 name: newProduct.name,
                 category: newProduct.category,
@@ -183,8 +183,8 @@
             originalPrice: parseInt(product.originalPrice) || 0
         };
 
-        if (typeof tcCloud !== 'undefined' && tcCloud) {
-            const { error } = await tcCloud.from('products').update({
+        if (typeof pdCloud !== 'undefined' && pdCloud) {
+            const { error } = await pdCloud.from('products').update({
                 name: updated.name,
                 category: updated.category,
                 brand: updated.brand,
@@ -208,8 +208,8 @@
     },
 
     async deleteProduct(id) {
-        if (typeof tcCloud !== 'undefined' && tcCloud) {
-            const { error } = await tcCloud.from('products').delete().eq('id', id);
+        if (typeof pdCloud !== 'undefined' && pdCloud) {
+            const { error } = await pdCloud.from('products').delete().eq('id', id);
             if (error) console.error("Supabase Delete Error:", error);
         }
         this.cache = this.cache.filter(p => p.id !== id);
@@ -223,3 +223,4 @@
 
 // Start the cloud engine
 productService.init();
+

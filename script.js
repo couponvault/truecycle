@@ -1,8 +1,8 @@
 ﻿// ============================================
-// TrueCycle - Main JavaScript
+// Prime Device - Main JavaScript
 // ============================================
 
-/** Global HTML Sanitizer â€” prevents XSS when injecting user-controlled data into innerHTML */
+/** Global HTML Sanitizer Ã¢â‚¬â€ prevents XSS when injecting user-controlled data into innerHTML */
 function escapeHTML(str) {
     if (typeof str !== 'string') return str;
     const div = document.createElement('div');
@@ -111,7 +111,7 @@ function injectProductSchema(product) {
     "description": product.description || "",
     "brand": {
       "@type": "Brand",
-      "name": product.brand || "TrueCycle"
+      "name": product.brand || "Prime Device"
     },
     "offers": {
       "@type": "Offer",
@@ -122,7 +122,7 @@ function injectProductSchema(product) {
       "availability": "https://schema.org/InStock",
       "seller": {
         "@type": "Organization",
-        "name": "TrueCycle"
+        "name": "Prime Device"
       }
     },
     "aggregateRating": {
@@ -148,7 +148,7 @@ function updateQty(delta) {
 
 // --- Cart State Management ---
 const Cart = {
-  items: JSON.parse(localStorage.getItem('truecycle_cart')) || [],
+  items: JSON.parse(localStorage.getItem('Prime Device_cart')) || [],
   init: function() {
     this.updateCounters();
     this.renderCartPage();
@@ -164,7 +164,7 @@ const Cart = {
     if (code.toUpperCase() === 'FIRST300') {
       this.discount = 300;
       this.couponCode = 'FIRST300';
-      feedback.textContent = `Coupon applied: ${CurrencySystem.format(300)} Discount! ðŸŽ‰`;
+      feedback.textContent = `Coupon applied: ${CurrencySystem.format(300)} Discount! Ã°Å¸Å½â€°`;
       feedback.style.color = '#27AE60';
       if (offerBox) { offerBox.style.background = '#EBF9F1'; offerBox.style.borderColor = '#27AE60'; }
       if (offerBtn) { offerBtn.textContent = 'APPLIED'; offerBtn.style.background = '#27AE60'; offerBtn.classList.remove('btn-primary'); offerBtn.style.color = 'white'; }
@@ -191,7 +191,7 @@ const Cart = {
     this.renderCartPage();
   },
   save: function() {
-    localStorage.setItem('truecycle_cart', JSON.stringify(this.items));
+    localStorage.setItem('Prime Device_cart', JSON.stringify(this.items));
     this.updateCounters();
     this.renderCartPage();
   },
@@ -273,7 +273,7 @@ const Cart = {
           </div>
           <div class="cart-qty-col">
             <div class="qty-control" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 50px; padding: 4px;">
-              <button class="qty-btn" onclick="Cart.updateQty('${item.id}', -1)" style="width: 28px; height: 28px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 700;">âˆ’</button>
+              <button class="qty-btn" onclick="Cart.updateQty('${item.id}', -1)" style="width: 28px; height: 28px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 700;">Ã¢Ë†â€™</button>
               <input type="number" class="qty-input" value="${item.qty}" readonly style="width: 35px; background: transparent; font-weight: 700; text-align: center;">
               <button class="qty-btn" onclick="Cart.updateQty('${item.id}', 1)" style="width: 28px; height: 28px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 700;">+</button>
             </div>
@@ -361,7 +361,7 @@ function addToCart(e) {
   // Auto-detect product
   let product = {
     id: 'p_' + Math.random().toString(36).substr(2, 9),
-    name: 'TrueCycle Device',
+    name: 'Prime Device Device',
     price: 49999,
     img: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=150&h=150',
     spec: 'Certified Refurbished',
@@ -394,7 +394,7 @@ function addToCart(e) {
   showToast('Product added to cart!');
 }
 
-// (Toast function defined once at end of file â€” see Global Toast Notification System)
+// (Toast function defined once at end of file Ã¢â‚¬â€ see Global Toast Notification System)
 
 // --- Wishlist UI Management ---
 const WishlistUI = {
@@ -443,7 +443,7 @@ const WishlistUI = {
     if (productCard) {
       product = {
         id: productCard.dataset.id || 'p_' + Math.random().toString(36).substr(2, 9),
-        name: productCard.querySelector('h3') ? productCard.querySelector('h3').textContent : 'TrueCycle Product',
+        name: productCard.querySelector('h3') ? productCard.querySelector('h3').textContent : 'Prime Device Product',
         price: productCard.querySelector('.current-price') ? parseInt(productCard.querySelector('.current-price').textContent.replace(/[^0-9]/g, '')) : 0,
         img: productCard.querySelector('img') ? productCard.querySelector('img').src : ''
       };
@@ -470,7 +470,7 @@ const WishlistUI = {
     setTimeout(() => btn.classList.remove('heart-pop'), 400);
 
     if (isAdded) {
-      showToast('Added to Wishlist! â¤ï¸');
+      showToast('Added to Wishlist! Ã¢ÂÂ¤Ã¯Â¸Â');
     } else {
       showToast('Removed from Wishlist', 'info');
     }
@@ -580,13 +580,13 @@ function handleWishlistToCart(id) {
     });
     
     wishlistService.removeFromWishlist(id);
-    showToast('Product shifted to cart! ðŸ›’');
+    showToast('Product shifted to cart! Ã°Å¸â€ºâ€™');
 }
 
 // --- User Authentication System ---
 const UserAuth = {
-  USERS_KEY: 'truecycle_users',
-  SESSION_KEY: 'truecycle_user_session',
+  USERS_KEY: 'Prime Device_users',
+  SESSION_KEY: 'Prime Device_user_session',
 
   /** SHA-256 hash */
   async hash(text) {
@@ -780,7 +780,7 @@ function renderAccountView() {
               <i class="far fa-user"></i>
             </div>
             <h2 style="margin-bottom:4px;">Welcome Back!</h2>
-            <p style="font-size:0.85rem; color:var(--text-muted);">Access your TrueCycle account</p>
+            <p style="font-size:0.85rem; color:var(--text-muted);">Access your Prime Device account</p>
           </div>
           <div id="loginError" style="display:none; background:#fff5f5; border:1px solid #fecaca; color:#dc2626; padding:10px 14px; border-radius:8px; font-size:0.82rem; margin-bottom:16px; text-align:center;"></div>
           <form id="loginForm" onsubmit="event.preventDefault(); handleUserLogin()">
@@ -797,7 +797,7 @@ function renderAccountView() {
             <div style="width:70px; height:70px; border-radius:50%; background:var(--bg-secondary); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:var(--primary);">
               <i class="fas fa-user-plus"></i>
             </div>
-            <h2 style="margin-bottom:8px;">Join TrueCycle</h2>
+            <h2 style="margin-bottom:8px;">Join Prime Device</h2>
             <p style="font-size:0.85rem; color:var(--text-muted);">Create your account for better shopping</p>
           </div>
           <div id="signupError" style="display:none; background:#fff5f5; border:1px solid #fecaca; color:#dc2626; padding:10px 14px; border-radius:8px; font-size:0.82rem; margin-bottom:16px; text-align:center;"></div>
@@ -835,7 +835,7 @@ async function handleUserLogin() {
   if (result.success) {
     btn.innerHTML = '<i class="fas fa-check"></i> Welcome back!';
     btn.style.backgroundColor = '#27AE60';
-    showToast(`Welcome back, ${result.user.name}! ðŸŽ‰`, 'success');
+    showToast(`Welcome back, ${result.user.name}! Ã°Å¸Å½â€°`, 'success');
     updateProfileIcon();
     setTimeout(() => {
       renderAccountView();
@@ -869,7 +869,7 @@ async function handleUserSignup() {
   if (result.success) {
     btn.innerHTML = '<i class="fas fa-check"></i> Account Created!';
     btn.style.backgroundColor = '#27AE60';
-    showToast(`Welcome to TrueCycle, ${result.user.name}! ðŸŽ‰`, 'success');
+    showToast(`Welcome to Prime Device, ${result.user.name}! Ã°Å¸Å½â€°`, 'success');
     updateProfileIcon();
     setTimeout(() => {
       renderAccountView();
@@ -983,7 +983,7 @@ function handleNewsletter(e) {
   const email = input.value;
 
   if (email) {
-    showToast('Thanks for subscribing! ðŸŽ‰');
+    showToast('Thanks for subscribing! Ã°Å¸Å½â€°');
     input.value = '';
   }
 }
@@ -1074,7 +1074,7 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// (Search function defined once below â€” see Search Logic section)
+// (Search function defined once below Ã¢â‚¬â€ see Search Logic section)
 
 // --- Quick Price Filtering ---
 function setPriceFilter(max) {
@@ -1107,7 +1107,7 @@ function setPriceFilter(max) {
     }
 }
 
-console.log('ðŸ”§ TrueCycle loaded successfully!');
+console.log('Ã°Å¸â€Â§ Prime Device loaded successfully!');
 
 // Helper to get total price from different pages (Cart or Checkout)
 function getCheckoutAmount() {
@@ -1236,8 +1236,8 @@ function startMockPayment(method) {
       `;
       
       // 1. Save to Supabase Cloud
-      if (typeof tcCloud !== 'undefined' && tcCloud) {
-          tcCloud.from('orders').insert([{
+      if (typeof pdCloud !== 'undefined' && pdCloud) {
+          pdCloud.from('orders').insert([{
               items: items,
               total_amount: numAmount,
               status: 'Confirmed',
@@ -1245,12 +1245,12 @@ function startMockPayment(method) {
               payment_method: method
           }]).then(({ error }) => {
               if (error) console.error("Cloud Order Sync Error:", error);
-              else console.log("TrueCycle Cloud: Order stored in database.");
+              else console.log("Prime Device Cloud: Order stored in database.");
           });
       }
 
       // 2. Local fallback
-      const orders = JSON.parse(localStorage.getItem('truecycle_orders')) || [];
+      const orders = JSON.parse(localStorage.getItem('Prime Device_orders')) || [];
       const newOrder = {
         id: orderId,
         date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
@@ -1261,12 +1261,12 @@ function startMockPayment(method) {
         address: address
       };
       orders.unshift(newOrder);
-      localStorage.setItem('truecycle_orders', JSON.stringify(orders));
+      localStorage.setItem('Prime Device_orders', JSON.stringify(orders));
 
       // Clear Cart
       Cart.items = [];
       Cart.save();
-      showToast('Order Successful! ðŸŽ‰', 'success');
+      showToast('Order Successful! Ã°Å¸Å½â€°', 'success');
 
     } else {
       content.innerHTML = `
@@ -1291,7 +1291,7 @@ function startMockPayment(method) {
 
 // --- Device Comparison System ---
 const CompareManager = {
-  list: JSON.parse(localStorage.getItem('truecycle_compare')) || [],
+  list: JSON.parse(localStorage.getItem('Prime Device_compare')) || [],
   
   toggle(product) {
     const idx = this.list.findIndex(p => p.id === product.id);
@@ -1312,7 +1312,7 @@ const CompareManager = {
   },
 
   save() {
-    localStorage.setItem('truecycle_compare', JSON.stringify(this.list));
+    localStorage.setItem('Prime Device_compare', JSON.stringify(this.list));
   },
 
   updateUI() {
@@ -1394,7 +1394,7 @@ function toggleCompare(e, id, name, price, img) {
   const card = btn ? btn.closest('.product-card') : null;
 
   // Fallback for placeholder data (fix zero value/placeholder issues)
-  if ((!name || name.includes('TrueCycle Device')) && card) {
+  if ((!name || name.includes('Prime Device Device')) && card) {
     const nameEl = card.querySelector('h3');
     if (nameEl) name = nameEl.textContent.trim();
   }
@@ -1491,7 +1491,7 @@ function openConditionGuide(e) {
         <button class="modal-close" onclick="closeConditionModal()">&times;</button>
         <div style="text-align:center; margin-bottom: 30px;">
           <h2 style="font-family:'Playfair Display', serif; color:var(--primary); font-size:2rem;">Quality Grading Standards</h2>
-          <p style="color:var(--text-secondary);">Every TrueCycle device undergoes a 72-point rigorous inspection.</p>
+          <p style="color:var(--text-secondary);">Every Prime Device device undergoes a 72-point rigorous inspection.</p>
         </div>
         
         <div class="condition-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:20px;">
@@ -1511,7 +1511,7 @@ function openConditionGuide(e) {
 
         <div style="margin-top:30px; padding:15px; background:var(--bg-secondary); border-radius:8px; display:flex; gap:15px; align-items:center;">
           <i class="fas fa-shield-alt" style="font-size:1.5rem; color:var(--primary);"></i>
-          <p style="font-size:0.85rem; margin:0;"><strong>12-Month TrueCycle Warranty:</strong> Regardless of condition, all devices are covered for any hardware or performance issues.</p>
+          <p style="font-size:0.85rem; margin:0;"><strong>12-Month Prime Device Warranty:</strong> Regardless of condition, all devices are covered for any hardware or performance issues.</p>
         </div>
       </div>
     </div>
@@ -1709,7 +1709,7 @@ const ProductUI = {
       if (this.filters.search) {
           const q = this.filters.search.toLowerCase();
           // Search regex: Handles "under 15000", "below 15000", and currency symbols
-          const underMatch = q.match(/(?:under|below|less than|within|prices?|rs|â‚¹|[\$\â‚¬\Â£\Ø¯.Ø¥])\s?(\d+)/i);
+          const underMatch = q.match(/(?:under|below|less than|within|prices?|rs|Ã¢â€šÂ¹|[\$\Ã¢â€šÂ¬\Ã‚Â£\Ã˜Â¯.Ã˜Â¥])\s?(\d+)/i);
           const aboveMatch = q.match(/(?:above|over|more than)\s?(\d+)/i);
           
           let priceLimit = null;
@@ -1718,7 +1718,7 @@ const ProductUI = {
           if (underMatch) { priceLimit = parseInt(underMatch[1]); priceType = 'under'; } 
           else if (aboveMatch) { priceLimit = parseInt(aboveMatch[1]); priceType = 'above'; }
 
-          const cleanQ = q.replace(/(?:under|below|less than|within|above|over|more than|prices?|rs|â‚¹|[\$\â‚¬\Â£\Ø¯.Ø¥])\s?(\d+)/ig, '').trim();
+          const cleanQ = q.replace(/(?:under|below|less than|within|above|over|more than|prices?|rs|Ã¢â€šÂ¹|[\$\Ã¢â€šÂ¬\Ã‚Â£\Ã˜Â¯.Ã˜Â¥])\s?(\d+)/ig, '').trim();
 
           if (cleanQ) {
               matchSearch = p.name.toLowerCase().includes(cleanQ) || 
@@ -1781,9 +1781,9 @@ const ProductUI = {
               </div>
             </a>
             <div class="product-info">
-              <div class="product-condition">âœ“ Certified Refurbished</div>
+              <div class="product-condition">Ã¢Å“â€œ Certified Refurbished</div>
               <h3><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
-              <div class="product-rating"><span class="stars">${'â˜…'.repeat(p.rating || 5)}${'â˜†'.repeat(5 - (p.rating || 5))}</span><span class="rating-count">(${p.reviews || 0})</span></div>
+              <div class="product-rating"><span class="stars">${'Ã¢Ëœâ€¦'.repeat(p.rating || 5)}${'Ã¢Ëœâ€ '.repeat(5 - (p.rating || 5))}</span><span class="rating-count">(${p.reviews || 0})</span></div>
               <div class="product-price">
                 <span class="current-price">${CurrencySystem.format(price, "", p.baseCurrency || "INR")}${p.images ? ' onwards' : ''}</span>
                 ${origPrice > price ? `<span class="original-price">${CurrencySystem.format(origPrice, "", p.baseCurrency || "INR")}</span>` : ''}
@@ -1975,4 +1975,5 @@ window.addEventListener('load', () => {
 
     revealElements.forEach(el => revealObserver.observe(el));
 });
+
 
