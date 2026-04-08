@@ -3423,13 +3423,56 @@ input, select, textarea {
 
 .price-modern { font-weight: 700; color: #1e293b; font-size: 1rem; }
 
+.cart-qty-modern {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  background: #f8fafc;
+  overflow: hidden;
+  height: 36px;
+}
+.cart-qty-modern button {
+  width: 36px;
+  height: 100%;
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+}
+.cart-qty-modern button:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+.cart-qty-modern span {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+
 /* 6. Mobile Optimization for Modern Cart */
 @media (max-width: 768px) {
   .cart-card-modern {
     grid-template-columns: 100px 1fr;
-    grid-template-rows: auto auto;
-    gap: 16px;
+    grid-template-rows: auto auto auto;
+    gap: 12px;
     padding: 16px;
   }
-  .cart-price-col { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 12px; }
+  .cart-img-wrap { grid-column: 1; grid-row: 1 / span 2; }
+  .cart-info-modern { grid-column: 2; grid-row: 1; }
+  .cart-qty-modern { grid-column: 2; grid-row: 2; white-space: nowrap; margin-bottom: 5px; }
+  .cart-price-col { 
+    grid-column: 1 / span 2; 
+    grid-row: 3;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-top: 1px dashed #e2e8f0; 
+    padding-top: 12px; 
+    margin-top: 4px;
+  }
 }

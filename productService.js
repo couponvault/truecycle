@@ -75,7 +75,8 @@ const productService = {
                 this.cache = data.map(p => ({
                     ...p,
                     basePrice: p.base_price,
-                    originalPrice: p.original_price,`n                    baseCurrency: p.base_currency || "INR"
+                    originalPrice: p.original_price,
+                    baseCurrency: p.base_currency || "INR"
                 }));
                 console.log("TrueCycle Cloud: Products synced from database.");
             } else {
@@ -89,7 +90,8 @@ const productService = {
                     category: p.category,
                     brand: p.brand,
                     base_price: p.basePrice || 0,
-                    original_price: p.originalPrice || 0,`n                    base_currency: p.baseCurrency || "INR",
+                    original_price: p.originalPrice || 0,
+                    base_currency: p.baseCurrency || "INR",
                     images: p.images,
                     rating: p.rating,
                     reviews: p.reviews,
@@ -154,7 +156,8 @@ const productService = {
                 category: newProduct.category,
                 brand: newProduct.brand,
                 base_price: newProduct.basePrice,
-                original_price: newProduct.originalPrice,`n                base_currency: newProduct.baseCurrency || "INR",
+                original_price: newProduct.originalPrice,
+                base_currency: newProduct.baseCurrency || "INR",
                 images: newProduct.images,
                 rating: newProduct.rating,
                 reviews: newProduct.reviews,
@@ -172,7 +175,7 @@ const productService = {
         return newProduct;
     },
 
-        async updateProduct(id, product) {
+    async updateProduct(id, product) {
         const updated = {
             ...product,
             id: id,
