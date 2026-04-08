@@ -1,4 +1,90 @@
-<!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <meta name="description"    content="View product details, specifications, and pricing for certified refurbished devices at TrueCycle. Fully tested and guaranteed.">  <meta name="keywords"    content="buy refurbished phone, second hand smartphone details, cheap laptop specs, TrueCycle device, refurbished apple, refurbished samsung">  <meta name="robots" content="index, follow">  <title>Device Details â€“ TrueCycle</title>  <link rel="stylesheet" href="styles.css?v=2">  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></head><body>  <!-- Navigation -->  <nav class="navbar" id="navbar">    <div class="navbar-top">      <div class="container">        <span>ðŸ“ž +91 98765 43210 &nbsp;|&nbsp; ðŸ“§ sm1807489@gmail.com</span>        <div>          <a href="#">Track Order</a> &nbsp;|&nbsp;          <a href="about.html">About Us</a> &nbsp;|&nbsp;          <a href="contact.html">Help</a> &nbsp;|&nbsp;          <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">            <option value="INR" style="color:#333">INR (₹)</option>            <option value="USD" style="color:#333">USD ($)</option>            <option value="GBP" style="color:#333">GBP (Â£)</option>            <option value="EUR" style="color:#333">EUR (€)</option>            <option value="AED" style="color:#333">AED (Ø¯.Ø¥)</option>          </select>        </div>      </div>    </div>    <div class="navbar-main">      <div class="container">        <a href="index.html" class="logo">          <img src="logo.png" alt="TrueCycle Logo" style="height: 48px; width: auto; object-fit: contain;">        </a>        <div class="nav-search">          <input id="navSearchInput" type="text" placeholder="Search for phones, brands, laptops..."            onkeydown="if(event.key==='Enter'){doSearch(this.value)}">          <i class="fas fa-search"></i>          <button class="search-btn" onclick="doSearch(document.getElementById('navSearchInput').value)"><i              class="fas fa-arrow-right"></i></button>        </div>        <div class="nav-links" id="navLinks">          <a href="index.html">Home</a>          <a href="products.html">Products</a>          <a href="products.html?cat=phones">Phones</a>          <a href="products.html?cat=laptops">Laptops</a>          <a href="conditions.html">Condition Guide</a>          <a href="about.html">About</a>          <a href="contact.html">Contact</a>        </div>        <div class="nav-actions">          <a href="wishlist.html" class="action-btn" title="Wishlist">            <i class="far fa-heart"></i>            <span class="cart-count" id="wishlistCount" style="display:none;">0</span>          </a>          <a href="cart.html" class="action-btn" title="Cart">            <i class="fas fa-shopping-bag"></i>            <span class="cart-count" id="cartCount">0</span>          </a>          <button class="action-btn" title="Account" onclick="toggleProfileModal()"><i class="far fa-user"></i></button>        </div>        <div class="mobile-toggle" id="mobileToggle" onclick="toggleNav()"><span></span><span></span><span></span></div>      </div>    </div>  </nav>  <!-- Breadcrumb -->  <section style="padding: 120px 0 20px; background: var(--bg-secondary);">    <div class="container">      <div class="breadcrumb" style="justify-content: flex-start;">        <a href="index.html">Home</a>        <span class="separator">/</span>        <a href="products.html">Products</a>        <span class="separator">/</span>        <a href="products.html" id="breadcrumbCategory">Category</a>        <span class="separator">/</span>        <span id="breadcrumbProduct">Product Name</span>      </div>    </div>  </section>  <!-- Product Detail -->  <section class="product-detail">    <div class="container">      <!-- Gallery -->      <div class="product-gallery">
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View product details, specifications, and pricing for certified refurbished devices at MintMobi. Fully tested and guaranteed.">
+  <meta name="keywords" content="buy refurbished phone, second hand smartphone details, cheap laptop specs, MintMobi device, refurbished apple, refurbished samsung">
+  <meta name="robots" content="index, follow">
+  <title>Device Details – MintMobi</title>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-top">
+      <div class="container">
+        <span>📞 +91 98765 43210 &nbsp;|&nbsp; 📧 sm1807489@gmail.com</span>
+        <div>
+          <a href="#">Track Order</a> &nbsp;|&nbsp;
+          <a href="about.html">About Us</a> &nbsp;|&nbsp;
+          <a href="contact.html">Help</a> &nbsp;|&nbsp;
+          <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">
+            <option value="INR" style="color:#333">INR (â‚¹)</option>
+            <option value="USD" style="color:#333">USD ($)</option>
+            <option value="GBP" style="color:#333">GBP (Â£)</option>
+            <option value="EUR" style="color:#333">EUR (â‚¬)</option>
+            <option value="AED" style="color:#333">AED (Ø¯.Ø¥)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="navbar-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <img src="logo.png" alt="MintMobi Logo" style="height: 48px; width: auto; object-fit: contain;">
+        </a>
+        <div class="nav-search">
+          <input id="navSearchInput" type="text" placeholder="Search for phones, brands, laptops..." onkeydown="if(event.key==='Enter'){doSearch(this.value)}">
+          <i class="fas fa-search"></i>
+          <button class="search-btn" onclick="doSearch(document.getElementById('navSearchInput').value)"><i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div class="nav-links" id="navLinks">
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="products.html?cat=phones">Phones</a>
+          <a href="products.html?cat=laptops">Laptops</a>
+          <a href="conditions.html">Condition Guide</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="nav-actions">
+          <a href="wishlist.html" class="action-btn" title="Wishlist">
+            <i class="far fa-heart"></i>
+            <span class="cart-count" id="wishlistCount" style="display:none;">0</span>
+          </a>
+          <a href="cart.html" class="action-btn" title="Cart">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </a>
+          <button class="action-btn" title="Account" onclick="toggleProfileModal()"><i class="far fa-user"></i></button>
+        </div>
+        <div class="mobile-toggle" id="mobileToggle" onclick="toggleNav()"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <section style="padding: 120px 0 20px; background: var(--bg-secondary);">
+    <div class="container">
+      <div class="breadcrumb" style="justify-content: flex-start;">
+        <a href="index.html">Home</a>
+        <span class="separator">/</span>
+        <a href="products.html">Products</a>
+        <span class="separator">/</span>
+        <a href="products.html" id="breadcrumbCategory">Category</a>
+        <span class="separator">/</span>
+        <span id="breadcrumbProduct">Product Name</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Detail -->
+  <section class="product-detail">
+    <div class="container">
+      <!-- Gallery -->
+      <div class="product-gallery">
         <div class="main-image" id="mainImage">
           <img src="" alt="Loading..." id="mainImg" style="opacity: 0.5;">
         </div>
@@ -6,56 +92,407 @@
           <!-- Thumbnails loaded dynamically -->
         </div>
       </div>
+
       <!-- Product Info -->
       <div class="product-detail-info">
         <h1>Product Details</h1>
         <div class="product-meta">
           <div class="product-rating">
-            <span class="stars">★★★★★</span>
+            <span class="stars">â˜…â˜…â˜…â˜…â˜…</span>
             <span class="rating-count">(142 reviews)</span>
           </div>
           <span class="sku">SKU: ---</span>
-        </div>        <div id="productConfigHeader"          style="font-size: 1.1rem; font-weight: 600; color: #64748b; margin-top: -10px; margin-bottom: 20px;">          <!-- Will show "Fair / 64GB / Black" -->        </div>        <div class="product-detail-price">          <span class="current-price" id="displayCurrentPrice">-</span>          <span class="original-price" id="displayOriginalPrice">-</span>          <div class="savings-badge" id="displaySavingsBadge"            style="background: #dcfce7; color: #15803d; padding: 5px 12px; border-radius: 100px; font-weight: 800; font-size: 0.85rem; display: inline-block;">            -</div>          <p id="displaySavingsText" style="color: #64748b; font-size: 0.9rem; margin-top: 5px;">-</p>        </div>        <!-- NEW: Storage Selection -->        <div class="selection-group" id="storageSelectionGroup" style="margin-top: 30px;">          <h4 style="margin-bottom: 12px; font-size: 1rem;">1. Select Storage</h4>          <div class="storage-selector-btns" id="storageSelector" style="display: flex; gap: 10px; flex-wrap: wrap;">            <!-- Dynamic Storage Buttons -->          </div>        </div>        <!-- NEW: Color Selection -->        <div class="selection-group" style="margin-top: 25px;">          <h4 style="margin-bottom: 12px; font-size: 1rem;">2. Select Color</h4>          <div class="color-selector-circles" id="colorSelector" style="display: flex; gap: 15px; align-items: center;">            <!-- Dynamic Color Circles -->          </div>        </div>        <!-- NEW: Condition Selection -->        <div class="selection-group" style="margin-top: 25px;">          <h4 style="margin-bottom: 12px; font-size: 1rem;">3. Select Condition <a href="policies.html#condition"              style="font-size: 0.8rem; color: var(--primary); margin-left: 10px;">Learn More</a></h4>          <div class="condition-selector-grid" id="conditionSelector"            style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">            <!-- Dynamic Condition Cards -->          </div>        </div>        <div class="detail-actions" style="margin-top: 40px;">          <div style="display:flex; gap:12px; margin-bottom:12px;">            <button class="btn btn-primary btn-lg" onclick="addToCart()"              style="flex:1; height: 60px; font-weight: 800;">              <i class="fas fa-shopping-cart"></i> ADD TO CART            </button>            <button class="btn btn-secondary btn-lg" onclick="buyNow()"              style="flex:1; height: 60px; font-weight: 800; background: #1e293b;">              BUY NOW            </button>          </div>        </div>        <div class="detail-guarantees">          <div class="guarantee-item">            <span class="g-icon">ðŸ›¡ï¸</span>            <div>              <strong>12-Month Warranty</strong>              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Comprehensive coverage</p>            </div>          </div>          <div class="guarantee-item">            <span class="g-icon">ðŸ”„</span>            <div>              <strong>7-Day Returns</strong>              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">No questions asked</p>            </div>          </div>          <div class="guarantee-item">            <span class="g-icon">ðŸšš</span>            <div>              <strong>Free Delivery</strong>              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Ships in 2-3 days</p>            </div>          </div>          <div class="guarantee-item">            <span class="g-icon">ðŸ”</span>            <div>              <strong>72-Point Check</strong>              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Quality guaranteed</p>            </div>          </div>        </div>        <!-- SMARTLINK BAIT BUTTON -->        <button class="btn"          style="width:100%; height:45px; margin-top:10px; background:#f8fafc; border:1px solid #e1e7ef; font-size:0.8rem; display:flex; align-items:center; justify-content:center; gap:8px;"          onclick="openSmartlink(event)">          <i class="fas fa-shield-halved" style="color:var(--primary-green);"></i> Check Extra Warranty Eligibility        </button>        <!-- SIDEBAR AD SLOT -->        <div class="tc-ad-container" style="margin-top:20px; padding:10px;">          <p style="font-size: 0.6rem; color: #94a3b8; margin-bottom: 5px;">SPONSORED</p>          <div id="ad_sidebar_detail">            <!-- PASTE ADSTERRA 300x250 SCRIPT HERE -->            <div              style="background:#fff; height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #eee; border-radius:8px; font-size:0.75rem; color:#94a3b8;">              <i class="fas fa-rectangle-ad" style="font-size:1.5rem; margin-bottom:5px;"></i>              Premium Deal (300x250 Slot)            </div>          </div>        </div>      </div>    </div>  </section>  <!-- Related Products -->  <section class="section" style="background: var(--bg-secondary);">    <div class="container">      <div class="section-header">        <span class="subtitle">You May Also Like</span>        <h2>Related Products</h2>      </div>      <div class="products-grid" id="relatedProductsGrid">        <!-- Dynamic Content from renderRelatedProducts() -->      </div>    </div>  </section>  <!-- Footer -->  <footer class="footer">    <div class="container">      <div class="footer-grid">        <div class="footer-brand">          <a href="index.html" class="logo">            <img src="logo.png" alt="TrueCycle Logo"              style="height: 45px; width: auto; display: block; object-fit: contain; margin-bottom: 20px;">          </a>          <p>India's most trusted destination for certified refurbished phones and electronics.</p>          <div class="footer-social">            <a href="#"><i class="fab fa-facebook-f"></i></a>            <a href="#"><i class="fab fa-instagram"></i></a>            <a href="#"><i class="fab fa-twitter"></i></a>            <a href="#"><i class="fab fa-youtube"></i></a>          </div>        </div>        <div class="footer-column">          <h4>Quick Links</h4>          <ul>            <li><a href="products.html">All Products</a></li>            <li><a href="about.html">About Us</a></li>            <li><a href="contact.html">Contact</a></li>          </ul>        </div>        <div class="footer-column">          <h4>Support</h4>          <ul>            <li><a href="#">FAQs</a></li>            <li><a href="#">Shipping Policy</a></li>            <li><a href="#">Return Policy</a></li>          </ul>        </div>        <div class="footer-column">          <h4>Contact</h4>          <ul>            <li><a href="mailto:sm1807489@gmail.com">sm1807489@gmail.com</a></li>            <li><a href="tel:+919876543210">+91 98765 43210</a></li>          </ul>        </div>      </div>      <div class="footer-bottom">        <span>Â© 2026 TrueCycle. All rights reserved.</span>        <div class="footer-payments"><span>VISA</span><span>Mastercard</span><span>UPI</span><span>RuPay</span></div>      </div>    </div>  </footer>  <button class="scroll-top" id="scrollTop" onclick="scrollToTop()"><i class="fas fa-chevron-up"></i></button>  <script src="currencyService.js"></script>
+        </div>
+
+        <div id="productConfigHeader" style="font-size: 1.1rem; font-weight: 600; color: #64748b; margin-top: -10px; margin-bottom: 20px;">
+          <!-- Will show "Fair / 64GB / Black" -->
+        </div>
+
+        <div class="product-detail-price">
+          <span class="current-price" id="displayCurrentPrice">-</span>
+          <span class="original-price" id="displayOriginalPrice">-</span>
+          <div class="savings-badge" id="displaySavingsBadge" style="background: #dcfce7; color: #15803d; padding: 5px 12px; border-radius: 100px; font-weight: 800; font-size: 0.85rem; display: inline-block;">
+            -</div>
+          <p id="displaySavingsText" style="color: #64748b; font-size: 0.9rem; margin-top: 5px;">-</p>
+        </div>
+
+        <!-- NEW: Storage Selection -->
+        <div class="selection-group" id="storageSelectionGroup" style="margin-top: 30px;">
+          <h4 style="margin-bottom: 12px; font-size: 1rem;">1. Select Storage</h4>
+          <div class="storage-selector-btns" id="storageSelector" style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <!-- Dynamic Storage Buttons -->
+          </div>
+        </div>
+
+        <!-- NEW: Color Selection -->
+        <div class="selection-group" style="margin-top: 25px;">
+          <h4 style="margin-bottom: 12px; font-size: 1rem;">2. Select Color</h4>
+          <div class="color-selector-circles" id="colorSelector" style="display: flex; gap: 15px; align-items: center;">
+            <!-- Dynamic Color Circles -->
+          </div>
+        </div>
+
+        <!-- NEW: Condition Selection -->
+        <div class="selection-group" style="margin-top: 25px;">
+          <h4 style="margin-bottom: 12px; font-size: 1rem;">3. Select Condition <a href="policies.html#condition" style="font-size: 0.8rem; color: var(--primary); margin-left: 10px;">Learn More</a></h4>
+          <div class="condition-selector-grid" id="conditionSelector" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            <!-- Dynamic Condition Cards -->
+          </div>
+        </div>
+
+        <div class="detail-actions" style="margin-top: 40px;">
+          <div style="display:flex; gap:12px; margin-bottom:12px;">
+            <button class="btn btn-primary btn-lg" onclick="addToCart()" style="flex:1; height: 60px; font-weight: 800;">
+              <i class="fas fa-shopping-cart"></i> ADD TO CART
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="buyNow()" style="flex:1; height: 60px; font-weight: 800; background: #1e293b;">
+              BUY NOW
+            </button>
+          </div>
+        </div>
+
+        <div class="detail-guarantees">
+          <div class="guarantee-item">
+            <span class="g-icon">ðŸ›¡ï¸</span>
+            <div>
+              <strong>12-Month Warranty</strong>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Comprehensive coverage</p>
+            </div>
+          </div>
+          <div class="guarantee-item">
+            <span class="g-icon">🔄</span>
+            <div>
+              <strong>7-Day Returns</strong>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">No questions asked</p>
+            </div>
+          </div>
+          <div class="guarantee-item">
+            <span class="g-icon">🚚</span>
+            <div>
+              <strong>Free Delivery</strong>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Ships in 2-3 days</p>
+            </div>
+          </div>
+          <div class="guarantee-item">
+            <span class="g-icon">ðŸ”</span>
+            <div>
+              <strong>72-Point Check</strong>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Quality guaranteed</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SMARTLINK BAIT BUTTON -->
+        <button class="btn" style="width:100%; height:45px; margin-top:10px; background:#f8fafc; border:1px solid #e1e7ef; font-size:0.8rem; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="openSmartlink(event)">
+          <i class="fas fa-shield-halved" style="color:var(--primary-green);"></i> Check Extra Warranty Eligibility
+        </button>
+
+        <!-- SIDEBAR AD SLOT -->
+        <div class="tc-ad-container" style="margin-top:20px; padding:10px;">
+          <p style="font-size: 0.6rem; color: #94a3b8; margin-bottom: 5px;">SPONSORED</p>
+          <div id="ad_sidebar_detail">
+            <div style="background:#fff; height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #eee; border-radius:8px; font-size:0.75rem; color:#94a3b8;">
+              <i class="fas fa-rectangle-ad" style="font-size:1.5rem; margin-bottom:5px;"></i>
+              Premium Deal (300x250 Slot)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Products -->
+  <section class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle">You May Also Like</span>
+        <h2>Related Products</h2>
+      </div>
+      <div class="products-grid" id="relatedProductsGrid">
+        <!-- Dynamic Content from renderRelatedProducts() -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="logo.png" alt="MintMobi Logo" style="height: 45px; width: auto; display: block; object-fit: contain; margin-bottom: 20px;">
+          </a>
+          <p>India's most trusted destination for certified refurbished phones and electronics.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="products.html">All Products</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Shipping Policy</a></li>
+            <li><a href="#">Return Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:sm1807489@gmail.com">sm1807489@gmail.com</a></li>
+            <li><a href="tel:+919876543210">+91 98765 43210</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 MintMobi. All rights reserved.</span>
+        <div class="footer-payments"><span>VISA</span><span>Mastercard</span><span>UPI</span><span>RuPay</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="scrollToTop()"><i class="fas fa-chevron-up"></i></button>
+
+  <script src="currencyService.js"></script>
   <script src="productService.js"></script>
   <script src="wishlistService.js?v=2"></script>
   <script src="script.js?v=2"></script>
-  <script>    let currentProduct = null;    let selCond = null;    let selVar = null;    let selColor = null;    document.addEventListener('DOMContentLoaded', async () => {      const urlParams = new URLSearchParams(window.location.search);      const productId = urlParams.get('id');      // Wait for productService to load from Cloud      if (!productService.isLoaded) {        await productService.init();      }      const products = productService.getProducts();      currentProduct = products.find(p => String(p.id) === String(productId));      if (!currentProduct) {        // Show error state cleanly        document.querySelector('.product-detail').innerHTML = `                <div class="container">                    <div style="text-align:center; padding:120px 0;">                        <i class="fas fa-search" style="font-size:4rem; color: #cbd5e1; margin-bottom:20px;"></i>                        <h2 style="font-size: 2rem; color: #1e293b; margin-bottom: 10px;">Device Not Found</h2>                        <p style="color: #64748b; font-size: 1.1rem; max-width: 500px; margin: 0 auto 30px;">                            The device you are looking for isn't in our current stock or the link is invalid.                         </p>                        <div style="display: flex; gap: 15px; justify-content: center;">                            <a href="products.html" class="btn btn-primary" style="padding: 14px 30px;">Browse All Phones</a>                            <a href="index.html" class="btn btn-secondary" style="padding: 14px 30px; background: #334155;">Back to Home</a>                        </div>                        <div style="margin-top: 50px; padding: 25px; background: #f8fafc; border-radius: 12px; display: inline-block;">                           <p style="font-size: 0.9rem; color: #94a3b8;">Ref ID: ${escapeHTML(productId || 'None')}</p>                        </div>                    </div>                </div>            `;        return;      }      initProductDetail(currentProduct);      renderRelatedProducts(currentProduct, products);      console.log("TrueCycle: Product Detail loaded successfully for ID", productId);    });    function initProductDetail(p) {      // Select defaults      selCond = p.conditions ? (p.conditions.find(c => c.label === 'Good') || p.conditions[0]) : { label: 'Excellent', adjustment: 0 };      selVar = p.variants ? p.variants[0] : { ram: '', storage: 'Standard', price: p.basePrice || 0, stock: 1 };      selColor = (p.colors && p.colors.length > 0) ? p.colors[0] : { name: 'Standard', hex: '#000', priceAdd: 0 };      // 1. Dynamic UI Overrides      document.title = `${p.name} - TrueCycle`;      const mainImg = document.getElementById('mainImg');      mainImg.src = p.images ? p.images[0] : p.img;      mainImg.style.opacity = '1';      document.querySelector('.product-detail-info h1').textContent = p.name;      document.querySelector('.product-rating .rating-count').textContent = `(${p.reviews || 0} reviews)`;      document.querySelector('.sku').textContent = `ID: ${p.id.toUpperCase()}`;      // Breadcrumb Sync      const breadcrumbProduct = document.getElementById('breadcrumbProduct');      if (breadcrumbProduct) breadcrumbProduct.textContent = p.name;      const breadcrumbCat = document.getElementById('breadcrumbCategory');      if (breadcrumbCat) {        breadcrumbCat.href = `products.html?cat=${p.category}`;        breadcrumbCat.textContent = p.category.charAt(0).toUpperCase() + p.category.slice(1);      }      // Render Thumbnails      const thumbRow = document.getElementById('thumbnailRow');      if (p.images && thumbRow) {        thumbRow.innerHTML = p.images.map((img, i) => `                <div class="thumbnail ${i === 0 ? 'active' : ''}" onclick="changeImage(this, '${img}')">                    <img src="${img}" alt="${p.name} thumbnail">                </div>              `).join('');      }      // 1. INITIALIZE SELECTIONS SAFELY      if (!selCond && p.conditions && p.conditions.length > 0) selCond = p.conditions[0];      if (!selVar && p.variants && p.variants.length > 0) selVar = p.variants[0];      if (!selColor && p.colors && p.colors.length > 0) selColor = p.colors[0];      // 2. Render Condition Tiers      const condGrid = document.getElementById('conditionSelector');      if (p.conditions) {        condGrid.innerHTML = p.conditions.map(c => `                <div class="cond-card ${(selCond && selCond.label === c.label) ? 'active' : ''}" onclick="selectCondition('${c.label}')" data-label="${c.label}">                    <span class="cond-label">${c.label}</span>                    <span class="cond-desc">                        ${c.label === 'Fair' ? '70-80% Battery' : (c.label === 'Good' ? '80-85% Battery' : '85%+ Battery')}                    </span>                </div>              `).join('');      }      // 3. Render Variant (Storage/RAM) Buttons      const memoryCategories = ['phones', 'laptops', 'tablets'];      const hasMemory = memoryCategories.includes(p.category);      const storGrid = document.getElementById('storageSelector');      const storGroup = document.getElementById('storageSelectionGroup');      if (hasMemory && p.variants && p.variants.length > 0) {        storGroup.style.display = 'block';        storGrid.innerHTML = p.variants.map((v, idx) => `                <button class="storage-btn ${(selVar && selVar === v) ? 'active' : ''}" onclick="selectStorage(${idx})" data-idx="${idx}">                    ${v.ram ? v.ram + ' / ' : ''}${v.storage}                </button>              `).join('');        if (!selVar) selVar = p.variants[0];      } else {        storGroup.style.display = 'none';        // If no variants, create a dummy selVar for price calculation        if (!selVar) selVar = { storage: 'Standard', prices: { fair: p.basePrice * 0.85, good: p.basePrice, superb: p.basePrice * 1.15 } };      }      // 4. Render Color Circles      const colorGrid = document.getElementById('colorSelector');      if (p.colors && p.colors.length > 0) {        colorGrid.innerHTML = p.colors.map(col => `                <div class="color-circle ${(selColor && selColor.name === col.name) ? 'active' : ''}"                      style="background-color: ${col.hex};"                      onclick="selectColor('${col.name}')"                      title="${col.name}"                     data-name="${col.name}">                </div>              `).join('');      }      // 5. Update Gallery Thumbnails      const thumbRow2 = document.querySelector('.thumbnail-row');      if (p.images && p.images.length > 0 && thumbRow2) {        thumbRow2.innerHTML = p.images.map((img, idx) => `                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="changeImage(this, '${img}')">                    <img src="${img}" alt="${p.name} ${idx + 1}">                </div>              `).join('');      }      calculateAndDisplay();    }    function selectCondition(label) {      selCond = currentProduct.conditions.find(c => c.label === label);      updateActiveClasses('#conditionSelector .cond-card', label, 'data-label');      calculateAndDisplay();    }    function selectStorage(idx) {      selVar = currentProduct.variants[idx];      updateActiveClasses('#storageSelector .storage-btn', idx, 'data-idx');      calculateAndDisplay();    }    function selectColor(name) {      selColor = currentProduct.colors.find(c => c.name === name);      updateActiveClasses('#colorSelector .color-circle', name, 'data-name');      calculateAndDisplay();    }    function updateActiveClasses(selector, activeVal, attr) {      document.querySelectorAll(selector).forEach(el => {        el.classList.toggle('active', el.getAttribute(attr) == activeVal);      });    }    function calculateAndDisplay() {      if (!currentProduct) return;      // SAFETY: Ensure we have a condition and variant      if (!selCond && currentProduct.conditions && currentProduct.conditions.length > 0) selCond = currentProduct.conditions[0];      if (!selVar && currentProduct.variants && currentProduct.variants.length > 0) selVar = currentProduct.variants[0];      // If still missing, we create a temporary fallback to prevent crash      const safeVar = selVar || { prices: { fair: 0, good: 0, superb: 0 } };      const safeCond = selCond || { label: 'Good', adjustment: 0 };      // NEW MANUAL PRICE LOOKUP (3D MATRIX)      const condKey = safeCond.label ? safeCond.label.toLowerCase() : 'good';      let finalPrice = 0;      // 1. Precise Matrix Lookup      if (currentProduct.pricingGrid) {        const vIdx = currentProduct.variants.indexOf(selVar);        const cIdx = currentProduct.colors.indexOf(selColor);        const matrixKey = `${vIdx}-${cIdx}-${condKey}`;        if (currentProduct.pricingGrid[matrixKey]) {          finalPrice = currentProduct.pricingGrid[matrixKey];        }      }      // 2. Fallback to 2D Manual (Variant + Condition) + Color Adjustment      if (finalPrice === 0) {        const colorPay = selColor ? (selColor.priceAdd || 0) : 0;        if (safeVar.prices && safeVar.prices[condKey] !== undefined && safeVar.prices[condKey] > 0) {          finalPrice = Math.floor(safeVar.prices[condKey] + colorPay);        } else {          // Fallback for older products or broken data: use adjustment formula          const base = (safeVar.price && safeVar.price > 0) ? safeVar.price : (currentProduct.basePrice || 0);          const adj = safeCond.adjustment || 0;          finalPrice = Math.floor(base * (1 + adj) + colorPay);        }      }      // Use original price if available, otherwise estimate      const originalPrice = currentProduct.originalPrice || Math.floor(finalPrice * 1.6);      const savings = originalPrice - finalPrice;      const perc = Math.round((savings / originalPrice) * 100);      // Update Selection Tagline      const memTag = (selVar.storage && selVar.storage !== 'Standard')        ? `${selVar.ram ? selVar.ram + ' / ' : ''}${selVar.storage} / `        : '';      document.getElementById('productConfigHeader').textContent =        `${selCond.label} Condition / ${memTag}${selColor.name}`;      // Update Display Prices      document.getElementById('displayCurrentPrice').textContent = CurrencySystem.format(finalPrice, '', currentProduct.baseCurrency || 'INR');      document.getElementById('displayOriginalPrice').textContent = CurrencySystem.format(originalPrice, '', currentProduct.baseCurrency || 'INR');      document.getElementById('displaySavingsBadge').textContent = `${perc}% OFF`;      document.getElementById('displaySavingsText').textContent = `You save ${CurrencySystem.format(savings, '', currentProduct.baseCurrency || 'INR')}`;      // Cache price on product object for Cart      currentProduct.temp_calculated_price = finalPrice;      const memLabel = (selVar.storage && selVar.storage !== 'Standard')        ? `${selVar.ram ? selVar.ram + '/' : ''}${selVar.storage} - `        : '';      
-      currentProduct.temp_selection = `${memLabel}${selCond.label} - ${selColor.name}`;
+  <script>
+    let currentProduct = null;
+    let selCond = null;
+    let selVar = null;
+    let selColor = null;
 
-      // SEO JSON-LD Schema Injection
-      let ldScript = document.getElementById('json-ld-product');
-      if (!ldScript) {
-        ldScript = document.createElement('script');
-        ldScript.id = 'json-ld-product';
-        ldScript.type = 'application/ld+json';
-        document.head.appendChild(ldScript);
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+
+      if (!productService.isLoaded) {
+        await productService.init();
       }
-      
-      const convertedPrice = (typeof CurrencySystem.getConvertedAmount === 'function') 
-          ? CurrencySystem.getConvertedAmount(finalPrice, '', currentProduct.baseCurrency || 'INR') 
-          : finalPrice;
-          
-      ldScript.textContent = JSON.stringify({
-        "@context": "https://schema.org/",
-        "@type": "Product",
-        "name": currentProduct.name,
-        "image": currentProduct.images ? currentProduct.images[0] : currentProduct.img,
-        "description": currentProduct.description || "Certified Refurbished Device by TrueCycle",
-        "sku": currentProduct.id,
-        "brand": { "@type": "Brand", "name": currentProduct.brand },
-        "offers": {
-          "@type": "Offer",
-          "url": window.location.href,
-          "priceCurrency": typeof CurrencySystem !== 'undefined' ? CurrencySystem.selected : (currentProduct.baseCurrency || 'INR'),
-          "price": convertedPrice,
-          "availability": "https://schema.org/InStock",
-          "itemCondition": "https://schema.org/RefurbishedCondition"
-        }
-      });
 
+      const products = productService.getProducts();
+      currentProduct = products.find(p => String(p.id) === String(productId));
+
+      if (!currentProduct) {
+        document.querySelector('.product-detail').innerHTML = `
+          <div class="container">
+            <div style="text-align:center; padding:120px 0;">
+              <i class="fas fa-search" style="font-size:4rem; color: #cbd5e1; margin-bottom:20px;"></i>
+              <h2 style="font-size: 2rem; color: #1e293b; margin-bottom: 10px;">Device Not Found</h2>
+              <p style="color: #64748b; font-size: 1.1rem; max-width: 500px; margin: 0 auto 30px;">
+                The device you are looking for isn't in our current stock or the link is invalid.
+              </p>
+              <div style="display: flex; gap: 15px; justify-content: center;">
+                <a href="products.html" class="btn btn-primary" style="padding: 14px 30px;">Browse All Phones</a>
+                <a href="index.html" class="btn btn-secondary" style="padding: 14px 30px; background: #334155;">Back to Home</a>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      initProductDetail(currentProduct);
+      renderRelatedProducts(currentProduct, products);
+      console.log("MintMobi: Product Detail loaded for ID", productId);
+    });
+
+    function initProductDetail(p) {
+      selCond = p.conditions ? (p.conditions.find(c => c.label === 'Good') || p.conditions[0]) : { label: 'Good', adjustment: 0 };
+      selVar = p.variants ? p.variants[0] : { ram: '', storage: 'Standard', prices: { fair: 0, good: 0, superb: 0 } };
+      selColor = (p.colors && p.colors.length > 0) ? p.colors[0] : { name: 'Standard', hex: '#000', priceAdd: 0 };
+
+      document.title = `${p.name} - MintMobi`;
+      const mainImg = document.getElementById('mainImg');
+      mainImg.src = p.images ? p.images[0] : p.img;
+      mainImg.style.opacity = '1';
+
+      document.querySelector('.product-detail-info h1').textContent = p.name;
+      document.querySelector('.product-rating .rating-count').textContent = `(${p.reviews || 0} reviews)`;
+      document.querySelector('.sku').textContent = `ID: ${p.id.toUpperCase()}`;
+
+      const thumbRow = document.getElementById('thumbnailRow');
+      if (p.images && thumbRow) {
+        thumbRow.innerHTML = p.images.map((img, i) => `
+          <div class="thumbnail ${i === 0 ? 'active' : ''}" onclick="changeImage(this, '${img}')">
+            <img src="${img}" alt="${p.name} thumbnail">
+          </div>
+        `).join('');
+      }
+
+      const condGrid = document.getElementById('conditionSelector');
+      if (p.conditions) {
+        condGrid.innerHTML = p.conditions.map(c => `
+          <div class="cond-card ${selCond.label === c.label ? 'active' : ''}" onclick="selectCondition('${c.label}')" data-label="${c.label}">
+            <span class="cond-label">${c.label}</span>
+            <span class="cond-desc">${c.label === 'Fair' ? '70-80% Battery' : (c.label === 'Good' ? '80-85% Battery' : '85%+ Battery')}</span>
+          </div>
+        `).join('');
+      }
+
+      const memoryCategories = ['phones', 'laptops', 'tablets'];
+      const hasMemory = memoryCategories.includes(p.category);
+      const storGrid = document.getElementById('storageSelector');
+      const storGroup = document.getElementById('storageSelectionGroup');
+      if (hasMemory && p.variants && p.variants.length > 0) {
+        storGroup.style.display = 'block';
+        storGrid.innerHTML = p.variants.map((v, idx) => `
+          <button class="storage-btn ${selVar === v ? 'active' : ''}" onclick="selectStorage(${idx})" data-idx="${idx}">
+            ${v.ram ? v.ram + ' / ' : ''}${v.storage}
+          </button>
+        `).join('');
+      } else {
+        storGroup.style.display = 'none';
+      }
+
+      const colorGrid = document.getElementById('colorSelector');
+      if (p.colors && p.colors.length > 0) {
+        colorGrid.innerHTML = p.colors.map(col => `
+          <div class="color-circle ${selColor.name === col.name ? 'active' : ''}"
+               style="background-color: ${col.hex};"
+               onclick="selectColor('${col.name}')"
+               title="${col.name}"
+               data-name="${col.name}">
+          </div>
+        `).join('');
+      }
+
+      calculateAndDisplay();
     }
 
-    function changeImage(el, src) {      document.getElementById('mainImg').src = src;      document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));      el.classList.add('active');    }    function addToCart() {      if (!currentProduct) return;      // Use the global Cart functionality from script.js, but pass specific selection data      const cartItem = {        id: currentProduct.id,        name: currentProduct.name,        price: currentProduct.temp_calculated_price,
-        baseCurrency: currentProduct.baseCurrency || 'INR',        img: currentProduct.images ? currentProduct.images[0] : currentProduct.img,        selection: currentProduct.temp_selection,        quantity: 1      };      if (typeof Cart !== 'undefined') {        Cart.add(cartItem);        showToast('Added to cart!');      }    }    function buyNow() {      if (!currentProduct) return;      addToCart();      // Success Formula: Move to Cart Review page first (extra page view = more ad revenue)      // instead of jumping directly to checkout.html.      setTimeout(() => {        window.location.href = 'cart.html';      }, 300);    }    function renderRelatedProducts(current, all) {      const grid = document.getElementById('relatedProductsGrid');      if (!grid) return;      // 1. Get Affinity-based Related Products      // First, try same category. If not enough, get others.      let related = all.filter(p => p.id !== current.id);      // Sort by "Price Proximity" (Budget Similarity)      const currentPrice = current.basePrice || 0;      related.sort((a, b) => {        const diffA = Math.abs((a.basePrice || 0) - currentPrice);        const diffB = Math.abs((b.basePrice || 0) - currentPrice);        // Prioritize same category, then price proximity        if (a.category === current.category && b.category !== current.category) return -1;        if (a.category !== current.category && b.category === current.category) return 1;        return diffA - diffB;      });      related = related.slice(0, 4);      if (related.length === 0) {        grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">No similar products found at the moment.</p>';        return;      }      grid.innerHTML = related.map(p => `            <div class="product-card">              <span class="product-badge ${p.basePrice > 70000 ? 'badge-trending' : 'badge-new'}">${p.basePrice > 70000 ? 'Flagship' : 'Best Value'}</span>              <button class="product-wishlist" onclick="event.preventDefault(); WishlistUI.handleToggle(this)"><i class="far fa-heart"></i></button>              <a href="product-detail.html?id=${p.id}" class="product-image" style="height:180px; padding:15px;">                <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}" style="object-fit:contain; max-height:100%;">              </a>              <div class="product-info" style="padding:15px;">                <h3 style="font-size:0.9rem;"><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>                <div class="product-price">                  <span class="current-price" style="font-size:1rem;">${CurrencySystem.format(p.basePrice || 0, '', p.baseCurrency || 'INR')} onwards</span>                </div>              </div>            </div>          `).join('');    }  </script>  <script src="components.js"></script>
-</body></html>
+    function selectCondition(label) {
+      selCond = currentProduct.conditions.find(c => c.label === label);
+      updateActiveClasses('#conditionSelector .cond-card', label, 'data-label');
+      calculateAndDisplay();
+    }
 
+    function selectStorage(idx) {
+      selVar = currentProduct.variants[idx];
+      updateActiveClasses('#storageSelector .storage-btn', idx, 'data-idx');
+      calculateAndDisplay();
+    }
+
+    function selectColor(name) {
+      selColor = currentProduct.colors.find(c => c.name === name);
+      updateActiveClasses('#colorSelector .color-circle', name, 'data-name');
+      calculateAndDisplay();
+    }
+
+    function updateActiveClasses(selector, activeVal, attr) {
+      document.querySelectorAll(selector).forEach(el => {
+        el.classList.toggle('active', el.getAttribute(attr) == activeVal);
+      });
+    }
+
+    function calculateAndDisplay() {
+      if (!currentProduct) return;
+      
+      const condKey = selCond.label.toLowerCase();
+      let finalPrice = 0;
+
+      if (currentProduct.pricingGrid) {
+        const vIdx = currentProduct.variants.indexOf(selVar);
+        const cIdx = currentProduct.colors.indexOf(selColor);
+        const matrixKey = `${vIdx}-${cIdx}-${condKey}`;
+        finalPrice = currentProduct.pricingGrid[matrixKey] || 0;
+      }
+
+      if (finalPrice === 0) {
+        const colorPay = selColor ? (selColor.priceAdd || 0) : 0;
+        if (selVar.prices && selVar.prices[condKey]) {
+          finalPrice = Math.floor(selVar.prices[condKey] + colorPay);
+        } else {
+          const base = selVar.price || currentProduct.basePrice || 0;
+          const adj = selCond.adjustment || 0;
+          finalPrice = Math.floor(base * (1 + adj) + colorPay);
+        }
+      }
+
+      const originalPrice = currentProduct.originalPrice || Math.floor(finalPrice * 1.6);
+      const savings = originalPrice - finalPrice;
+      const perc = Math.round((savings / originalPrice) * 100);
+
+      const memTag = (selVar.storage && selVar.storage !== 'Standard') ? `${selVar.ram ? selVar.ram + ' / ' : ''}${selVar.storage} / ` : '';
+      document.getElementById('productConfigHeader').textContent = `${selCond.label} Condition / ${memTag}${selColor.name}`;
+
+      document.getElementById('displayCurrentPrice').textContent = CurrencySystem.format(finalPrice, '', currentProduct.baseCurrency || 'INR');
+      document.getElementById('displayOriginalPrice').textContent = CurrencySystem.format(originalPrice, '', currentProduct.baseCurrency || 'INR');
+      document.getElementById('displaySavingsBadge').textContent = `${perc}% OFF`;
+      document.getElementById('displaySavingsText').textContent = `You save ${CurrencySystem.format(savings, '', currentProduct.baseCurrency || 'INR')}`;
+
+      currentProduct.temp_calculated_price = finalPrice;
+      const memLabel = (selVar.storage && selVar.storage !== 'Standard') ? `${selVar.ram ? selVar.ram + '/' : ''}${selVar.storage} - ` : '';
+      currentProduct.temp_selection = `${memLabel}${selCond.label} - ${selColor.name}`;
+    }
+
+    function changeImage(el, src) {
+      document.getElementById('mainImg').src = src;
+      document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function addToCart() {
+      if (!currentProduct) return;
+      const cartItem = {
+        id: currentProduct.id,
+        name: currentProduct.name,
+        price: currentProduct.temp_calculated_price,
+        baseCurrency: currentProduct.baseCurrency || 'INR',
+        img: currentProduct.images ? currentProduct.images[0] : currentProduct.img,
+        selection: currentProduct.temp_selection,
+        quantity: 1
+      };
+      if (typeof Cart !== 'undefined') {
+        Cart.add(cartItem);
+        showToast('Added to cart!');
+      }
+    }
+
+    function buyNow() {
+      if (!currentProduct) return;
+      addToCart();
+      setTimeout(() => { window.location.href = 'cart.html'; }, 300);
+    }
+
+    function renderRelatedProducts(current, all) {
+      const grid = document.getElementById('relatedProductsGrid');
+      if (!grid) return;
+      let related = all.filter(p => p.id !== current.id);
+      const currentPrice = current.basePrice || 0;
+      related.sort((a, b) => {
+        if (a.category === current.category && b.category !== current.category) return -1;
+        if (a.category !== current.category && b.category === current.category) return 1;
+        return Math.abs((a.basePrice || 0) - currentPrice) - Math.abs((b.basePrice || 0) - currentPrice);
+      });
+      related = related.slice(0, 4);
+      grid.innerHTML = related.map(p => `
+        <div class="product-card">
+          <span class="product-badge ${p.basePrice > 70000 ? 'badge-trending' : 'badge-new'}">${p.basePrice > 70000 ? 'Flagship' : 'Best Value'}</span>
+          <button class="product-wishlist" onclick="event.preventDefault(); WishlistUI.handleToggle(this)"><i class="far fa-heart"></i></button>
+          <a href="product-detail.html?id=${p.id}" class="product-image" style="height:180px; padding:15px;">
+            <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}" style="object-fit:contain; max-height:100%;">
+          </a>
+          <div class="product-info" style="padding:15px;">
+            <h3 style="font-size:0.9rem;"><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
+            <div class="product-price">
+              <span class="current-price" style="font-size:1rem;">${CurrencySystem.format(p.basePrice || 0, '', p.baseCurrency || 'INR')} onwards</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+  <script src="components.js"></script>
+</body>
+</html>

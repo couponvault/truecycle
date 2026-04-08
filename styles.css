@@ -2273,10 +2273,13 @@ input, select, textarea {
 
   .product-detail .container {
     grid-template-columns: 1fr;
+    gap: 30px;
   }
 
   .product-gallery {
-    position: fixed;
+    position: relative;
+    top: 0;
+    margin-bottom: 30px;
   }
 
   .cart-layout {
@@ -2340,7 +2343,7 @@ input, select, textarea {
 
   .navbar-main .container {
     flex-wrap: wrap !important;
-    gap: 10px 15px;
+    gap: 10px;
     padding: 0 16px;
     justify-content: space-between;
     align-items: center;

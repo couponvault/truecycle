@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Product Creator - TrueCycle Admin</title>
+    <title>Master Product Creator - MintMobi Admin</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -145,7 +145,7 @@
 <body>
     <div class="admin-layout">
         <aside class="sidebar">
-            <a href="index.html" class="sidebar-logo"><i class="fas fa-recycle"></i> TrueCycle</a>
+            <a href="index.html" class="sidebar-logo"><i class="fas fa-recycle"></i> MintMobi</a>
             <div class="nav-menu">
                 <a href="admin-dashboard.html" class="nav-link" id="nav-dash"><i class="fas fa-th-large"></i> Dashboard</a>
                 <a href="admin-products.html" class="nav-link" id="nav-inventory"><i class="fas fa-mobile-alt"></i> Products</a>
@@ -219,16 +219,16 @@
                                 <div class="form-group" style="flex:1;">
                                     <label>Base Currency</label>
                                     <select id="prdBaseCurrency" onchange="updateMatrixHeaders(); updateLivePreview();" style="padding:14px; border:2px solid var(--admin-border); border-radius:12px; font-size:1rem; outline:none; transition:0.2s;">
-                                        <option value="INR">INR (₹)</option>
+                                        <option value="INR">INR (â‚¹)</option>
                                         <option value="USD">USD ($)</option>
-                                        <option value="GBP">GBP (£)</option>
-                                        <option value="EUR">EUR (€)</option>
-                                        <option value="AED">AED (د.إ)</option>
+                                        <option value="GBP">GBP (Â£)</option>
+                                        <option value="EUR">EUR (â‚¬)</option>
+                                        <option value="AED">AED (Ø¯.Ø¥)</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="pricing-summary" id="pricingSummary">
-                                <span>Base Discount Preview: ₹0</span>
+                                <span>Base Discount Preview: â‚¹0</span>
                                 <span style="background:var(--admin-primary); color:white; padding:2px 10px; border-radius:4px;">0% OFF</span>
                             </div>
                         </div>
@@ -296,9 +296,9 @@
                                 <thead>
                                     <tr>
                                         <th>Combination</th>
-                                        <th style="background:#fff7ed; width:150px;" class="matrix-h-fair">Fair Price (₹)</th>
-                                        <th style="background:#f0fdf4; width:150px;" class="matrix-h-good">Good Price (₹)</th>
-                                        <th style="background:#eff6ff; width:150px;" class="matrix-h-superb">Superb Price (₹)</th>
+                                        <th style="background:#fff7ed; width:150px;" class="matrix-h-fair">Fair Price (â‚¹)</th>
+                                        <th style="background:#f0fdf4; width:150px;" class="matrix-h-good">Good Price (â‚¹)</th>
+                                        <th style="background:#eff6ff; width:150px;" class="matrix-h-superb">Superb Price (â‚¹)</th>
                                         <th style="width:80px;">Stock</th>
                                     </tr>
                                 </thead>
@@ -321,7 +321,7 @@
 
                         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
                         <div id="imageError" style="color: #e74c3c; font-size: 0.8rem; margin-top: 15px; display: none; font-weight: 700;">
-                            ⚠️ Error: All 5 primary image slots must be filled to publish.
+                            âš ï¸ Error: All 5 primary image slots must be filled to publish.
                         </div>
                     </div>
                 </div>
@@ -341,9 +341,9 @@
                         </div>
 
                         <div style="margin-bottom: 15px;">
-                            <div style="font-size: 1.8rem; font-weight: 900; color: var(--eco-green);" id="prevPrice">₹14,000</div>
+                            <div style="font-size: 1.8rem; font-weight: 900; color: var(--eco-green);" id="prevPrice">â‚¹14,000</div>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="text-decoration: line-through; color: #64748b;" id="prevOrig">₹30,000</span>
+                                <span style="text-decoration: line-through; color: #64748b;" id="prevOrig">â‚¹30,000</span>
                                 <span style="background: var(--eco-green); color: #1e293b; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 900;" id="prevOff">53% OFF</span>
                             </div>
                         </div>
@@ -612,9 +612,9 @@
         }
 
         function updateMatrixHeaders() {
-            const symbols = { INR: '₹', USD: '$', GBP: '£', EUR: '€', AED: 'د.إ' };
+            const symbols = { INR: 'â‚¹', USD: '$', GBP: 'Â£', EUR: 'â‚¬', AED: 'Ø¯.Ø¥' };
             const curr = document.getElementById('prdBaseCurrency').value;
-            const sym = symbols[curr] || '₹';
+            const sym = symbols[curr] || 'â‚¹';
             document.querySelector('.matrix-h-fair').textContent = `Fair Price (${sym})`;
             document.querySelector('.matrix-h-good').textContent = `Good Price (${sym})`;
             document.querySelector('.matrix-h-superb').textContent = `Superb Price (${sym})`;
@@ -649,7 +649,7 @@
                 const savings = mrp - selling;
                 const discountPerc = Math.round((savings / mrp) * 100);
                 const summary = document.getElementById('pricingSummary');
-                if (summary) summary.innerHTML = `<span>Preview Discount: ₹${savings.toLocaleString('en-IN')}</span> <span style="background:var(--admin-primary); color:white; padding:2px 10px; border-radius:4px;">${discountPerc}% OFF</span>`;
+                if (summary) summary.innerHTML = `<span>Preview Discount: â‚¹${savings.toLocaleString('en-IN')}</span> <span style="background:var(--admin-primary); color:white; padding:2px 10px; border-radius:4px;">${discountPerc}% OFF</span>`;
                 
                 const prevNameEl = document.getElementById('prevName');
                 const prevPriceEl = document.getElementById('prevPrice');
@@ -725,10 +725,10 @@
 
             if (editProductId) {
                 productService.updateProduct(editProductId, masterData);
-                showToast('Product Updated! 🚀');
+                showToast('Product Updated! ðŸš€');
             } else {
                 productService.addProduct(masterData);
-                showToast('Product Published! 🚀');
+                showToast('Product Published! ðŸš€');
             }
             setTimeout(() => location.href = 'admin-products.html', 1000);
         }

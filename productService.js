@@ -1,5 +1,5 @@
 const productService = {
-    key: 'truecycle_products',
+    key: 'mintmobi_products',
     cache: [],
     isLoaded: false,
 
