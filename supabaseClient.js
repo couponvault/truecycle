@@ -1,4 +1,4 @@
-/** 
+﻿/** 
  * Supabase Client Initialization 
  * TrueCycle Cloud Engine 
  */

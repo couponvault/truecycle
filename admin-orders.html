@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Orders - MintMobi Admin</title>
+    <title>Manage Orders - Prime Device Admin</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -69,7 +69,7 @@
 
     <aside class="sidebar">
         <a href="index.html" class="sidebar-logo">
-            <i class="fas fa-recycle"></i> MintMobi
+            <i class="fas fa-recycle"></i> Prime Device
         </a>
         <div class="nav-menu">
             <a href="admin-dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i> Dashboard</a>
@@ -131,7 +131,7 @@
 
           // Fallback to local if empty
           if (orders.length === 0) {
-              const local = JSON.parse(localStorage.getItem('MintMobi_orders')) || [];
+              const local = JSON.parse(localStorage.getItem('Prime Device_orders')) || [];
               orders = local.map(o => ({
                   id: o.id, date: o.date, name: o.address ? o.address.name : 'Guest', 
                   amount: o.amount, status: o.status, paymentMethod: o.paymentMethod || 'COD'

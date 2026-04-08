@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Wishlist Service - Handles all data persistence and business logic for the Wishlist.
  * Designed to be future-ready: can be easily swapped for a backend API.
  */

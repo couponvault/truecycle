@@ -1,5 +1,5 @@
-const productService = {
-    key: 'mintmobi_products',
+﻿const productService = {
+    key: 'Prime Device_products',
     cache: [],
     isLoaded: false,
 

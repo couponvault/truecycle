@@ -1,9 +1,9 @@
-/**
+﻿/**
  * TrueCycle Admin Authentication Guard
  * Client-side access control for the Admin Panel.
  * ---
  * Default PIN: truecycle2026
- * Change via Admin Panel → Settings → Security
+ * Change via Admin Panel â†’ Settings â†’ Security
  */
 
 const AdminAuth = {
@@ -110,7 +110,7 @@ const AdminAuth = {
         const storedHash = localStorage.getItem(this.HASH_KEY);
 
         if (inputHash === storedHash) {
-            // Success — create session, clear attempts
+            // Success â€” create session, clear attempts
             const session = {
                 loggedIn: true,
                 timestamp: Date.now(),
@@ -121,7 +121,7 @@ const AdminAuth = {
             localStorage.removeItem(this.LOCKOUT_KEY);
             return { success: true };
         } else {
-            // Failed — increment attempts
+            // Failed â€” increment attempts
             let attempts = this.getAttempts() + 1;
             localStorage.setItem(this.ATTEMPTS_KEY, attempts.toString());
 
@@ -159,7 +159,7 @@ const AdminAuth = {
         return { success: true, message: 'Password changed successfully in Cloud!' };
     },
 
-    /** Logout — destroy session */
+    /** Logout â€” destroy session */
     logout() {
         localStorage.removeItem(this.SESSION_KEY);
         window.location.href = 'admin-dashboard.html';
@@ -279,7 +279,7 @@ const AdminAuth = {
                 </div>
 
                 <div id="authLockoutDisplay" style="display:none" class="auth-lockout-timer">
-                    <i class="fas fa-lock"></i> Locked — <span id="authLockoutSeconds">0</span>s remaining
+                    <i class="fas fa-lock"></i> Locked â€” <span id="authLockoutSeconds">0</span>s remaining
                 </div>
 
                 <form id="adminLoginForm" onsubmit="return false;">
@@ -296,7 +296,7 @@ const AdminAuth = {
                 </form>
 
                 <div class="auth-footer">
-                    <i class="fas fa-recycle" style="color:#006778;"></i> TrueCycle Admin · Secured Access
+                    <i class="fas fa-recycle" style="color:#006778;"></i> TrueCycle Admin Â· Secured Access
                 </div>
             </div>
         `;
@@ -329,7 +329,7 @@ const AdminAuth = {
             return; // Allow access
         }
 
-        // Not authenticated — block the page
+        // Not authenticated â€” block the page
         this.renderLoginScreen();
     },
 

@@ -1,4 +1,4 @@
-const addressService = {
+﻿const addressService = {
   getAddresses: function() {
     const saved = localStorage.getItem('truecycle_addresses');
     return saved ? JSON.parse(saved) : [];

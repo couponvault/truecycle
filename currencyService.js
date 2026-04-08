@@ -1,4 +1,4 @@
-/**
+﻿/**
  * TrueCycle - Universal Global Currency System
  * Automatically detects ANY country and converts prices using Intl API.
  */

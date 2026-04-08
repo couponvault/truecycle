@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="View product details, specifications, and pricing for certified refurbished devices at MintMobi. Fully tested and guaranteed.">
-  <meta name="keywords" content="buy refurbished phone, second hand smartphone details, cheap laptop specs, MintMobi device, refurbished apple, refurbished samsung">
+  <meta name="description" content="View product details, specifications, and pricing for certified refurbished devices at Prime Device. Fully tested and guaranteed.">
+  <meta name="keywords" content="buy refurbished phone, second hand smartphone details, cheap laptop specs, Prime Device device, refurbished apple, refurbished samsung">
   <meta name="robots" content="index, follow">
-  <title>Device Details – MintMobi</title>
+  <title>Device Details – Prime Device</title>
   <link rel="stylesheet" href="styles.css?v=2">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -33,7 +33,7 @@
     <div class="navbar-main">
       <div class="container">
         <a href="index.html" class="logo">
-          <img src="logo.png" alt="MintMobi Logo" style="height: 48px; width: auto; object-fit: contain;">
+          <img src="logo.png" alt="Prime Device Logo" style="height: 48px; width: auto; object-fit: contain;">
         </a>
         <div class="nav-search">
           <input id="navSearchInput" type="text" placeholder="Search for phones, brands, laptops..." onkeydown="if(event.key==='Enter'){doSearch(this.value)}">
@@ -220,7 +220,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="index.html" class="logo">
-            <img src="logo.png" alt="MintMobi Logo" style="height: 45px; width: auto; display: block; object-fit: contain; margin-bottom: 20px;">
+            <img src="logo.png" alt="Prime Device Logo" style="height: 45px; width: auto; display: block; object-fit: contain; margin-bottom: 20px;">
           </a>
           <p>India's most trusted destination for certified refurbished phones and electronics.</p>
           <div class="footer-social">
@@ -255,7 +255,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 MintMobi. All rights reserved.</span>
+        <span>© 2026 Prime Device. All rights reserved.</span>
         <div class="footer-payments"><span>VISA</span><span>Mastercard</span><span>UPI</span><span>RuPay</span></div>
       </div>
     </div>
@@ -305,7 +305,7 @@
 
       initProductDetail(currentProduct);
       renderRelatedProducts(currentProduct, products);
-      console.log("MintMobi: Product Detail loaded for ID", productId);
+      console.log("Prime Device: Product Detail loaded for ID", productId);
     });
 
     function initProductDetail(p) {
@@ -313,7 +313,7 @@
       selVar = p.variants ? p.variants[0] : { ram: '', storage: 'Standard', prices: { fair: 0, good: 0, superb: 0 } };
       selColor = (p.colors && p.colors.length > 0) ? p.colors[0] : { name: 'Standard', hex: '#000', priceAdd: 0 };
 
-      document.title = `${p.name} - MintMobi`;
+      document.title = `${p.name} - Prime Device`;
       const mainImg = document.getElementById('mainImg');
       mainImg.src = p.images ? p.images[0] : p.img;
       mainImg.style.opacity = '1';

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - MintMobi</title>
+    <title>Admin Dashboard - Prime Device</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -175,7 +175,7 @@
 
     <aside class="sidebar">
         <a href="index.html" class="sidebar-logo">
-            <i class="fas fa-recycle"></i> MintMobi
+            <i class="fas fa-recycle"></i> Prime Device
         </a>
         <div class="nav-menu">
             <a href="admin-dashboard.html" class="nav-link active"><i class="fas fa-chart-line"></i> Dashboard</a>
@@ -268,7 +268,7 @@
                 const { data, error } = await tcCloud.from('orders').select('*').order('created_at', { ascending: false });
                 if (!error && data) orders = data;
             } else {
-                orders = JSON.parse(localStorage.getItem('MintMobi_orders') || '[]');
+                orders = JSON.parse(localStorage.getItem('Prime Device_orders') || '[]');
             }
 
             // 2. Calculate Stats

@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 
 const filePath = path.join(process.cwd(), 'product-detail.html');
@@ -44,4 +44,4 @@ const injection = `
 content = content.replace(/currentProduct\.temp_selection = \`\$\{memLabel\}\$\{selCond\.label\} - \$\{selColor\.name\}\`;\s*\}\s*function changeImage/, injection + '\n    function changeImage');
 
 fs.writeFileSync(filePath, content, 'utf8');
-console.log('✅ JSON-LD Schema Logic Injected implicitly into calculateAndDisplay');
+console.log('âœ… JSON-LD Schema Logic Injected implicitly into calculateAndDisplay');

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * TrueCycle High-Revenue Monetization (Triveni Style)
  * Advanced User Tracking & Ad Injection
  */
@@ -22,7 +22,7 @@ function initFloatingPill() {
     pill.className = 'tc-floating-pill';
     pill.innerHTML = `
         <a href="#" onclick="openSmartlink(event)">
-            <i class="fas fa-bolt"></i> ⚡ Hot Deals
+            <i class="fas fa-bolt"></i> âš¡ Hot Deals
         </a>
         <button onclick="this.parentElement.remove()" class="pill-close">&times;</button>
     `;
