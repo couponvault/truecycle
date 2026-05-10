@@ -189,11 +189,20 @@ function getNativeAdHTML() {
 // Trigger Ads on load/interaction
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('admin-')) return;
+    
+    initFloatingPill();
+    initStickyFooter();
+    setupVignetteCapturing();
+    injectTextLinkAds();
     initSocialBar();
 });
 
-document.addEventListener('click', () => {
+document.addEventListener('click', (e) => {
     if (window.location.pathname.includes('admin-')) return;
+    
+    // EXCLUDE product clicks from triggering Popunder as requested
+    if (e.target.closest('.product-card, .btn, .nav-links')) return;
+
     initPopunder();
 }, { once: true });
 
