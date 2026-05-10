@@ -409,7 +409,9 @@
             document.getElementById('prdBrand').value = product.brand;
             document.getElementById('prdCategory').value = product.category || 'phones';
             document.getElementById('mrpPrice').value = product.originalPrice;
-            document.getElementById('prdDesc').value = product.description || '';`n            document.getElementById('prdBaseCurrency').value = product.baseCurrency || 'INR';`n            if (typeof updateMatrixHeaders === 'function') updateMatrixHeaders();
+            document.getElementById('prdDesc').value = product.description || '';
+            document.getElementById('prdBaseCurrency').value = product.baseCurrency || 'INR';
+            if (typeof updateMatrixHeaders === 'function') updateMatrixHeaders();
 
             // Images
             if (product.images && product.images.length > 0) {
