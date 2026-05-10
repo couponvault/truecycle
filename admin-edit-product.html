@@ -171,7 +171,7 @@
                             <span><i class="fas fa-info-circle"></i> Basic Product Info</span>
                             <div class="import-tool" style="display: flex; gap: 8px;">
                                 <input type="text" id="importUrl" placeholder="Paste product link (e.g. Amazon, Triveni...)" style="width: 250px; padding: 8px 12px; font-size: 0.8rem; border: 1px solid var(--admin-border); border-radius: 8px;">
-                                <button class="btn-add" onclick="smartImportFromUrl()" style="padding: 8px 15px; font-size: 0.8rem; background: var(--admin-primary); color: white;">
+                                <button id="btnSmartImport" class="btn-add" onclick="smartImportFromUrl()" style="padding: 8px 15px; font-size: 0.8rem; background: var(--admin-primary); color: white;">
                                     <i class="fas fa-magic"></i> Smart Import
                                 </button>
                             </div>
@@ -749,7 +749,7 @@
                 return;
             }
 
-            const btn = document.querySelector('button[onclick="smartImportFromUrl()"]');
+            const btn = document.getElementById('btnSmartImport');
             const originalHtml = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing...';
             btn.disabled = true;
