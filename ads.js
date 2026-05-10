@@ -4,6 +4,12 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // SECURITY: Never load ads in the admin panel
+    if (window.location.pathname.includes('admin-')) {
+        console.log("Ads disabled for Admin Panel.");
+        return;
+    }
+
     // 1. Initialise Floating "Deal Pill"
     initFloatingPill();
 
