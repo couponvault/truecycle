@@ -5,11 +5,11 @@
 
 const Prime DeviceUI = {
   currencies: [
-    { code: 'INR', symbol: 'â‚¹', flag: 'ðŸ‡®ðŸ‡³' },
+    { code: 'INR', symbol: '₹', flag: 'ðŸ‡®ðŸ‡³' },
     { code: 'USD', symbol: '$', flag: 'ðŸ‡ºðŸ‡¸' },
-    { code: 'GBP', symbol: 'Â£', flag: 'ðŸ‡¬ðŸ‡§' },
-    { code: 'EUR', symbol: 'â‚¬', flag: 'ðŸ‡ªðŸ‡º' },
-    { code: 'AED', symbol: 'Ø¯.Ø¥', flag: 'ðŸ‡¦ðŸ‡ª' },
+    { code: 'GBP', symbol: '£', flag: 'ðŸ‡¬ðŸ‡§' },
+    { code: 'EUR', symbol: '€', flag: 'ðŸ‡ªðŸ‡º' },
+    { code: 'AED', symbol: 'د.إ', flag: 'ðŸ‡¦ðŸ‡ª' },
     { code: 'JPY', symbol: 'Â¥', flag: 'ðŸ‡¯ðŸ‡µ' },
     { code: 'AUD', symbol: 'A$', flag: 'ðŸ‡¦ðŸ‡º' },
     { code: 'CAD', symbol: 'C$', flag: 'ðŸ‡¨ðŸ‡¦' }

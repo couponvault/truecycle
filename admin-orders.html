@@ -121,7 +121,7 @@
                           id: o.id.toString().substring(0, 8).toUpperCase(),
                           date: new Date(o.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
                           name: o.customer_name || (o.address ? o.address.name : 'Guest User'),
-                          amount: 'â‚¹' + o.total_amount.toLocaleString('en-IN'),
+                          amount: '₹' + o.total_amount.toLocaleString('en-IN'),
                           status: o.status,
                           paymentMethod: o.payment_method
                       }));

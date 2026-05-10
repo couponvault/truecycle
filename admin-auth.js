@@ -110,7 +110,7 @@ const AdminAuth = {
         const storedHash = localStorage.getItem(this.HASH_KEY);
 
         if (inputHash === storedHash) {
-            // Success â€” create session, clear attempts
+            // Success — create session, clear attempts
             const session = {
                 loggedIn: true,
                 timestamp: Date.now(),
@@ -121,7 +121,7 @@ const AdminAuth = {
             localStorage.removeItem(this.LOCKOUT_KEY);
             return { success: true };
         } else {
-            // Failed â€” increment attempts
+            // Failed — increment attempts
             let attempts = this.getAttempts() + 1;
             localStorage.setItem(this.ATTEMPTS_KEY, attempts.toString());
 
@@ -159,7 +159,7 @@ const AdminAuth = {
         return { success: true, message: 'Password changed successfully in Cloud!' };
     },
 
-    /** Logout â€” destroy session */
+    /** Logout — destroy session */
     logout() {
         localStorage.removeItem(this.SESSION_KEY);
         window.location.href = 'admin-dashboard.html';
@@ -279,7 +279,7 @@ const AdminAuth = {
                 </div>
 
                 <div id="authLockoutDisplay" style="display:none" class="auth-lockout-timer">
-                    <i class="fas fa-lock"></i> Locked â€” <span id="authLockoutSeconds">0</span>s remaining
+                    <i class="fas fa-lock"></i> Locked — <span id="authLockoutSeconds">0</span>s remaining
                 </div>
 
                 <form id="adminLoginForm" onsubmit="return false;">
@@ -329,7 +329,7 @@ const AdminAuth = {
             return; // Allow access
         }
 
-        // Not authenticated â€” block the page
+        // Not authenticated — block the page
         this.renderLoginScreen();
     },
 

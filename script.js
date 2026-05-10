@@ -1,8 +1,8 @@
-﻿// ============================================
+// ============================================
 // Prime Device - Main JavaScript
 // ============================================
 
-/** Global HTML Sanitizer Ã¢â‚¬â€ prevents XSS when injecting user-controlled data into innerHTML */
+/** Global HTML Sanitizer — prevents XSS when injecting user-controlled data into innerHTML */
 function escapeHTML(str) {
     if (typeof str !== 'string') return str;
     const div = document.createElement('div');
@@ -164,7 +164,7 @@ const Cart = {
     if (code.toUpperCase() === 'FIRST300') {
       this.discount = 300;
       this.couponCode = 'FIRST300';
-      feedback.textContent = `Coupon applied: ${CurrencySystem.format(300)} Discount! Ã°Å¸Å½â€°`;
+      feedback.textContent = `Coupon applied: ${CurrencySystem.format(300)} Discount! 🎉`;
       feedback.style.color = '#27AE60';
       if (offerBox) { offerBox.style.background = '#EBF9F1'; offerBox.style.borderColor = '#27AE60'; }
       if (offerBtn) { offerBtn.textContent = 'APPLIED'; offerBtn.style.background = '#27AE60'; offerBtn.classList.remove('btn-primary'); offerBtn.style.color = 'white'; }
@@ -273,7 +273,7 @@ const Cart = {
           </div>
           <div class="cart-qty-col">
             <div class="qty-control" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 50px; padding: 4px;">
-              <button class="qty-btn" onclick="Cart.updateQty('${item.id}', -1)" style="width: 28px; height: 28px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 700;">Ã¢Ë†â€™</button>
+              <button class="qty-btn" onclick="Cart.updateQty('${item.id}', -1)" style="width: 28px; height: 28px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 700;">−</button>
               <input type="number" class="qty-input" value="${item.qty}" readonly style="width: 35px; background: transparent; font-weight: 700; text-align: center;">
               <button class="qty-btn" onclick="Cart.updateQty('${item.id}', 1)" style="width: 28px; height: 28px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 700;">+</button>
             </div>
@@ -394,7 +394,7 @@ function addToCart(e) {
   showToast('Product added to cart!');
 }
 
-// (Toast function defined once at end of file Ã¢â‚¬â€ see Global Toast Notification System)
+// (Toast function defined once at end of file — see Global Toast Notification System)
 
 // --- Wishlist UI Management ---
 const WishlistUI = {
@@ -580,7 +580,7 @@ function handleWishlistToCart(id) {
     });
     
     wishlistService.removeFromWishlist(id);
-    showToast('Product shifted to cart! Ã°Å¸â€ºâ€™');
+    showToast('Product shifted to cart! 🛒');
 }
 
 // --- User Authentication System ---
@@ -835,7 +835,7 @@ async function handleUserLogin() {
   if (result.success) {
     btn.innerHTML = '<i class="fas fa-check"></i> Welcome back!';
     btn.style.backgroundColor = '#27AE60';
-    showToast(`Welcome back, ${result.user.name}! Ã°Å¸Å½â€°`, 'success');
+    showToast(`Welcome back, ${result.user.name}! 🎉`, 'success');
     updateProfileIcon();
     setTimeout(() => {
       renderAccountView();
@@ -869,7 +869,7 @@ async function handleUserSignup() {
   if (result.success) {
     btn.innerHTML = '<i class="fas fa-check"></i> Account Created!';
     btn.style.backgroundColor = '#27AE60';
-    showToast(`Welcome to Prime Device, ${result.user.name}! Ã°Å¸Å½â€°`, 'success');
+    showToast(`Welcome to Prime Device, ${result.user.name}! 🎉`, 'success');
     updateProfileIcon();
     setTimeout(() => {
       renderAccountView();
@@ -983,7 +983,7 @@ function handleNewsletter(e) {
   const email = input.value;
 
   if (email) {
-    showToast('Thanks for subscribing! Ã°Å¸Å½â€°');
+    showToast('Thanks for subscribing! 🎉');
     input.value = '';
   }
 }
@@ -1074,7 +1074,7 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// (Search function defined once below Ã¢â‚¬â€ see Search Logic section)
+// (Search function defined once below — see Search Logic section)
 
 // --- Quick Price Filtering ---
 function setPriceFilter(max) {
@@ -1266,7 +1266,7 @@ function startMockPayment(method) {
       // Clear Cart
       Cart.items = [];
       Cart.save();
-      showToast('Order Successful! Ã°Å¸Å½â€°', 'success');
+      showToast('Order Successful! 🎉', 'success');
 
     } else {
       content.innerHTML = `
@@ -1709,7 +1709,7 @@ const ProductUI = {
       if (this.filters.search) {
           const q = this.filters.search.toLowerCase();
           // Search regex: Handles "under 15000", "below 15000", and currency symbols
-          const underMatch = q.match(/(?:under|below|less than|within|prices?|rs|Ã¢â€šÂ¹|[\$\Ã¢â€šÂ¬\Ã‚Â£\Ã˜Â¯.Ã˜Â¥])\s?(\d+)/i);
+          const underMatch = q.match(/(?:under|below|less than|within|prices?|rs|₹|[\$\Ã¢â€šÂ¬\Ã‚£\Ã˜Â¯.Ã˜Â¥])\s?(\d+)/i);
           const aboveMatch = q.match(/(?:above|over|more than)\s?(\d+)/i);
           
           let priceLimit = null;
@@ -1718,7 +1718,7 @@ const ProductUI = {
           if (underMatch) { priceLimit = parseInt(underMatch[1]); priceType = 'under'; } 
           else if (aboveMatch) { priceLimit = parseInt(aboveMatch[1]); priceType = 'above'; }
 
-          const cleanQ = q.replace(/(?:under|below|less than|within|above|over|more than|prices?|rs|Ã¢â€šÂ¹|[\$\Ã¢â€šÂ¬\Ã‚Â£\Ã˜Â¯.Ã˜Â¥])\s?(\d+)/ig, '').trim();
+          const cleanQ = q.replace(/(?:under|below|less than|within|above|over|more than|prices?|rs|₹|[\$\Ã¢â€šÂ¬\Ã‚£\Ã˜Â¯.Ã˜Â¥])\s?(\d+)/ig, '').trim();
 
           if (cleanQ) {
               matchSearch = p.name.toLowerCase().includes(cleanQ) || 
@@ -1781,9 +1781,9 @@ const ProductUI = {
               </div>
             </a>
             <div class="product-info">
-              <div class="product-condition">Ã¢Å“â€œ Certified Refurbished</div>
+              <div class="product-condition">✓ Certified Refurbished</div>
               <h3><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
-              <div class="product-rating"><span class="stars">${'Ã¢Ëœâ€¦'.repeat(p.rating || 5)}${'Ã¢Ëœâ€ '.repeat(5 - (p.rating || 5))}</span><span class="rating-count">(${p.reviews || 0})</span></div>
+              <div class="product-rating"><span class="stars">${'★'.repeat(p.rating || 5)}${'☆'.repeat(5 - (p.rating || 5))}</span><span class="rating-count">(${p.reviews || 0})</span></div>
               <div class="product-price">
                 <span class="current-price">${CurrencySystem.format(price, "", p.baseCurrency || "INR")}${p.images ? ' onwards' : ''}</span>
                 ${origPrice > price ? `<span class="original-price">${CurrencySystem.format(origPrice, "", p.baseCurrency || "INR")}</span>` : ''}

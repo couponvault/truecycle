@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -29,11 +29,11 @@
           <a href="about.html">About Us</a> &nbsp;|&nbsp;
           <a href="contact.html">Help</a> &nbsp;|&nbsp;
           <select id="currencySelector" onchange="CurrencySystem.setCurrency(this.value)" style="background:transparent; color:white; border:none; font-size:0.75rem; cursor:pointer; outline:none; font-weight:600;">
-            <option value="INR" style="color:#333">INR (â‚¹)</option>
+            <option value="INR" style="color:#333">INR (₹)</option>
             <option value="USD" style="color:#333">USD ($)</option>
-            <option value="GBP" style="color:#333">GBP (Â£)</option>
-            <option value="EUR" style="color:#333">EUR (â‚¬)</option>
-            <option value="AED" style="color:#333">AED (Ø¯.Ø¥)</option>
+            <option value="GBP" style="color:#333">GBP (£)</option>
+            <option value="EUR" style="color:#333">EUR (€)</option>
+            <option value="AED" style="color:#333">AED (د.إ)</option>
           </select>
         </div>
       </div>
@@ -131,9 +131,9 @@
         <div class="filter-group">
           <h4>Price Range <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></h4>
           <div class="price-range">
-            <input type="number" id="minPrice" data-price="0" data-price-suffix=" Min" placeholder="â‚¹ Min" min="0">
-            <span>â€”</span>
-            <input type="number" id="maxPrice" data-price="0" data-price-suffix=" Max" placeholder="â‚¹ Max" min="0">
+            <input type="number" id="minPrice" data-price="0" data-price-suffix=" Min" placeholder="₹ Min" min="0">
+            <span>—</span>
+            <input type="number" id="maxPrice" data-price="0" data-price-suffix=" Max" placeholder="₹ Max" min="0">
           </div>
         </div>
         <button id="applyFiltersBtn" class="btn btn-primary btn-sm" style="width:100%; margin-top: 8px;">Apply Filters</button>
@@ -146,9 +146,9 @@
           <!-- Row 1: Budget Shortcuts -->
           <div class="budget-shortcuts" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
             <span style="font-weight: 600; font-size: 0.9rem;">Quick Budget:</span>
-            <button class="budget-chip" data-price="15000" data-price-prefix="Under " onclick="setPriceFilter(15000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">Under â‚¹15k</button>
-            <button class="budget-chip" onclick="setPriceFilter(30000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">â‚¹15k - â‚¹30k</button>
-            <button class="budget-chip" data-price="50000" data-price-prefix="Under " onclick="setPriceFilter(50000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">Under â‚¹50k</button>
+            <button class="budget-chip" data-price="15000" data-price-prefix="Under " onclick="setPriceFilter(15000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">Under ₹15k</button>
+            <button class="budget-chip" onclick="setPriceFilter(30000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">₹15k - ₹30k</button>
+            <button class="budget-chip" data-price="50000" data-price-prefix="Under " onclick="setPriceFilter(50000)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">Under ₹50k</button>
             <button class="budget-chip" onclick="setPriceFilter(Infinity)" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">All Prices</button>
           </div>
           
