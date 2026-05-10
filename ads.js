@@ -43,9 +43,11 @@ function initStickyFooter() {
     footerBar.innerHTML = `
         <div class="sticky-bar-content">
             <span class="ad-label">AD</span>
-            <div id="adsterra_leaderboard">
-                <!-- PASTE 728x90 SCRIPT HERE -->
-                <div class="ad-placeholder">Leaderboard Ad Widget</div>
+            <div id="adsterra_leaderboard" style="min-width:728px; min-height:90px;">
+                <script>
+                    atOptions = { 'key' : '288004202200de54ebabb1af35a181d4', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+                </script>
+                <script src="https://www.highperformanceformat.com/288004202200de54ebabb1af35a181d4/invoke.js"></script>
             </div>
             <button onclick="this.parentElement.parentElement.remove()" class="sticky-close">&times;</button>
         </div>
@@ -87,10 +89,14 @@ function showVignette(url) {
             <h3>Prime Device Exclusive Offer</h3>
             <span class="vignette-timer">Navigating in <b id="v-countdown">2</b>s...</span>
         </div>
-        <div class="vignette-ad-slot">
-            <div class="ad-placeholder-large">Premium Interstitial Ad (High Revenue)</div>
+        <div class="vignette-ad-slot" style="min-width:300px; min-height:250px;">
+            <script>
+                atOptions = { 'key' : '28b113efe81be24b1a8281bcf4c24088', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+            </script>
+            <script src="https://www.highperformanceformat.com/28b113efe81be24b1a8281bcf4c24088/invoke.js"></script>
         </div>
     `;
+
 
     const skipBtn = document.createElement('button');
     skipBtn.className = 'vignette-skip';
