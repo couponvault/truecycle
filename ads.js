@@ -146,28 +146,50 @@ function injectTextLinkAds() {
 }
 
 function openSmartlink(event) {
-    event.preventDefault();
-    // Your High-CPM Smartlink (noopener prevents reverse tabnabbing)
-    window.open('https://your-smartlink-here.com', '_blank', 'noopener,noreferrer');
+    if (event) event.preventDefault();
+    // Updated with your official Adsterra Smartlink
+    window.open('https://www.profitablecpmratenetwork.com/eib4z2cm?key=f68997e57dc8373b162e59e700208cf2', '_blank', 'noopener,noreferrer');
 }
 
 // --- ADSTERRA IMPLEMENTATION ---
 
-// 1. Popunder with Capping (Runs once per session to protect UX)
+// 1. Popunder with Capping
 function initPopunder() {
     if (sessionStorage.getItem('tc_pop_done')) return;
-    
     const script = document.createElement('script');
     script.src = 'https://pl29412315.profitablecpmratenetwork.com/5e/2b/1b/5e2b1b160a81e72a198936bf6da7cb68.js';
     document.body.appendChild(script);
-    
-    // Mark as done for this session
     sessionStorage.setItem('tc_pop_done', 'true');
 }
 
-// Trigger Popunder on first real interaction
+// 2. Social Bar (Always active on store pages)
+function initSocialBar() {
+    const script = document.createElement('script');
+    script.src = 'https://pl29412317.profitablecpmratenetwork.com/6b/ef/10/6bef101f4173f3a041eb0b3a04cb3aa1.js';
+    document.body.appendChild(script);
+}
+
+// 3. Native Banner Injection (For product grids)
+function getNativeAdHTML() {
+    // Return the container for the native ad
+    return `
+        <div class="product-card promo-card native-ad-container" style="background:#f8fafc; border:2px dashed #e2e8f0; padding:10px;">
+            <div id="container-074a5197ab4592fa0b97ada41b3c4742"></div>
+            <script async="async" data-cfasync="false" src="https://pl29412316.profitablecpmratenetwork.com/074a5197ab4592fa0b97ada41b3c4742/invoke.js"></script>
+        </div>
+    `;
+}
+
+// Trigger Ads on load/interaction
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.location.pathname.includes('admin-')) return;
+    initSocialBar();
+});
+
 document.addEventListener('click', () => {
+    if (window.location.pathname.includes('admin-')) return;
     initPopunder();
 }, { once: true });
+
 
 
