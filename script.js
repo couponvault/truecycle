@@ -1709,7 +1709,7 @@ const ProductUI = {
       if (this.filters.search) {
           const q = this.filters.search.toLowerCase();
           // Search regex: Handles "under 15000", "below 15000", and currency symbols
-          const underMatch = q.match(/(?:under|below|less than|within|prices?|rs|₹|[\$\Ã¢â€šÂ¬\Ã‚£\Ã˜Â¯.Ã˜Â¥])\s?(\d+)/i);
+          const underMatch = q.match(/(?:under|below|less than|within|prices?|rs|₹|[\$\€\£\د.إ])\s?(\d+)/i);
           const aboveMatch = q.match(/(?:above|over|more than)\s?(\d+)/i);
           
           let priceLimit = null;
@@ -1718,7 +1718,7 @@ const ProductUI = {
           if (underMatch) { priceLimit = parseInt(underMatch[1]); priceType = 'under'; } 
           else if (aboveMatch) { priceLimit = parseInt(aboveMatch[1]); priceType = 'above'; }
 
-          const cleanQ = q.replace(/(?:under|below|less than|within|above|over|more than|prices?|rs|₹|[\$\Ã¢â€šÂ¬\Ã‚£\Ã˜Â¯.Ã˜Â¥])\s?(\d+)/ig, '').trim();
+          const cleanQ = q.replace(/(?:under|below|less than|within|above|over|more than|prices?|rs|₹|[\$\€\£\د.إ])\s?(\d+)/ig, '').trim();
 
           if (cleanQ) {
               matchSearch = p.name.toLowerCase().includes(cleanQ) || 

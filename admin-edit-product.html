@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -167,7 +167,15 @@
                 <div>
                     <!-- 1. Basic Info -->
                     <div class="admin-card">
-                        <div class="card-header"><i class="fas fa-info-circle"></i> Basic Product Info</div>
+                        <div class="card-header" style="justify-content: space-between;">
+                            <span><i class="fas fa-info-circle"></i> Basic Product Info</span>
+                            <div class="import-tool" style="display: flex; gap: 8px;">
+                                <input type="text" id="importUrl" placeholder="Paste product link (e.g. Amazon, Triveni...)" style="width: 250px; padding: 8px 12px; font-size: 0.8rem; border: 1px solid var(--admin-border); border-radius: 8px;">
+                                <button class="btn-add" onclick="smartImportFromUrl()" style="padding: 8px 15px; font-size: 0.8rem; background: var(--admin-primary); color: white;">
+                                    <i class="fas fa-magic"></i> Smart Import
+                                </button>
+                            </div>
+                        </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Product Marketing Name</label>
@@ -725,12 +733,79 @@
 
             if (editProductId) {
                 productService.updateProduct(editProductId, masterData);
-                showToast('Product Updated! ðŸš€');
+                showToast('Product Updated! 🚀');
             } else {
                 productService.addProduct(masterData);
-                showToast('Product Published! ðŸš€');
+                showToast('Product Published! 🚀');
             }
             setTimeout(() => location.href = 'admin-products.html', 1000);
+        }
+
+        async function smartImportFromUrl() {
+            const url = document.getElementById('importUrl').value;
+            if (!url) {
+                showToast('Please paste a product URL first!', 'error');
+                return;
+            }
+
+            const btn = event.currentTarget;
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing...';
+            btn.disabled = true;
+
+            try {
+                // Use AllOrigins proxy to bypass CORS
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
+                
+                if (!data.contents) throw new Error('Could not fetch page content');
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data.contents, 'text/html');
+
+                // 1. Get Title (OG or Title tag)
+                const title = doc.querySelector('meta[property="og:title"]')?.content || 
+                              doc.querySelector('h1')?.textContent || 
+                              doc.title;
+                if (title) document.getElementById('prdName').value = title.split('|')[0].trim();
+
+                // 2. Get Description
+                const desc = doc.querySelector('meta[property="og:description"]')?.content || 
+                             doc.querySelector('meta[name="description"]')?.content;
+                if (desc) document.getElementById('prdDesc').value = desc.trim();
+
+                // 3. Get Images (OG Image + Scanned Images)
+                const images = [];
+                const ogImg = doc.querySelector('meta[property="og:image"]')?.content;
+                if (ogImg) images.push(ogImg);
+
+                // Find other large images
+                const imgTags = Array.from(doc.querySelectorAll('img'))
+                    .map(img => img.src)
+                    .filter(src => src && (src.includes('product') || src.includes('media')))
+                    .slice(0, 5);
+                
+                imgTags.forEach(src => {
+                    if (!images.includes(src) && images.length < 5) images.push(src);
+                });
+
+                // Map to slots
+                images.forEach((src, idx) => {
+                    if (idx < 5) productImages[idx] = src;
+                });
+
+                renderImageSlots();
+                updateLivePreview();
+                showToast('Import Complete! Please verify details.', 'success');
+
+            } catch (error) {
+                console.error(error);
+                showToast('Import failed. Some sites block scraping.', 'error');
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
         }
 
         const standardColors = {

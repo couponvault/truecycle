@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin-dashboard.html
+Disallow: /admin-products.html
+Disallow: /admin-edit-product.html
+Disallow: /admin-orders.html
+Disallow: /admin-settings.html
+
+Sitemap: https://yourdomain.com/sitemap.xml
