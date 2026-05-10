@@ -846,6 +846,55 @@
             }
         }
 
+        function renderImageSlots() {
+            const grid = document.getElementById('imageSlotGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = productImages.map((img, i) => `
+                <div class="img-slot ${img ? 'filled' : ''}">
+                    <div class="slot-label ${i === 0 ? 'main' : ''}">${i === 0 ? 'PRIMARY IMAGE' : 'SLOT ' + (i + 1)}</div>
+                    ${img ? `<img src="${img}">` : `
+                        <div style="text-align:center; padding:10px;">
+                            <i class="fas fa-plus-circle" style="font-size:1.5rem; color:#cbd5e1; margin-bottom:5px;"></i>
+                            <div style="font-size:0.65rem; color:#94a3b8;">Empty</div>
+                        </div>
+                    `}
+                    <div class="slot-actions">
+                        <button class="action-btn" title="Add/Change" onclick="handleSlotAdd(${i})"><i class="fas fa-pencil"></i></button>
+                        ${img ? `<button class="action-btn danger" title="Remove" onclick="deleteImageSlot(${i})"><i class="fas fa-trash"></i></button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let activeSlot = 0;
+        function handleSlotAdd(idx) {
+            activeSlot = idx;
+            document.getElementById('fileInput').click();
+        }
+
+        async function handleImageUpload(input) {
+            if (!input.files || !input.files[0]) return;
+            const file = input.files[0];
+            const btn = document.getElementById('btnSmartImport'); // Borrowing a spinner context if needed
+            
+            // For now, use FileReader for local preview (Real app should upload to cloud)
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                productImages[activeSlot] = e.target.result;
+                renderImageSlots();
+                updateLivePreview();
+                input.value = ''; // Reset file input
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function deleteImageSlot(idx) {
+            productImages[idx] = null;
+            renderImageSlots();
+            updateLivePreview();
+        }
+
         const standardColors = {
             'black': '#000000', 'white': '#FFFFFF', 'red': '#FF0000', 'blue': '#0000FF',
             'green': '#008000', 'yellow': '#FFFF00', 'purple': '#800080', 'pink': '#FFC0CB',
