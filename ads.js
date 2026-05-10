@@ -145,3 +145,23 @@ function openSmartlink(event) {
     window.open('https://your-smartlink-here.com', '_blank', 'noopener,noreferrer');
 }
 
+// --- ADSTERRA IMPLEMENTATION ---
+
+// 1. Popunder with Capping (Runs once per session to protect UX)
+function initPopunder() {
+    if (sessionStorage.getItem('tc_pop_done')) return;
+    
+    const script = document.createElement('script');
+    script.src = 'https://pl29412315.profitablecpmratenetwork.com/5e/2b/1b/5e2b1b160a81e72a198936bf6da7cb68.js';
+    document.body.appendChild(script);
+    
+    // Mark as done for this session
+    sessionStorage.setItem('tc_pop_done', 'true');
+}
+
+// Trigger Popunder on first real interaction
+document.addEventListener('click', () => {
+    initPopunder();
+}, { once: true });
+
+
