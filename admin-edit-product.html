@@ -879,17 +879,40 @@
         async function handleImageUpload(input) {
             if (!input.files || !input.files[0]) return;
             const file = input.files[0];
-            const btn = document.getElementById('btnSmartImport'); // Borrowing a spinner context if needed
             
-            // For now, use FileReader for local preview (Real app should upload to cloud)
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                productImages[activeSlot] = e.target.result;
-                renderImageSlots();
-                updateLivePreview();
+            // Show loading state on the specific slot
+            const slot = document.querySelectorAll('.img-slot')[activeSlot];
+            const originalContent = slot.innerHTML;
+            slot.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;"><i class="fas fa-spinner fa-spin"></i><span style="font-size:0.6rem;margin-top:5px;">Uploading...</span></div>';
+
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                // Upload to ImgBB (Using your API Key)
+                const apiKey = '5d14ab97b912ce81ae50128b38c230df';
+                const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    productImages[activeSlot] = result.data.url;
+                    renderImageSlots();
+                    updateLivePreview();
+                    showToast('Image Hosted Successfully! ☁️');
+                } else {
+                    throw new Error('ImgBB Upload Failed');
+                }
+            } catch (err) {
+                console.error(err);
+                slot.innerHTML = originalContent;
+                showToast('Upload failed. Try again.', 'error');
+            } finally {
                 input.value = ''; // Reset file input
-            };
-            reader.readAsDataURL(file);
+            }
         }
 
         function deleteImageSlot(idx) {
