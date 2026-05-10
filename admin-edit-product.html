@@ -742,13 +742,14 @@
         }
 
         async function smartImportFromUrl() {
-            const url = document.getElementById('importUrl').value;
+            const urlInput = document.getElementById('importUrl');
+            const url = urlInput.value.trim();
             if (!url) {
                 showToast('Please paste a product URL first!', 'error');
                 return;
             }
 
-            const btn = event.currentTarget;
+            const btn = document.querySelector('button[onclick="smartImportFromUrl()"]');
             const originalHtml = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing...';
             btn.disabled = true;
@@ -764,30 +765,49 @@
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data.contents, 'text/html');
 
-                // 1. Get Title (OG or Title tag)
-                const title = doc.querySelector('meta[property="og:title"]')?.content || 
-                              doc.querySelector('h1')?.textContent || 
-                              doc.title;
-                if (title) document.getElementById('prdName').value = title.split('|')[0].trim();
+                // 1. Get Title (OG, Title tag, or H1)
+                let title = doc.querySelector('meta[property="og:title"]')?.content || 
+                            doc.querySelector('#productTitle')?.textContent || 
+                            doc.querySelector('h1')?.textContent || 
+                            doc.title;
+                
+                if (title) {
+                    title = title.trim();
+                    // Clean up Amazon/Flipkart long titles (usually everything before | or -)
+                    const cleanTitle = title.split('|')[0].split(' - ')[0].split(' : ')[0].trim();
+                    document.getElementById('prdName').value = cleanTitle;
+                }
 
                 // 2. Get Description
                 const desc = doc.querySelector('meta[property="og:description"]')?.content || 
-                             doc.querySelector('meta[name="description"]')?.content;
-                if (desc) document.getElementById('prdDesc').value = desc.trim();
+                             doc.querySelector('meta[name="description"]')?.content ||
+                             doc.querySelector('#feature-bullets')?.textContent;
+                if (desc) document.getElementById('prdDesc').value = desc.trim().substring(0, 1000);
 
-                // 3. Get Images (OG Image + Scanned Images)
-                const images = [];
+                // 3. Get Images
+                let images = [];
+                // OG Image is usually high quality
                 const ogImg = doc.querySelector('meta[property="og:image"]')?.content;
-                if (ogImg) images.push(ogImg);
+                if (ogImg && !ogImg.includes('logo')) images.push(ogImg);
 
-                // Find other large images
-                const imgTags = Array.from(doc.querySelectorAll('img'))
-                    .map(img => img.src)
-                    .filter(src => src && (src.includes('product') || src.includes('media')))
-                    .slice(0, 5);
+                // Amazon specific image detection
+                const amazonImgs = Array.from(doc.querySelectorAll('img'))
+                    .map(img => img.src || img.getAttribute('data-old-hires') || img.getAttribute('data-a-dynamic-image'))
+                    .filter(src => src && src.includes('media-amazon.com') && !src.includes('clear-pixel'));
                 
-                imgTags.forEach(src => {
-                    if (!images.includes(src) && images.length < 5) images.push(src);
+                // General image detection
+                const otherImgs = Array.from(doc.querySelectorAll('img'))
+                    .map(img => img.src)
+                    .filter(src => src && (src.includes('product') || src.includes('primary') || src.includes('item')) && src.startsWith('http'));
+
+                [...amazonImgs, ...otherImgs].forEach(src => {
+                    if (src && !images.includes(src) && images.length < 5) {
+                        // Clean up Amazon dynamic image JSON if present
+                        if (src.startsWith('{')) {
+                            try { src = Object.keys(JSON.parse(src))[0]; } catch(e) {}
+                        }
+                        images.push(src);
+                    }
                 });
 
                 // Map to slots
@@ -799,9 +819,9 @@
                 updateLivePreview();
                 showToast('Import Complete! Please verify details.', 'success');
 
-            } catch (error) {
-                console.error(error);
-                showToast('Import failed. Some sites block scraping.', 'error');
+            } catch (err) {
+                console.error('Import Error:', err);
+                showToast('Import failed. The site might be blocking us.', 'error');
             } finally {
                 btn.innerHTML = originalHtml;
                 btn.disabled = false;
