@@ -1,4 +1,4 @@
-﻿const productService = {
+const productService = {
     key: 'Prime Device_products',
     cache: [],
     isLoaded: false,
@@ -57,11 +57,23 @@
         }
     ],
 
+    dbStatus: {
+        connected: false,
+        error: null,
+        mode: 'offline' // 'online' | 'offline' | 'error'
+    },
+
+    notifyStatus() {
+        window.dispatchEvent(new CustomEvent('dbStatusChanged', { detail: this.dbStatus }));
+    },
+
     async init() {
         if (typeof pdCloud === 'undefined' || !pdCloud) {
             console.warn("Cloud connection not ready, falling back to LocalStorage.");
             this.cache = JSON.parse(localStorage.getItem(this.key) || JSON.stringify(this.seedData));
             this.isLoaded = true;
+            this.dbStatus = { connected: false, error: 'Supabase library not loaded', mode: 'offline' };
+            this.notifyStatus();
             return;
         }
 
@@ -69,6 +81,9 @@
             // 1. Fetch from Cloud
             const { data, error } = await pdCloud.from('products').select('*');
             if (error) throw error;
+
+            this.dbStatus = { connected: true, error: null, mode: 'online' };
+            this.notifyStatus();
 
             if (data && data.length > 0) {
                 // Map DB snake_case to Frontend camelCase
@@ -102,8 +117,12 @@
                     pricing_grid: p.pricingGrid || {}
                 }));
 
-                const { insertError } = await pdCloud.from('products').insert(toInsert);
-                if (insertError) console.error("Cloud Migration Error:", insertError);
+                const { error: insertError } = await pdCloud.from('products').insert(toInsert);
+                if (insertError) {
+                    console.error("Cloud Migration Error:", insertError);
+                    this.dbStatus = { connected: false, error: insertError.message || insertError, mode: 'error' };
+                    this.notifyStatus();
+                }
                 this.cache = localData;
             }
             this.isLoaded = true;
@@ -116,6 +135,8 @@
             console.error("Supabase Initialization Error:", err);
             this.cache = JSON.parse(localStorage.getItem(this.key) || JSON.stringify(this.seedData));
             this.isLoaded = true;
+            this.dbStatus = { connected: false, error: err.message || err, mode: 'error' };
+            this.notifyStatus();
             window.dispatchEvent(new CustomEvent('productsReady'));
         }
     },
@@ -167,12 +188,17 @@
                 colors: newProduct.colors,
                 pricing_grid: newProduct.pricingGrid
             }]);
-            if (error) console.error("Supabase Add Error:", error);
+            if (error) {
+                console.error("Supabase Add Error:", error);
+                this.dbStatus = { connected: false, error: error.message || error, mode: 'error' };
+                this.notifyStatus();
+                return { success: false, error: error.message || error };
+            }
         }
 
         this.cache.push(newProduct);
         localStorage.setItem(this.key, JSON.stringify(this.cache));
-        return newProduct;
+        return { success: true, product: newProduct };
     },
 
     async updateProduct(id, product) {
@@ -198,13 +224,18 @@
                 colors: updated.colors,
                 pricing_grid: updated.pricingGrid
             }).eq('id', id);
-            if (error) console.error('Supabase Update Error:', error);
+            if (error) {
+                console.error('Supabase Update Error:', error);
+                this.dbStatus = { connected: false, error: error.message || error, mode: 'error' };
+                this.notifyStatus();
+                return { success: false, error: error.message || error };
+            }
         }
 
         const idx = this.cache.findIndex(p => p.id === id);
         if (idx > -1) this.cache[idx] = updated;
         localStorage.setItem(this.key, JSON.stringify(this.cache));
-        return updated;
+        return { success: true, product: updated };
     },
 
     async deleteProduct(id) {
