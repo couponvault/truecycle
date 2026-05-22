@@ -225,7 +225,11 @@
                             <div class="form-row">
                                 <div class="form-group" style="flex:2;">
                                     <label>Original Price (MRP)</label>
-                                    <input type="number" id="mrpPrice" oninput="updateLivePreview()" placeholder="Official Official Launch Price">
+                                    <input type="number" id="mrpPrice" oninput="updateLivePreview()" placeholder="Official Launch Price">
+                                </div>
+                                <div class="form-group" style="flex:2;">
+                                    <label>Base Offered Price (Selling Price)</label>
+                                    <input type="number" id="baseOfferedPrice" oninput="updateLivePreview(); autofillMatrixFromBase();" placeholder="Your main selling price">
                                 </div>
                                 <div class="form-group" style="flex:1;">
                                     <label>Base Currency</label>
@@ -386,7 +390,7 @@
 
             // Generate Smart Bookmarklet URL dynamically based on current host
             const origin = window.location.origin + window.location.pathname;
-            const bookmarkletCode = `javascript:(function(){let t=document.querySelector('#productTitle')?.textContent||document.querySelector('.B_NuCI')?.textContent||document.querySelector('meta[property="og:title"]')?.content||document.querySelector('h1')?.textContent||document.title;t=t?encodeURIComponent(t.trim().split('|')[0].split(' - ')[0].split(' : ')[0].trim()):'';let d=document.querySelector('meta[property="og:description"]')?.content||document.querySelector('#feature-bullets')?.textContent||document.querySelector('.p_699623696')?.textContent||document.querySelector('meta[name="description"]')?.content;d=d?encodeURIComponent(d.trim().substring(0,600)):'';let i=[];let og=document.querySelector('meta[property="og:image"]')?.content;if(og&&!og.includes('logo')&&!og.includes('icon'))i.push(og);let imgs=Array.from(document.querySelectorAll('img'));let largeImgs=imgs.filter(img=>{const w=img.naturalWidth||img.width||0;const h=img.naturalHeight||img.height||0;const src=img.src||'';if(src.includes('clear-pixel')||src.includes('sprite')||src.includes('logo')||src.includes('icon')||src.includes('avatar')||src.includes('video')||src.includes('play')||src.includes('youtube'))return false;if(src.includes('/flap/')||src.includes('/promos/')||src.includes('/theme/')||src.includes('static-assets'))return false;const isProductImgPath=(src.includes('media-amazon.com')&&src.includes('/images/I/'))||(src.includes('flixcart.com')&&src.includes('/image/'));return w>200||h>200||isProductImgPath;}).map(img=>{let src=img.src||img.getAttribute('data-old-hires')||img.getAttribute('data-a-dynamic-image')||'';if(src.startsWith('{')){try{src=Object.keys(JSON.parse(src))[0];}catch(e){}}return src;}).filter(src=>src&&src.startsWith('http'));largeImgs.forEach(src=>{if(!i.includes(src)&&i.length<5)i.push(src);});const u='${origin}?mode=add&importName='+t+'&importDesc='+d+'&importImgs='+encodeURIComponent(i.join(','));window.open(u,'_blank');})()`;
+            const bookmarkletCode = `javascript:(function(){let t=document.querySelector('#productTitle')?.textContent||document.querySelector('.B_NuCI')?.textContent||document.querySelector('meta[property="og:title"]')?.content||document.querySelector('h1')?.textContent||document.title;t=t?encodeURIComponent(t.trim().split('|')[0].split(' - ')[0].split(' : ')[0].trim()):'';let d=document.querySelector('meta[property="og:description"]')?.content||document.querySelector('#feature-bullets')?.textContent||document.querySelector('.p_699623696')?.textContent||document.querySelector('meta[name="description"]')?.content;d=d?encodeURIComponent(d.trim().substring(0,600)):'';let i=[];let og=document.querySelector('meta[property="og:image"]')?.content;if(og&&!og.includes('logo')&&!og.includes('icon'))i.push(og);let imgs=Array.from(document.querySelectorAll('img'));let largeImgs=imgs.filter(img=>{const w=img.naturalWidth||img.width||0;const h=img.naturalHeight||img.height||0;const src=img.src||'';if(src.includes('clear-pixel')||src.includes('sprite')||src.includes('logo')||src.includes('icon')||src.includes('avatar')||src.includes('video')||src.includes('play')||src.includes('youtube'))return false;if(src.includes('/flap/')||src.includes('/promos/')||src.includes('/theme/')||src.includes('static-assets'))return false;const isProductImgPath=(src.includes('media-amazon.com')&&src.includes('/images/I/'))||(src.includes('flixcart.com')&&src.includes('/image/'));return w>200||h>200||isProductImgPath;}).map(img=>{let src=img.src||img.getAttribute('data-old-hires')||img.getAttribute('data-a-dynamic-image')||'';if(src.startsWith('{')){try{src=Object.keys(JSON.parse(src))[0];}catch(e){}}return src;}).filter(src=>src&&src.startsWith('http'));largeImgs.forEach(src=>{if(!i.includes(src)&&i.length<5)i.push(src);});let pr=document.querySelector('.a-price .a-offscreen')?.textContent||document.querySelector('._30jeq3._16Jk6d')?.textContent||document.querySelector('._30jeq3')?.textContent||'';pr=pr?pr.replace(/[^0-9]/g,''):'';let mr=document.querySelector('.a-price.a-text-price .a-offscreen')?.textContent||document.querySelector('._3I9_R0')?.textContent||'';mr=mr?mr.replace(/[^0-9]/g,''):'';const u='${origin}?mode=add&importName='+t+'&importDesc='+d+'&importImgs='+encodeURIComponent(i.join(','))+'&importPrice='+pr+'&importMrp='+mr;window.open(u,'_blank');})()`;
 
             const bmlLink = document.getElementById('bookmarkletLink');
             if (bmlLink) {
@@ -408,12 +412,20 @@
                 const importName = params.get('importName');
                 const importDesc = params.get('importDesc');
                 const importImgs = params.get('importImgs');
+                const importPrice = params.get('importPrice');
+                const importMrp = params.get('importMrp');
 
                 if (importName) {
                     document.getElementById('prdName').value = decodeURIComponent(importName);
                 }
                 if (importDesc) {
                     document.getElementById('prdDesc').value = decodeURIComponent(importDesc);
+                }
+                if (importPrice) {
+                    document.getElementById('baseOfferedPrice').value = importPrice;
+                }
+                if (importMrp) {
+                    document.getElementById('mrpPrice').value = importMrp;
                 }
                 if (importImgs) {
                     const imgs = decodeURIComponent(importImgs).split(',');
@@ -425,7 +437,7 @@
                 renderImageSlots();
                 updateLivePreview();
 
-                if (importName || importDesc || importImgs) {
+                if (importName || importDesc || importImgs || importPrice) {
                     showToast('Smart Bookmarklet imported product details!', 'success');
                 }
             }
@@ -448,6 +460,7 @@
             document.getElementById('prdBrand').value = product.brand;
             document.getElementById('prdCategory').value = product.category || 'phones';
             document.getElementById('mrpPrice').value = product.originalPrice;
+            document.getElementById('baseOfferedPrice').value = product.basePrice || '';
             document.getElementById('prdDesc').value = product.description || '';
             document.getElementById('prdBaseCurrency').value = product.baseCurrency || 'INR';
             if (typeof updateMatrixHeaders === 'function') updateMatrixHeaders();
@@ -657,7 +670,23 @@
                     tbody.appendChild(tr);
                 });
             });
+            autofillMatrixFromBase();
             showToast('Pricing Matrix updated!');
+        }
+
+        function autofillMatrixFromBase() {
+            const baseVal = parseFloat(document.getElementById('baseOfferedPrice').value);
+            if (!baseVal) return;
+
+            document.querySelectorAll('.matrix-row').forEach(row => {
+                const fairInput = row.querySelector('.p-fair');
+                const goodInput = row.querySelector('.p-good');
+                const superbInput = row.querySelector('.p-superb');
+
+                if (fairInput) fairInput.value = Math.round(baseVal * 0.9);
+                if (goodInput) goodInput.value = Math.round(baseVal);
+                if (superbInput) superbInput.value = Math.round(baseVal * 1.1);
+            });
         }
 
         function updateMatrixHeaders() {
@@ -676,7 +705,7 @@
             
             // Try to get price from first row of matrix if available
             const firstGoodInput = document.querySelector('.matrix-row .p-good');
-            let selling = firstGoodInput ? (parseFloat(firstGoodInput.value) || 0) : 0;
+            let selling = firstGoodInput ? (parseFloat(firstGoodInput.value) || 0) : (parseFloat(document.getElementById('baseOfferedPrice').value) || 0);
             
             // Image Preview (Slot 1)
             const prevImgContainer = document.getElementById('prevMainImg');
@@ -723,9 +752,10 @@
 
         function saveMasterProduct() {
             const mrp = parseFloat(document.getElementById('mrpPrice').value);
+            const offered = parseFloat(document.getElementById('baseOfferedPrice').value);
             const mRows = Array.from(document.querySelectorAll('.matrix-row'));
             
-            if (!mrp || mRows.length === 0) { showToast('Complete Basic Info & Pricing Matrix!', 'error'); return; }
+            if (!mrp || (!offered && mRows.length === 0)) { showToast('Complete Basic Info & Pricing Matrix!', 'error'); return; }
 
             const filledImages = productImages.filter(img => img !== null);
             if (filledImages.length < 1) { showToast('Add at least 1 image.', 'error'); return; }
@@ -734,28 +764,39 @@
             const variants = [];
             const colors = [];
 
-            // Extract Combinations
-            mRows.forEach(row => {
-                const vIdx = row.dataset.vidx;
-                const cIdx = row.dataset.cidx;
-                const pFair = parseFloat(row.querySelector('.p-fair').value) || 0;
-                const pGood = parseFloat(row.querySelector('.p-good').value) || 0;
-                const pSuperb = parseFloat(row.querySelector('.p-superb').value) || 0;
-                const stock = parseInt(row.querySelector('.p-stock').value) || 0;
+            if (mRows.length > 0) {
+                // Extract Combinations
+                mRows.forEach(row => {
+                    const vIdx = row.dataset.vidx;
+                    const cIdx = row.dataset.cidx;
+                    const pFair = parseFloat(row.querySelector('.p-fair').value) || offered || 0;
+                    const pGood = parseFloat(row.querySelector('.p-good').value) || offered || 0;
+                    const pSuperb = parseFloat(row.querySelector('.p-superb').value) || offered || 0;
+                    const stock = parseInt(row.querySelector('.p-stock').value) || 0;
 
-                pricingGrid[`${vIdx}-${cIdx}-fair`] = pFair;
-                pricingGrid[`${vIdx}-${cIdx}-good`] = pGood;
-                pricingGrid[`${vIdx}-${cIdx}-superb`] = pSuperb;
-                pricingGrid[`${vIdx}-${cIdx}-stock`] = stock;
+                    pricingGrid[`${vIdx}-${cIdx}-fair`] = pFair;
+                    pricingGrid[`${vIdx}-${cIdx}-good`] = pGood;
+                    pricingGrid[`${vIdx}-${cIdx}-superb`] = pSuperb;
+                    pricingGrid[`${vIdx}-${cIdx}-stock`] = stock;
 
-                // Sync basic lists for legacy search/filters
-                if (!variants[vIdx]) variants[vIdx] = { ram: row.dataset.ram, storage: row.dataset.store };
-                if (!colors[cIdx]) colors[cIdx] = { name: row.dataset.cname, hex: row.dataset.chex };
-            });
+                    // Sync basic lists for legacy search/filters
+                    if (!variants[vIdx]) variants[vIdx] = { ram: row.dataset.ram, storage: row.dataset.store };
+                    if (!colors[cIdx]) colors[cIdx] = { name: row.dataset.cname, hex: row.dataset.chex };
+                });
+            } else {
+                // Default fallback combination for simple products
+                variants.push({ ram: '', storage: 'Standard' });
+                colors.push({ name: 'Default', hex: '#64748b' });
+
+                pricingGrid['0-0-fair'] = Math.round(offered * 0.9);
+                pricingGrid['0-0-good'] = Math.round(offered);
+                pricingGrid['0-0-superb'] = Math.round(offered * 1.1);
+                pricingGrid['0-0-stock'] = 10;
+            }
 
             // Find starting price for listing
             const allPrices = Object.values(pricingGrid).filter(p => typeof p === 'number' && p > 0);
-            const minPrice = Math.min(...allPrices);
+            const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : offered;
 
             const masterData = {
                 name: document.getElementById('prdName').value,
