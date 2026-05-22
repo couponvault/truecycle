@@ -794,9 +794,12 @@
                 pricingGrid['0-0-stock'] = 10;
             }
 
-            // Find starting price for listing
-            const allPrices = Object.values(pricingGrid).filter(p => typeof p === 'number' && p > 0);
-            const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : offered;
+            // Find starting price for listing (only looking at price keys, not stock keys)
+            const priceValues = Object.keys(pricingGrid)
+                .filter(key => !key.endsWith('-stock'))
+                .map(key => pricingGrid[key])
+                .filter(p => typeof p === 'number' && p > 0);
+            const minPrice = priceValues.length > 0 ? Math.min(...priceValues) : offered;
 
             const masterData = {
                 name: document.getElementById('prdName').value,
