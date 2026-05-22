@@ -169,7 +169,10 @@
                     <div class="admin-card">
                         <div class="card-header" style="justify-content: space-between;">
                             <span><i class="fas fa-info-circle"></i> Basic Product Info</span>
-                            <div class="import-tool" style="display: flex; gap: 8px;">
+                            <div class="import-tool" style="display: flex; gap: 8px; align-items: center;">
+                                <a href="#" id="bookmarkletLink" class="btn-add" style="padding: 8px 15px; font-size: 0.8rem; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; text-decoration: none; border-radius: 8px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;" title="Drag this to your bookmarks bar to import items in 1 click!">
+                                    <i class="fas fa-bookmark"></i> Import Bookmarklet
+                                </a>
                                 <input type="text" id="importUrl" placeholder="Paste product link (e.g. Amazon, Triveni...)" style="width: 250px; padding: 8px 12px; font-size: 0.8rem; border: 1px solid var(--admin-border); border-radius: 8px;">
                                 <button id="btnSmartImport" class="btn-add" onclick="smartImportFromUrl()" style="padding: 8px 15px; font-size: 0.8rem; background: var(--admin-primary); color: white;">
                                     <i class="fas fa-magic"></i> Smart Import
@@ -381,14 +384,50 @@
             editProductId = params.get('id');
             const mode = params.get('mode');
 
+            // Generate Smart Bookmarklet URL dynamically based on current host
+            const origin = window.location.origin + window.location.pathname;
+            const bookmarkletCode = `javascript:(function(){let t=document.querySelector('#productTitle')?.textContent||document.querySelector('.B_NuCI')?.textContent||document.querySelector('meta[property="og:title"]')?.content||document.querySelector('h1')?.textContent||document.title;t=t?encodeURIComponent(t.trim().split('|')[0].split(' - ')[0].split(' : ')[0].trim()):'';let d=document.querySelector('meta[property="og:description"]')?.content||document.querySelector('#feature-bullets')?.textContent||document.querySelector('.p_699623696')?.textContent||document.querySelector('meta[name="description"]')?.content;d=d?encodeURIComponent(d.trim().substring(0,1000)):'';let i=[];let og=document.querySelector('meta[property="og:image"]')?.content;if(og&&!og.includes('logo'))i.push(og);let am=Array.from(document.querySelectorAll('img')).map(img=>(img.src||img.getAttribute('data-old-hires')||img.getAttribute('data-a-dynamic-image'))).filter(src=>src&&src.includes('media-amazon.com')&&!src.includes('clear-pixel')&&!src.includes('sprite'));let fk=Array.from(document.querySelectorAll('img')).map(img=>img.src).filter(src=>src&&src.includes('rukminim2.flixcart.com'));[...am,...fk].forEach(src=>{if(src&&!i.includes(src)&&i.length<5){if(src.startsWith('{')){try{src=Object.keys(JSON.parse(src))[0];}catch(e){}}i.push(src);}});if(i.length===0){let ge=Array.from(document.querySelectorAll('img')).map(img=>img.src).filter(src=>src&&src.startsWith('http')&&!src.includes('logo')&&!src.includes('icon')&&!src.includes('avatar'));ge.forEach(src=>{if(i.length<5&&!i.includes(src))i.push(src);});}const u='${origin}?mode=add&importName='+t+'&importDesc='+d+'&importImgs='+encodeURIComponent(i.join(','));window.open(u,'_blank');})()`;
+
+            const bmlLink = document.getElementById('bookmarkletLink');
+            if (bmlLink) {
+                bmlLink.href = bookmarkletCode;
+                bmlLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('Drag this button to your Browser Bookmarks Bar to install it! Once installed, click it while viewing any product on Amazon, Flipkart, or Triveniworld to instantly import it.');
+                });
+            }
+
             if (editProductId) {
                 document.getElementById('nav-inventory').classList.add('active');
                 loadProductData(editProductId);
             } else {
                 document.getElementById('nav-add').classList.add('active');
                 addColorDef('Midnight Black', '#1e1e1e');
+                
+                // Pre-fill fields from bookmarklet/URL import
+                const importName = params.get('importName');
+                const importDesc = params.get('importDesc');
+                const importImgs = params.get('importImgs');
+
+                if (importName) {
+                    document.getElementById('prdName').value = decodeURIComponent(importName);
+                }
+                if (importDesc) {
+                    document.getElementById('prdDesc').value = decodeURIComponent(importDesc);
+                }
+                if (importImgs) {
+                    const imgs = decodeURIComponent(importImgs).split(',');
+                    imgs.forEach((img, idx) => {
+                        if (idx < 5 && img) productImages[idx] = img.trim();
+                    });
+                }
+
                 renderImageSlots();
                 updateLivePreview();
+
+                if (importName || importDesc || importImgs) {
+                    showToast('Smart Bookmarklet imported product details!', 'success');
+                }
             }
         });
 
