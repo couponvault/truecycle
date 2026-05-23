@@ -94,6 +94,47 @@ const productService = {
                     baseCurrency: p.base_currency || "INR"
                 }));
                 console.log("Prime Device Cloud: Products synced from database.");
+
+                // Proactive Sync: If there are products in local storage not present in the cloud database, upload them now
+                const localRaw = localStorage.getItem(this.key);
+                if (localRaw) {
+                    try {
+                        const localProducts = JSON.parse(localRaw);
+                        const cloudIds = new Set(data.map(p => p.id));
+                        const localOnlyProducts = localProducts.filter(p => p.id && !cloudIds.has(p.id));
+                        
+                        if (localOnlyProducts.length > 0) {
+                            console.log(`Prime Device Cloud: Found ${localOnlyProducts.length} local-only products. Syncing to database...`);
+                            const toInsert = localOnlyProducts.map(p => ({
+                                id: p.id,
+                                name: p.name,
+                                category: p.category,
+                                brand: p.brand,
+                                base_price: p.basePrice || 0,
+                                original_price: p.originalPrice || 0,
+                                base_currency: p.baseCurrency || "INR",
+                                images: p.images,
+                                rating: p.rating,
+                                reviews: p.reviews,
+                                description: p.description,
+                                variants: p.variants,
+                                conditions: p.conditions,
+                                colors: p.colors,
+                                pricing_grid: p.pricingGrid || {}
+                            }));
+                            const { error: syncError } = await pdCloud.from('products').insert(toInsert);
+                            if (syncError) {
+                                console.error("Cloud Sync-up Error for local products:", syncError);
+                            } else {
+                                console.log("Prime Device Cloud: Local-only products successfully synced to cloud.");
+                                // Add them to our active cache so they display immediately
+                                localOnlyProducts.forEach(p => this.cache.push(p));
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Failed to parse or sync local products:", e);
+                    }
+                }
             } else {
                 // 2. Initial Migration: Sync Seed/Local data to Cloud
                 console.log("Prime Device Cloud: Empty database detected. Migrating local data...");
